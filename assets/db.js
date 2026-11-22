@@ -6,7 +6,9 @@
     USERS: 'yuvantara_users_db',
     APPLICATIONS: 'yuvantara_apps_db',
     CURRENT_USER: 'yuvantara_session_user',
-    CERTIFICATES: 'yuvantara_certs_db'
+    CERTIFICATES: 'yuvantara_certs_db',
+    LOCKOUTS: 'yuvantara_lockouts',
+    SESSION_TOKEN: 'yuvantara_session_token'
   };
 
   // Initial Seed Data
@@ -123,6 +125,54 @@
   }
 
   var DB = {
+    // ── Security Helpers ──
+    hashPassword: function(password) {
+      // djb2-based hash with salt (not cryptographic, but obfuscates plain text)
+      var salt = 'YUV@2026#SECURE!INTERNSHIP';
+      var str = salt + (password || '') + salt;
+      var h = 5381;
+      for (var i = 0; i < str.length; i++) {
+        h = ((h << 5) + h) ^ str.charCodeAt(i);
+        h = h & h; // 32-bit
+      }
+      return 'YH$' + (Math.abs(h) >>> 0).toString(16).toUpperCase().padStart(8, '0');
+    },
+
+    _getLockouts: function() { return getStorage(STORAGE_KEYS.LOCKOUTS, {}); },
+    _setLockouts: function(d) { setStorage(STORAGE_KEYS.LOCKOUTS, d); },
+
+    _isLocked: function(email) {
+      var lockouts = this._getLockouts();
+      var rec = lockouts[(email || '').toLowerCase()];
+      if (!rec || !rec.lockedUntil) return false;
+      if (Date.now() < rec.lockedUntil) return { locked: true, remainingMs: rec.lockedUntil - Date.now() };
+      // Expired lockout — clean up
+      delete lockouts[(email || '').toLowerCase()];
+      this._setLockouts(lockouts);
+      return false;
+    },
+
+    _recordFail: function(email) {
+      var lockouts = this._getLockouts();
+      var key = (email || '').toLowerCase();
+      if (!lockouts[key]) lockouts[key] = { count: 0, lockedUntil: null };
+      lockouts[key].count = (lockouts[key].count || 0) + 1;
+      var remaining = 5 - lockouts[key].count;
+      if (lockouts[key].count >= 5) {
+        lockouts[key].lockedUntil = Date.now() + 15 * 60 * 1000; // 15 min lockout
+        lockouts[key].count = 0;
+        remaining = 0;
+      }
+      this._setLockouts(lockouts);
+      return remaining;
+    },
+
+    _clearFails: function(email) {
+      var lockouts = this._getLockouts();
+      delete lockouts[(email || '').toLowerCase()];
+      this._setLockouts(lockouts);
+    },
+
     // Users
     getUsers: function() {
       return getStorage(STORAGE_KEYS.USERS, SEED_USERS);
@@ -152,20 +202,24 @@
 
       var users = this.getUsers();
       var newStudent = {
-        id: 'USR-' + (Date.now().toString().slice(-4)),
+        id: 'USR-' + (Date.now().toString().slice(-5)),
         name: data.name || 'Student Candidate',
         email: data.email.trim().toLowerCase(),
-        password: data.password,
-        phone: data.phone || '+91 98765 43210',
+        passwordHash: this.hashPassword(data.password),   // store hash only, NOT plain text
+        phone: data.phone || '',
         track: data.track || 'Cybersecurity & SOC Operations',
         stream: data.stream || 'Engineering / Technology',
         college: data.college || 'NIT Patna',
         role: 'student',
         registeredAt: new Date().toISOString().split('T')[0],
-        progress: 15,
+        accountStatus: data.accountStatus || 'pending',   // 'pending' until admin activates
+        paymentRef: data.paymentRef || null,
+        paymentMethod: data.paymentMethod || null,
+        paidAt: data.paidAt || null,
+        progress: 0,
         modules: [
-          { name: 'Module 1: Orientation & Core Foundations', status: 'completed' },
-          { name: 'Module 2: Lab Setup & Environment Diagnostics', status: 'in-progress' },
+          { name: 'Module 1: Orientation & Core Foundations', status: 'pending' },
+          { name: 'Module 2: Lab Setup & Environment Diagnostics', status: 'pending' },
           { name: 'Module 3: Hands-on Case Studies & Practical Labs', status: 'pending' },
           { name: 'Module 4: Mid-Term Evaluation & Milestone Submission', status: 'pending' },
           { name: 'Module 5: Capstone Project & Certification', status: 'pending' }
@@ -180,12 +234,60 @@
 
     login: function(email, password) {
       if (!email || !password) return { success: false, message: 'Please provide both email and password.' };
-      var user = this.getUserByEmail(email);
-      if (!user) return { success: false, message: 'No account found with this email address.' };
-      if (user.password !== password) return { success: false, message: 'Incorrect password.' };
+      email = email.trim().toLowerCase();
 
-      this.setCurrentUser(user);
-      return { success: true, user: user };
+      // Rate-limit check
+      var lockCheck = this._isLocked(email);
+      if (lockCheck && lockCheck.locked) {
+        var mins = Math.ceil(lockCheck.remainingMs / 60000);
+        return { success: false, message: '🔒 Account temporarily locked due to too many failed attempts. Try again in ' + mins + ' minute(s).' };
+      }
+
+      var user = this.getUserByEmail(email);
+      if (!user) {
+        this._recordFail(email);
+        return { success: false, message: 'No account found with this email address.' };
+      }
+
+      // Support both hashed (new users) and plain (seed data) passwords
+      var passwordOk = false;
+      if (user.passwordHash) {
+        passwordOk = (user.passwordHash === this.hashPassword(password));
+      } else if (user.password) {
+        passwordOk = (user.password === password);
+        // Upgrade to hash on successful login
+        if (passwordOk) {
+          var users = this.getUsers();
+          for (var i = 0; i < users.length; i++) {
+            if (users[i].email.toLowerCase() === email) {
+              users[i].passwordHash = this.hashPassword(password);
+              delete users[i].password;
+              break;
+            }
+          }
+          setStorage(STORAGE_KEYS.USERS, users);
+        }
+      }
+
+      if (!passwordOk) {
+        var rem = this._recordFail(email);
+        var msg = 'Incorrect password.';
+        if (rem > 0) msg += ' ' + rem + ' attempt(s) remaining before 15-min lockout.';
+        else msg += ' Account locked for 15 minutes.';
+        return { success: false, message: msg };
+      }
+
+      // Clear failed attempts on success
+      this._clearFails(email);
+
+      // Build session with 8-hour expiry
+      var sess = Object.assign({}, user);
+      delete sess.password;
+      delete sess.passwordHash;
+      sess._sessionExpiry = Date.now() + (8 * 60 * 60 * 1000);
+      this.setCurrentUser(sess);
+
+      return { success: true, user: sess };
     },
 
     updateStudent: function(email, updates) {
@@ -239,7 +341,14 @@
 
     // Session Management
     getCurrentUser: function() {
-      return getStorage(STORAGE_KEYS.CURRENT_USER, null);
+      var user = getStorage(STORAGE_KEYS.CURRENT_USER, null);
+      if (!user) return null;
+      // Auto-expire sessions after 8 hours
+      if (user._sessionExpiry && Date.now() > user._sessionExpiry) {
+        this.logout();
+        return null;
+      }
+      return user;
     },
 
     setCurrentUser: function(user) {

@@ -1,0 +1,416 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Secure Checkout | Yuvantara</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/portal.css">
+<style>
+  /* ── Payment Page Styles ── */
+  .pay-wrap { min-height: calc(100vh - 70px); background: #F8FAFC; padding: 40px 0 80px; }
+  .pay-container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  .pay-title { text-align: center; margin-bottom: 36px; }
+  .pay-title h1 { font-size: 1.9rem; color: #0F172A; margin: 0 0 8px; }
+  .pay-title p { color: #64748B; margin: 0; }
+  .secure-bar { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 32px; }
+  .secure-badge { display: inline-flex; align-items: center; gap: 7px; font-size: .82rem; color: #15803D; font-weight: 600; padding: 6px 14px; background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 99px; }
+  .pay-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start; }
+  @media(max-width:720px) { .pay-grid { grid-template-columns: 1fr; } }
+
+  /* ── Order Summary Card ── */
+  .order-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(15,23,42,.07); }
+  .order-header { background: linear-gradient(135deg, #0F172A, #1E293B); color: #fff; padding: 20px 24px; }
+  .order-header h3 { margin: 0 0 4px; font-size: 1rem; color: #CBD5E1; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+  .order-header .prog-name { font-size: 1.15rem; font-weight: 700; color: #fff; }
+  .order-body { padding: 24px; }
+  .order-student { display: flex; align-items: center; gap: 14px; padding: 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; margin-bottom: 20px; }
+  .order-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6, #22D3EE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; flex-shrink: 0; }
+  .order-student-info { font-size: .9rem; }
+  .order-student-info strong { display: block; color: #0F172A; font-size: 1rem; }
+  .order-student-info span { color: #64748B; }
+  .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F1F5FA; font-size: .95rem; }
+  .fee-row:last-of-type { border-bottom: none; }
+  .fee-row .label { color: #374151; }
+  .fee-row .value { font-weight: 600; color: #0F172A; }
+  .fee-row.gst .label { color: #64748B; font-size: .88rem; }
+  .fee-row.gst .value { color: #64748B; font-size: .88rem; }
+  .fee-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: linear-gradient(135deg, #EFF6FF, #F0F9FF); border: 1.5px solid #BFDBFE; border-radius: 10px; margin-top: 16px; }
+  .fee-total .label { font-weight: 700; color: #1E40AF; font-size: 1rem; }
+  .fee-total .value { font-size: 1.5rem; font-weight: 800; color: #1D4ED8; }
+  .included-items { margin-top: 20px; }
+  .included-items h4 { font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; color: #64748B; font-weight: 600; margin: 0 0 10px; }
+  .included-item { display: flex; align-items: center; gap: 8px; font-size: .88rem; color: #374151; padding: 5px 0; }
+  .included-item span { color: #15803D; font-size: 1rem; }
+
+  /* ── Payment Card ── */
+  .payment-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(15,23,42,.07); }
+  .payment-card h3 { font-size: 1.1rem; color: #0F172A; margin: 0 0 20px; display: flex; align-items: center; gap: 8px; }
+  .pay-tabs { display: flex; gap: 6px; margin-bottom: 24px; background: #F8FAFC; padding: 5px; border-radius: 10px; border: 1px solid #E2E8F0; }
+  .pay-tab-btn { flex: 1; padding: 9px 10px; border: none; background: transparent; border-radius: 7px; font: inherit; font-size: .85rem; font-weight: 600; color: #64748B; cursor: pointer; transition: all .18s; }
+  .pay-tab-btn.active { background: #fff; color: #1D4ED8; box-shadow: 0 2px 8px rgba(15,23,42,.08); }
+  .pay-pane { display: none; }
+  .pay-pane.active { display: block; }
+  .pf-label { font-size: .85rem; font-weight: 600; color: #374151; display: block; margin-bottom: 6px; }
+  .pf-input { width: 100%; padding: 11px 14px; border: 1.5px solid #D1D5DB; border-radius: 10px; font: inherit; font-size: .95rem; color: #111827; background: #fff; transition: border-color .2s; }
+  .pf-input:focus { outline: none; border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
+  .pf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pf-group { margin-bottom: 16px; }
+  .upi-hint { font-size: .78rem; color: #6B7280; margin-top: 5px; }
+  .upi-badges { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .upi-badge { padding: 3px 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: .78rem; color: #6B7280; background: #F9FAFB; }
+  .bank-select { width: 100%; padding: 11px 14px; border: 1.5px solid #D1D5DB; border-radius: 10px; font: inherit; font-size: .95rem; color: #111827; background: #fff; }
+  .pay-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #1D4ED8, #0369A1); color: #fff; border: none; border-radius: 12px; font: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all .2s; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .pay-btn:hover { background: linear-gradient(135deg, #1E40AF, #0284C7); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(29,78,216,.35); }
+  .pay-btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+  .pay-secure-note { text-align: center; font-size: .78rem; color: #9CA3AF; margin-top: 12px; }
+  .pay-secure-note a { color: #3B82F6; }
+
+  /* ── Processing Overlay ── */
+  .processing-overlay { position: fixed; inset: 0; background: rgba(248,250,252,.96); display: none; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 20px; }
+  .processing-overlay.show { display: flex; }
+  .spinner { width: 56px; height: 56px; border: 5px solid #BFDBFE; border-top-color: #1D4ED8; border-radius: 50%; animation: spin .9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing-overlay p { font-size: 1.1rem; font-weight: 600; color: #1E293B; }
+  .processing-overlay small { color: #64748B; font-size: .88rem; }
+
+  /* ── Success State ── */
+  .success-box { text-align: center; padding: 48px 24px; }
+  .success-icon { font-size: 4rem; margin-bottom: 16px; }
+  .success-box h2 { color: #15803D; font-size: 1.7rem; margin: 0 0 10px; }
+  .success-box p { color: #374151; max-width: 420px; margin: 0 auto 24px; }
+</style>
+</head>
+<body>
+
+<!-- Processing overlay -->
+<div class="processing-overlay" id="processing-overlay">
+  <div class="spinner"></div>
+  <p id="processing-msg">Verifying payment...</p>
+  <small>Please do not close this window</small>
+</div>
+
+<!-- Header (minimal) -->
+<header><div class="w bar">
+  <a class="logo" href="../index.html"><i></i>Yuvantara</a>
+  <nav class="nav" style="margin-left:auto">
+    <a href="../internships/index.html" style="font-size:.9rem;color:#9AA6BC;padding:8px 12px">← Back to Internships</a>
+  </nav>
+</div></header>
+
+<div class="pay-wrap">
+  <div class="pay-container">
+
+    <!-- Not-logged-in guard: show if no pending app -->
+    <div id="no-pending-view" style="display:none;text-align:center;padding:80px 24px">
+      <div style="font-size:3rem;margin-bottom:16px">🔒</div>
+      <h2 style="color:#0F172A;margin:0 0 10px">No Active Session</h2>
+      <p style="color:#64748B;margin:0 0 24px">No pending application found. Please apply for an internship first.</p>
+      <a href="../index.html" class="btn p">Go to Homepage</a>
+    </div>
+
+    <!-- Main payment view -->
+    <div id="payment-view">
+      <div class="pay-title">
+        <h1>🎓 Complete Your Enrollment</h1>
+        <p>Secure checkout — ₹236 documentation processing fee</p>
+      </div>
+
+      <div class="secure-bar">
+        <div class="secure-badge">🔒 SSL Secured</div>
+        <div class="secure-badge">🛡️ 100% Safe Transaction</div>
+        <div class="secure-badge">📋 GST Invoice Included</div>
+        <div class="secure-badge">✅ Instant Confirmation</div>
+      </div>
+
+      <div class="pay-grid">
+
+        <!-- Left: Order Summary -->
+        <div class="order-card">
+          <div class="order-header">
+            <h3>Order Summary</h3>
+            <div class="prog-name" id="order-track">Industrial Internship Program</div>
+          </div>
+          <div class="order-body">
+            <div class="order-student">
+              <div class="order-avatar" id="order-avatar">ST</div>
+              <div class="order-student-info">
+                <strong id="order-name">Student Name</strong>
+                <span id="order-email">email@example.com</span>
+              </div>
+            </div>
+
+            <div class="fee-row">
+              <span class="label">Documentation Processing Fee</span>
+              <span class="value">₹200.00</span>
+            </div>
+            <div class="fee-row gst">
+              <span class="label">GST @ 18% (CGST 9% + SGST 9%)</span>
+              <span class="value">₹36.00</span>
+            </div>
+
+            <div class="fee-total">
+              <span class="label">Total Amount Payable</span>
+              <span class="value">₹236</span>
+            </div>
+
+            <div class="included-items">
+              <h4>What's Included</h4>
+              <div class="included-item"><span>✅</span> Program Registration & Enrollment</div>
+              <div class="included-item"><span>✅</span> Student ID & Portal Access</div>
+              <div class="included-item"><span>✅</span> Official Certificate (on completion)</div>
+              <div class="included-item"><span>✅</span> GST Tax Invoice (sent via email)</div>
+              <div class="included-item"><span>✅</span> 24×7 Student Support Access</div>
+              <div class="included-item"><span>✅</span> Curriculum & Study Materials</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Payment Form -->
+        <div class="payment-card">
+          <h3>🔐 Secure Payment</h3>
+
+          <div class="pay-tabs">
+            <button class="pay-tab-btn active" data-ptab="upi">📱 UPI</button>
+            <button class="pay-tab-btn" data-ptab="card">💳 Card</button>
+            <button class="pay-tab-btn" data-ptab="netbank">🏦 Net Banking</button>
+          </div>
+
+          <!-- UPI Pane -->
+          <div class="pay-pane active" id="ptab-upi">
+            <div class="pf-group">
+              <label class="pf-label">UPI ID</label>
+              <input class="pf-input" id="upi-id" type="text" placeholder="yourname@upi" autocomplete="off">
+              <div class="upi-hint">Enter your registered UPI ID (e.g. 9876543210@paytm)</div>
+              <div class="upi-badges">
+                <span class="upi-badge">PhonePe</span>
+                <span class="upi-badge">Google Pay</span>
+                <span class="upi-badge">Paytm</span>
+                <span class="upi-badge">BHIM</span>
+                <span class="upi-badge">Amazon Pay</span>
+              </div>
+            </div>
+            <button class="pay-btn" id="btn-pay-upi">🔒 Pay ₹236 via UPI</button>
+          </div>
+
+          <!-- Card Pane -->
+          <div class="pay-pane" id="ptab-card">
+            <div class="pf-group">
+              <label class="pf-label">Cardholder Name</label>
+              <input class="pf-input" id="card-name" type="text" placeholder="As printed on card">
+            </div>
+            <div class="pf-group">
+              <label class="pf-label">Card Number</label>
+              <input class="pf-input" id="card-num" type="text" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCard(this)">
+            </div>
+            <div class="pf-row">
+              <div class="pf-group">
+                <label class="pf-label">Expiry Date</label>
+                <input class="pf-input" id="card-exp" type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+              </div>
+              <div class="pf-group">
+                <label class="pf-label">CVV</label>
+                <input class="pf-input" id="card-cvv" type="password" placeholder="•••" maxlength="4">
+              </div>
+            </div>
+            <button class="pay-btn" id="btn-pay-card">🔒 Pay ₹236 via Card</button>
+          </div>
+
+          <!-- Net Banking Pane -->
+          <div class="pay-pane" id="ptab-netbank">
+            <div class="pf-group">
+              <label class="pf-label">Select Your Bank</label>
+              <select class="bank-select" id="bank-select">
+                <option value="">-- Select Bank --</option>
+                <option>State Bank of India (SBI)</option>
+                <option>HDFC Bank</option>
+                <option>ICICI Bank</option>
+                <option>Axis Bank</option>
+                <option>Punjab National Bank (PNB)</option>
+                <option>Bank of Baroda</option>
+                <option>Canara Bank</option>
+                <option>Union Bank of India</option>
+                <option>Kotak Mahindra Bank</option>
+                <option>IndusInd Bank</option>
+                <option>Other Bank</option>
+              </select>
+            </div>
+            <button class="pay-btn" id="btn-pay-netbank">🔒 Proceed to Net Banking</button>
+          </div>
+
+          <p class="pay-secure-note">
+            🔒 Your payment is 256-bit SSL encrypted · Yuvantara never stores card details ·
+            <a href="../privacy-policy/index.html">Privacy Policy</a>
+          </p>
+        </div>
+      </div><!-- /.pay-grid -->
+    </div><!-- /#payment-view -->
+
+  </div><!-- /.pay-container -->
+</div><!-- /.pay-wrap -->
+
+<script src="../assets/db.js"></script>
+<script src="../assets/site.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  var pendingApp = null;
+  var BASE = '../';
+
+  function init() {
+    // Read pending application
+    try {
+      var raw = localStorage.getItem('yuvantara_pending_app');
+      pendingApp = raw ? JSON.parse(raw) : null;
+    } catch(e) { pendingApp = null; }
+
+    if (!pendingApp || !pendingApp.email) {
+      document.getElementById('payment-view').style.display = 'none';
+      document.getElementById('no-pending-view').style.display = 'block';
+      return;
+    }
+
+    // Populate order summary
+    var initials = (pendingApp.name || 'ST').split(' ').map(function(n){ return n[0]; }).slice(0,2).join('').toUpperCase();
+    var el = document.getElementById('order-avatar'); if (el) el.textContent = initials;
+    var en = document.getElementById('order-name'); if (en) en.textContent = pendingApp.name || 'Student';
+    var ee = document.getElementById('order-email'); if (ee) ee.textContent = pendingApp.email;
+    var et = document.getElementById('order-track'); if (et) et.textContent = pendingApp.track || 'Industrial Internship Program';
+
+    // Tab switching
+    document.querySelectorAll('.pay-tab-btn[data-ptab]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.pay-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+        document.querySelectorAll('.pay-pane').forEach(function(p){ p.classList.remove('active'); });
+        btn.classList.add('active');
+        var pane = document.getElementById('ptab-' + btn.dataset.ptab);
+        if (pane) pane.classList.add('active');
+      });
+    });
+
+    // Pay buttons
+    document.getElementById('btn-pay-upi').addEventListener('click', function() {
+      var upi = document.getElementById('upi-id').value.trim();
+      if (!upi || upi.indexOf('@') === -1) {
+        alert('Please enter a valid UPI ID (e.g. yourname@paytm)');
+        return;
+      }
+      processPayment('UPI');
+    });
+
+    document.getElementById('btn-pay-card').addEventListener('click', function() {
+      var num = document.getElementById('card-num').value.replace(/\s/g, '');
+      var exp = document.getElementById('card-exp').value.trim();
+      var cvv = document.getElementById('card-cvv').value.trim();
+      var name = document.getElementById('card-name').value.trim();
+      if (!name || num.length < 15 || !exp || cvv.length < 3) {
+        alert('Please fill all card details correctly.');
+        return;
+      }
+      processPayment('Card');
+    });
+
+    document.getElementById('btn-pay-netbank').addEventListener('click', function() {
+      var bank = document.getElementById('bank-select').value;
+      if (!bank) { alert('Please select your bank.'); return; }
+      processPayment('Net Banking (' + bank + ')');
+    });
+  }
+
+  function processPayment(method) {
+    var overlay = document.getElementById('processing-overlay');
+    var msg = document.getElementById('processing-msg');
+    overlay.classList.add('show');
+
+    var steps = [
+      { text: 'Connecting to payment gateway...', delay: 800 },
+      { text: 'Verifying transaction...', delay: 1400 },
+      { text: 'Securing your enrollment...', delay: 1000 },
+      { text: 'Activating student account...', delay: 800 }
+    ];
+
+    var t = 0;
+    steps.forEach(function(step) {
+      t += step.delay;
+      setTimeout(function() { if (msg) msg.textContent = step.text; }, t);
+    });
+
+    setTimeout(function() {
+      completeEnrollment(method);
+    }, t + 600);
+  }
+
+  function completeEnrollment(method) {
+    if (!window.YuvantaraDB || !pendingApp) {
+      alert('System error. Please try again.');
+      return;
+    }
+
+    // 1. Submit application record
+    var appResult = YuvantaraDB.submitApplication({
+      name: pendingApp.name,
+      email: pendingApp.email,
+      phone: pendingApp.phone,
+      track: pendingApp.track,
+      stream: pendingApp.stream,
+      college: pendingApp.college,
+      password: pendingApp.password
+    });
+
+    // 2. Register student account with pending content status
+    var reg = YuvantaraDB.registerStudent({
+      name: pendingApp.name,
+      email: pendingApp.email,
+      password: pendingApp.password,
+      phone: pendingApp.phone,
+      track: pendingApp.track,
+      stream: pendingApp.stream,
+      college: pendingApp.college,
+      accountStatus: 'pending',
+      paymentRef: 'PAY-' + Date.now().toString().slice(-8),
+      paymentMethod: method,
+      paymentAmount: 236,
+      paidAt: new Date().toISOString().split('T')[0]
+    });
+
+    // 3. Mark application as 'approved' (payment = instant enrollment)
+    if (appResult.success) {
+      YuvantaraDB.updateApplicationStatus(appResult.app.id, 'approved');
+    }
+
+    if (reg.success || (reg && reg.message && reg.message.indexOf('already') !== -1)) {
+      // 4. Auto-login
+      var loginRes = YuvantaraDB.login(pendingApp.email, pendingApp.password);
+
+      // 5. Clear temp data
+      localStorage.removeItem('yuvantara_pending_app');
+
+      // 6. Redirect to portal
+      var msg = document.getElementById('processing-msg');
+      if (msg) msg.textContent = '🎉 Enrollment Successful! Redirecting...';
+
+      setTimeout(function() {
+        window.location.href = BASE + 'portal/index.html';
+      }, 1000);
+    } else {
+      document.getElementById('processing-overlay').classList.remove('show');
+      alert('Could not complete enrollment: ' + (reg.message || 'Unknown error.'));
+    }
+  }
+
+  // Card number formatter
+  window.formatCard = function(el) {
+    var v = el.value.replace(/\D/g, '').slice(0, 16);
+    el.value = v.replace(/(.{4})/g, '$1  ').trim();
+  };
+
+  window.formatExpiry = function(el) {
+    var v = el.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 2) v = v.slice(0, 2) + ' / ' + v.slice(2);
+    el.value = v;
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body></html>

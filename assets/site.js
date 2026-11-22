@@ -255,7 +255,17 @@ document.addEventListener('DOMContentLoaded', function() {
       var college = document.getElementById('s-college') ? document.getElementById('s-college').value.trim() : '';
 
       if (window.YuvantaraDB) {
-        // Check for duplicate email
+        // Password strength check
+        if (!pass || pass.length < 8) {
+          alert('Password must be at least 8 characters long.');
+          return;
+        }
+        if (!/[0-9]/.test(pass)) {
+          alert('Password must contain at least one number.');
+          return;
+        }
+
+        // Check for duplicate email in users DB
         if (YuvantaraDB.getUserByEmail(email)) {
           alert('An account with this email already exists. Please log in instead.');
           return;
@@ -267,37 +277,29 @@ document.addEventListener('DOMContentLoaded', function() {
           return a.email.toLowerCase() === email.toLowerCase();
         });
         if (alreadyApplied) {
-          alert('You have already submitted an application with this email. Please wait for admin approval or contact us.');
+          alert('You have already submitted an application with this email. Please log in or contact us at xyv@yuvantara.com.');
           return;
         }
 
-        // Submit application ONLY — do not register until admin approves
-        var appResult = YuvantaraDB.submitApplication({
-          name: name,
-          email: email,
-          phone: phone,
-          track: prog,
-          stream: stream,
-          college: college,
-          password: pass   // stored in app so admin can activate with correct password
-        });
-
-        if (appResult.success) {
-          closeModal();
-          signupForm.reset();
-          newCaptcha('cap-signup-q');
-          alert(
-            '✅ Application Submitted Successfully!\n\n' +
-            'Hello ' + name + ', your application for the "' + prog + '" internship has been received.\n\n' +
-            '📋 Application ID: ' + appResult.app.id + '\n' +
-            '⏳ Status: Pending Review\n\n' +
-            'You will receive access to your Student Portal once our team reviews and approves your application. This typically takes 1–2 business days.'
-          );
-          return;
-        } else {
-          alert('Could not submit application. Please try again or contact us.');
+        // Store application data temporarily for payment page
+        var pendingData = {
+          name: name, email: email, phone: phone,
+          password: pass, track: prog, stream: stream, college: college,
+          createdAt: Date.now()
+        };
+        try {
+          localStorage.setItem('yuvantara_pending_app', JSON.stringify(pendingData));
+        } catch(e) {
+          alert('Storage error. Please allow cookies/local storage.');
           return;
         }
+
+        // Redirect to payment/checkout page
+        closeModal();
+        var basePath = window.__yuvantaraBasePath || '';
+        window.location.href = basePath + 'payment/index.html';
+        return;
+
       } else {
         alert('Congratulations ' + name + '! Your application for ' + prog + ' has been received.');
         signupForm.reset();
