@@ -30,7 +30,9 @@
     var apps = YuvantaraDB.getApplications();
 
     var pendingApps = apps.filter(function(a) { return a.status === 'pending'; });
-    var issuedCerts = students.filter(function(s) { return s.certificate && s.certificate.id; });
+    var issuedCerts = students.filter(function(s) {
+      return s.certificate && (s.certificate.id || s.certificate.status === 'revoked');
+    });
 
     // Update KPIs
     setText('kpi-students', students.length);
@@ -60,10 +62,13 @@
     var html = '';
     students.forEach(function(s) {
       var pct = typeof s.progress === 'number' ? s.progress : 0;
-      var hasCert = s.certificate && s.certificate.id;
+      var hasCert = s.certificate && s.certificate.id && s.certificate.status !== 'revoked';
+      var certRevoked = s.certificate && s.certificate.status === 'revoked';
       var certBadge = hasCert
-        ? '<span class="module-status-badge badge-done" style="font-size:.75rem">Issued: ' + escapeHtml(s.certificate.id) + '</span>'
-        : '<span class="module-status-badge badge-wait" style="font-size:.75rem">Not Issued</span>';
+        ? '<span class="module-status-badge badge-done" style="font-size:.75rem">✅ Issued: ' + escapeHtml(s.certificate.id) + '</span>'
+        : certRevoked
+          ? '<span class="module-status-badge" style="font-size:.75rem;background:#FEF2F2;color:#DC2626;border:1px solid #FECACA">❌ Revoked</span>'
+          : '<span class="module-status-badge badge-wait" style="font-size:.75rem">Not Issued</span>';
 
       html += '<tr>' +
         '<td><strong style="font-family:monospace;color:#1E293B">' + escapeHtml(s.id || 'USR') + '</strong></td>' +
@@ -161,19 +166,29 @@
     var html = '';
     issuedCerts.forEach(function(s) {
       var cert = s.certificate;
-      html += '<tr>' +
-        '<td><strong style="font-family:monospace;color:#1D4ED8;font-size:1.05rem">' + escapeHtml(cert.id) + '</strong></td>' +
-        '<td><strong style="color:#0F172A">' + escapeHtml(s.name) + '</strong><br><small style="color:#64748B">' + escapeHtml(s.college || '') + '</small></td>' +
-        '<td>' + escapeHtml(cert.title || s.track) + '</td>' +
-        '<td>' + escapeHtml(cert.issueDate || '—') + '</td>' +
-        '<td><span style="color:#047857;font-weight:700">' + escapeHtml(cert.grade || 'Passed') + '</span></td>' +
-        '<td><span class="module-status-badge badge-done">' + escapeHtml(cert.status || 'Verified') + '</span></td>' +
-        '<td style="text-align:right">' +
-          '<div class="action-btns" style="justify-content:flex-end">' +
+      var isRevoked = cert.status === 'revoked';
+
+      var statusBadge = isRevoked
+        ? '<span class="module-status-badge" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA">❌ Revoked</span>'
+        : '<span class="module-status-badge badge-done">✅ ' + escapeHtml(cert.status || 'Verified') + '</span>';
+
+      var actionHtml = isRevoked
+        ? '<span style="font-size:.82rem;color:#DC2626;font-weight:600;padding:6px 12px;background:#FEE2E2;border-radius:6px;display:inline-block">❌ Revoked on ' + escapeHtml(cert.revokedAt || '') + '</span>'
+        : '<div class="action-btns" style="justify-content:flex-end">' +
             '<a class="btn-sm-action primary" href="../verify-certificate/index.html?id=' + encodeURIComponent(cert.id) + '" target="_blank">🔍 Verify</a>' +
             '<button class="btn-sm-action danger" data-act="revoke-cert" data-email="' + escapeHtml(s.email) + '">Revoke</button>' +
-          '</div>' +
-        '</td>' +
+          '</div>';
+
+      var rowStyle = isRevoked ? 'background:linear-gradient(90deg,#FFF5F5 0%,#fff 100%);border-left:4px solid #EF4444;opacity:.8' : '';
+
+      html += '<tr style="' + rowStyle + '">' +
+        '<td><strong style="font-family:monospace;color:' + (isRevoked ? '#DC2626' : '#1D4ED8') + ';font-size:1.05rem">' + escapeHtml(cert.id || '—') + '</strong></td>' +
+        '<td><strong style="color:#0F172A">' + escapeHtml(s.name) + '</strong><br><small style="color:#64748B">' + escapeHtml(s.college || '') + '</small></td>' +
+        '<td>' + escapeHtml(cert.title || s.track || '—') + '</td>' +
+        '<td>' + escapeHtml(cert.issueDate || '—') + '</td>' +
+        '<td><span style="color:' + (isRevoked ? '#DC2626' : '#047857') + ';font-weight:700">' + escapeHtml(cert.grade || (isRevoked ? 'N/A' : 'Passed')) + '</span></td>' +
+        '<td>' + statusBadge + '</td>' +
+        '<td style="text-align:right">' + actionHtml + '</td>' +
       '</tr>';
     });
 
@@ -320,18 +335,24 @@
         var appId = actBtn.dataset.appid;
         var app = YuvantaraDB.getApplications().find(function(a) { return a.id === appId; });
         if (app) {
-          // Register as student
+          // Use password stored in application, fallback to default
+          var studentPass = app.password || 'student123';
           var regRes = YuvantaraDB.registerStudent({
             name: app.name,
             email: app.email,
             phone: app.phone,
-            password: 'student123',
+            password: studentPass,
             track: app.track,
             college: app.college,
             stream: app.stream
           });
           YuvantaraDB.updateApplicationStatus(appId, 'approved');
-          alert('Application approved! Student account activated for ' + app.name + ' (Password: student123).');
+          if (regRes.success) {
+            alert('✅ Application approved!\n\nStudent account activated for:\n👤 ' + app.name + '\n📧 ' + app.email + '\n🔑 Password: ' + studentPass + '\n\nThey can now log in to the Student Portal.');
+          } else {
+            // Student may already exist (e.g. re-approved), just mark approved
+            alert('✅ Application marked as approved for ' + app.name + '.\n(' + (regRes.message || 'Account may already exist.') + ')');
+          }
           renderAdminDashboard();
         }
       }
@@ -348,9 +369,11 @@
       // 6. Revoke Certificate
       if (act === 'revoke-cert') {
         var email = actBtn.dataset.email;
-        if (confirm('Revoke official certificate for student "' + email + '"?')) {
-          YuvantaraDB.updateStudent(email, { certificate: null });
-          alert('Certificate revoked.');
+        if (confirm('Revoke official certificate for student "' + email + '"?\n\nThe student will see a "Certificate Revoked" notice in their portal.')) {
+          YuvantaraDB.updateStudent(email, {
+            certificate: { status: 'revoked', revokedAt: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) }
+          });
+          alert('Certificate revoked. The student will see a revocation notice when they log in.');
           renderAdminDashboard();
         }
       }

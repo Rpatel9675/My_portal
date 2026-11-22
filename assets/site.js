@@ -255,36 +255,47 @@ document.addEventListener('DOMContentLoaded', function() {
       var college = document.getElementById('s-college') ? document.getElementById('s-college').value.trim() : '';
 
       if (window.YuvantaraDB) {
-        // Submit application
-        YuvantaraDB.submitApplication({
+        // Check for duplicate email
+        if (YuvantaraDB.getUserByEmail(email)) {
+          alert('An account with this email already exists. Please log in instead.');
+          return;
+        }
+
+        // Check if application already submitted
+        var existingApps = YuvantaraDB.getApplications();
+        var alreadyApplied = existingApps.some(function(a) {
+          return a.email.toLowerCase() === email.toLowerCase();
+        });
+        if (alreadyApplied) {
+          alert('You have already submitted an application with this email. Please wait for admin approval or contact us.');
+          return;
+        }
+
+        // Submit application ONLY — do not register until admin approves
+        var appResult = YuvantaraDB.submitApplication({
           name: name,
           email: email,
           phone: phone,
           track: prog,
           stream: stream,
-          college: college
+          college: college,
+          password: pass   // stored in app so admin can activate with correct password
         });
 
-        // Register student account
-        var reg = YuvantaraDB.registerStudent({
-          name: name,
-          email: email,
-          password: pass,
-          phone: phone,
-          track: prog,
-          stream: stream,
-          college: college
-        });
-
-        if (reg.success) {
-          YuvantaraDB.login(email, pass);
+        if (appResult.success) {
           closeModal();
-          alert('Congratulations ' + name + '! Your application for the ' + prog + ' Internship has been submitted successfully.\n\nRedirecting to your student portal...');
-          var basePath = window.__yuvantaraBasePath || '';
-          window.location.href = basePath + 'portal/index.html';
+          signupForm.reset();
+          newCaptcha('cap-signup-q');
+          alert(
+            '✅ Application Submitted Successfully!\n\n' +
+            'Hello ' + name + ', your application for the "' + prog + '" internship has been received.\n\n' +
+            '📋 Application ID: ' + appResult.app.id + '\n' +
+            '⏳ Status: Pending Review\n\n' +
+            'You will receive access to your Student Portal once our team reviews and approves your application. This typically takes 1–2 business days.'
+          );
           return;
         } else {
-          alert('Notice: ' + (reg.message || 'Could not complete registration.'));
+          alert('Could not submit application. Please try again or contact us.');
           return;
         }
       } else {

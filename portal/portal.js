@@ -123,7 +123,7 @@
     var uploadedPreview = document.getElementById('uploaded-cert-preview');
 
     var cert = user.certificate;
-    if (cert && cert.id) {
+    if (cert && cert.id && cert.status !== 'revoked') {
       if (certWrap) certWrap.style.display = 'block';
       if (emptyWrap) emptyWrap.style.display = 'none';
 
@@ -140,6 +140,21 @@
       var verifyLink = document.getElementById('btn-verify-cert-link');
       if (verifyLink) {
         verifyLink.href = '../verify-certificate/index.html?id=' + encodeURIComponent(cert.id);
+      }
+    } else if (cert && cert.status === 'revoked') {
+      // Certificate revoked by admin
+      if (certWrap) certWrap.style.display = 'none';
+      if (emptyWrap) {
+        emptyWrap.style.display = 'block';
+        emptyWrap.innerHTML =
+          '<div style="font-size:3.5rem;margin-bottom:12px">🚫</div>' +
+          '<h3 style="color:#DC2626;margin:0 0 10px">Certificate Revoked</h3>' +
+          '<p style="color:#374151;max-width:480px;margin:0 auto 16px">Your official Yuvantara Certificate has been revoked' +
+          (cert.revokedAt ? ' on <strong>' + cert.revokedAt + '</strong>' : '') +
+          '. Please contact your program coordinator for further details or to appeal this decision.</p>' +
+          '<div style="display:inline-flex;align-items:center;gap:8px;background:#FEE2E2;color:#DC2626;border:1.5px solid #FECACA;border-radius:10px;padding:10px 20px;font-weight:600;font-size:.95rem">' +
+          '❌ Certificate No Longer Valid</div>' +
+          '<div style="margin-top:16px"><a href="mailto:xyv@yuvantara.com" style="color:#1D4ED8;font-weight:600;text-decoration:underline">📧 Contact: xyv@yuvantara.com</a></div>';
       }
     } else if (typeof user.progress === 'number' && user.progress >= 100) {
       // 100% done but certificate not yet issued by admin

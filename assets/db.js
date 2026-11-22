@@ -272,6 +272,7 @@
         track: data.track || 'Cybersecurity & SOC Operations',
         stream: data.stream || '',
         college: data.college || '',
+        password: data.password || 'student123',   // saved for auto-activation on approval
         appliedAt: new Date().toISOString().split('T')[0],
         status: 'pending'
       };
