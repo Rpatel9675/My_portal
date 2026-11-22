@@ -331,17 +331,12 @@
               </div>
             </div>
             <div>
-              <label for="p-track">Enrolled Internship Track</label>
-              <select id="p-track">
-                <option>Cybersecurity &amp; SOC Operations</option>
-                <option>Artificial Intelligence &amp; Machine Learning</option>
-                <option>Cloud Infrastructure &amp; DevOps</option>
-                <option>Python Full-Stack &amp; Automation</option>
-                <option>Robotics &amp; IoT Embedded Systems</option>
-                <option>Data Science &amp; Business Analytics</option>
-                <option>Full-Stack Web Engineering</option>
-                <option>Mobile App Development (Flutter / Kotlin)</option>
-              </select>
+              <label for="p-track" style="display:flex;align-items:center;gap:8px">
+                Enrolled Internship Track
+                <span style="font-size:.75rem;color:#DC2626;background:#FEF2F2;border:1px solid #FECACA;border-radius:99px;padding:2px 8px;font-weight:600">🔒 Locked</span>
+              </label>
+              <input id="p-track" type="text" readonly style="background:#F8FAFC;cursor:not-allowed;color:#374151;border-color:#E2E8F0;font-weight:600">
+              <small style="color:#64748B;font-size:.8rem;margin-top:4px;display:block">Your internship track is fixed at enrollment. Contact <a href="mailto:xyv@yuvantara.com" style="color:#2563EB">xyv@yuvantara.com</a> to request a track change.</small>
             </div>
             <div style="margin-top:10px">
               <button class="btn p" type="submit">Save Changes</button>

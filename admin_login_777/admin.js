@@ -33,6 +33,7 @@
     var issuedCerts = students.filter(function(s) {
       return s.certificate && (s.certificate.id || s.certificate.status === 'revoked');
     });
+    var pendingStudents = students.filter(function(s) { return s.accountStatus === 'pending'; });
 
     // Update KPIs
     setText('kpi-students', students.length);
@@ -41,6 +42,12 @@
     setText('tab-cnt-students', students.length);
     setText('tab-cnt-apps', apps.length);
     setText('tab-cnt-certs', issuedCerts.length);
+
+    // Show pending activation count in students tab badge if any
+    var stuTabCnt = document.getElementById('tab-cnt-students');
+    if (stuTabCnt && pendingStudents.length > 0) {
+      stuTabCnt.textContent = students.length + ' (' + pendingStudents.length + ' pending)';
+    }
 
     // Render Tables
     renderStudentsTable(students);
@@ -70,11 +77,21 @@
           ? '<span class="module-status-badge" style="font-size:.75rem;background:#FEF2F2;color:#DC2626;border:1px solid #FECACA">❌ Revoked</span>'
           : '<span class="module-status-badge badge-wait" style="font-size:.75rem">Not Issued</span>';
 
-      html += '<tr>' +
-        '<td><strong style="font-family:monospace;color:#1E293B">' + escapeHtml(s.id || 'USR') + '</strong></td>' +
+      var isPending = s.accountStatus === 'pending';
+      var statusBadge = isPending
+        ? '<span class="module-status-badge" style="font-size:.72rem;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;margin-left:6px">⏳ Pending</span>'
+        : '<span class="module-status-badge badge-done" style="font-size:.72rem;margin-left:6px">✅ Active</span>';
+
+      var activateBtn = isPending
+        ? '<button class="btn-sm-action" style="background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7" data-act="activate-stu" data-email="' + escapeHtml(s.email) + '" title="Activate content access for student">▶ Activate</button>'
+        : '';
+
+      html += '<tr' + (isPending ? ' style="background:#FFFBEB"' : '') + '>' +
+        '<td><strong style="font-family:monospace;color:#1E293B">' + escapeHtml(s.id || 'USR') + '</strong>' + statusBadge + '</td>' +
         '<td>' +
           '<div style="font-weight:700;color:#0F172A">' + escapeHtml(s.name) + '</div>' +
           '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(s.email) + ' • ' + escapeHtml(s.phone || '') + '</div>' +
+          (s.paymentRef ? '<div style="font-size:.75rem;color:#3B82F6;margin-top:2px">💳 ' + escapeHtml(s.paymentRef) + '</div>' : '') +
         '</td>' +
         '<td>' +
           '<div style="color:#0F172A;font-weight:600">' + escapeHtml(s.college || '—') + '</div>' +
@@ -83,13 +100,14 @@
         '<td><span class="badge-track" style="font-size:.78rem">' + escapeHtml(s.track || 'General Track') + '</span></td>' +
         '<td style="min-width:140px">' +
           '<div style="display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;margin-bottom:3px">' +
-            '<span>' + pct + '%</span>' +
+            '<span>' + (isPending ? '—' : pct + '%') + '</span>' +
           '</div>' +
-          '<div class="progress-bar-bg" style="height:6px"><div class="progress-bar-fill" style="width:' + pct + '%"></div></div>' +
+          '<div class="progress-bar-bg" style="height:6px"><div class="progress-bar-fill" style="width:' + (isPending ? 0 : pct) + '%"></div></div>' +
         '</td>' +
         '<td>' + certBadge + '</td>' +
         '<td style="text-align:right">' +
           '<div class="action-btns" style="justify-content:flex-end">' +
+            activateBtn +
             '<button class="btn-sm-action primary" data-act="prog" data-email="' + escapeHtml(s.email) + '" title="Edit Progress & Modules">⚡ Progress</button>' +
             '<button class="btn-sm-action" data-act="cert" data-email="' + escapeHtml(s.email) + '" title="Issue / Manage Certificate">🎓 Certificate</button>' +
             '<button class="btn-sm-action danger" data-act="del-stu" data-email="' + escapeHtml(s.email) + '" title="Delete Student Record">🗑️</button>' +
@@ -319,6 +337,27 @@
       if (act === 'cert') {
         var email = actBtn.dataset.email;
         openCertModal(email);
+      }
+
+      // 2.5 Activate Student Content
+      if (act === 'activate-stu') {
+        var email = actBtn.dataset.email;
+        var student = YuvantaraDB.getUserByEmail(email);
+        if (student) {
+          YuvantaraDB.updateStudent(email, {
+            accountStatus: 'active',
+            progress: student.progress || 15,
+            modules: student.modules && student.modules.length ? student.modules : [
+              { name: 'Module 1: Orientation & Core Foundations', status: 'completed' },
+              { name: 'Module 2: Lab Setup & Environment Diagnostics', status: 'in-progress' },
+              { name: 'Module 3: Hands-on Case Studies & Practical Labs', status: 'pending' },
+              { name: 'Module 4: Mid-Term Evaluation & Milestone Submission', status: 'pending' },
+              { name: 'Module 5: Capstone Project & Certification', status: 'pending' }
+            ]
+          });
+          alert('✅ Content activated for ' + student.name + '!\n\nThe student now has full access to their internship curriculum and portal.');
+          renderAdminDashboard();
+        }
       }
 
       // 3. Delete Student

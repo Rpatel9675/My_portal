@@ -321,14 +321,32 @@
     changePassword: function(email, currentPassword, newPassword) {
       var user = this.getUserByEmail(email);
       if (!user) return { success: false, message: 'User not found.' };
-      if (user.password !== currentPassword) {
-        return { success: false, message: 'Current password does not match.' };
+
+      // Verify current password (supports both hashed and plain)
+      var currentOk = false;
+      if (user.passwordHash) {
+        currentOk = (user.passwordHash === this.hashPassword(currentPassword));
+      } else if (user.password) {
+        currentOk = (user.password === currentPassword);
       }
-      if (!newPassword || newPassword.length < 6) {
-        return { success: false, message: 'New password must be at least 6 characters.' };
+      if (!currentOk) return { success: false, message: 'Current password does not match.' };
+
+      if (!newPassword || newPassword.length < 8) {
+        return { success: false, message: 'New password must be at least 8 characters.' };
       }
 
-      return this.updateStudent(email, { password: newPassword });
+      // Store only hash of new password
+      var users = this.getUsers();
+      email = email.trim().toLowerCase();
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].email.toLowerCase() === email) {
+          users[i].passwordHash = this.hashPassword(newPassword);
+          delete users[i].password;
+          break;
+        }
+      }
+      setStorage(STORAGE_KEYS.USERS, users);
+      return { success: true };
     },
 
     deleteStudent: function(email) {
