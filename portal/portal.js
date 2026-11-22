@@ -141,6 +141,18 @@
       if (verifyLink) {
         verifyLink.href = '../verify-certificate/index.html?id=' + encodeURIComponent(cert.id);
       }
+    } else if (typeof user.progress === 'number' && user.progress >= 100) {
+      // 100% done but certificate not yet issued by admin
+      if (certWrap) certWrap.style.display = 'none';
+      if (emptyWrap) {
+        emptyWrap.style.display = 'block';
+        emptyWrap.innerHTML =
+          '<div style="font-size:3.5rem;margin-bottom:12px">🎓</div>' +
+          '<h3 style="color:#15803D;margin:0 0 10px">Congratulations! Curriculum 100% Complete</h3>' +
+          '<p style="color:#374151;max-width:480px;margin:0 auto 16px">You have successfully completed all program milestones. Your official Yuvantara Certificate is currently being reviewed and will be issued by your program coordinator shortly.</p>' +
+          '<div style="display:inline-flex;align-items:center;gap:8px;background:#DCFCE7;color:#15803D;border:1.5px solid #86EFAC;border-radius:10px;padding:10px 20px;font-weight:600;font-size:.95rem">' +
+          '⏳ Awaiting Admin Issuance</div>';
+      }
     } else {
       if (certWrap) certWrap.style.display = 'none';
       if (emptyWrap) emptyWrap.style.display = 'block';

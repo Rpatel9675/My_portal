@@ -109,23 +109,31 @@
     var html = '';
     apps.forEach(function(a) {
       var statusBadge = '';
+      var rowStyle = '';
+
       if (a.status === 'approved') {
-        statusBadge = '<span class="module-status-badge badge-done">Approved</span>';
+        statusBadge = '<span class="module-status-badge badge-done" style="font-size:.8rem">✅ Approved</span>';
+        rowStyle = 'background:linear-gradient(90deg,#F0FDF4 0%,#fff 100%);border-left:4px solid #22C55E';
       } else if (a.status === 'rejected') {
-        statusBadge = '<span class="module-status-badge" style="background:#FEF2F2;color:#DC2626">Rejected</span>';
+        statusBadge = '<span class="module-status-badge" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;font-size:.8rem">❌ Rejected</span>';
+        rowStyle = 'background:linear-gradient(90deg,#FFF5F5 0%,#fff 100%);border-left:4px solid #EF4444;opacity:.85';
       } else {
-        statusBadge = '<span class="module-status-badge" style="background:#FEF3C7;color:#D97706">Pending</span>';
+        statusBadge = '<span class="module-status-badge" style="background:#FEF3C7;color:#D97706;border:1px solid #FDE68A;font-size:.8rem">⏳ Pending</span>';
+        rowStyle = '';
       }
 
       var actionHtml = '';
-      if (a.status !== 'approved') {
-        actionHtml += '<button class="btn-sm-action primary" data-act="approve-app" data-appid="' + escapeHtml(a.id) + '">Approve &amp; Enroll</button> ';
-      }
-      if (a.status !== 'rejected') {
-        actionHtml += '<button class="btn-sm-action" data-act="reject-app" data-appid="' + escapeHtml(a.id) + '">Reject</button>';
+      if (a.status === 'approved') {
+        actionHtml = '<span style="font-size:.82rem;color:#15803D;font-weight:600;padding:6px 12px;background:#DCFCE7;border-radius:6px;display:inline-block">✅ Enrolled</span>';
+      } else if (a.status === 'rejected') {
+        actionHtml = '<span style="font-size:.82rem;color:#DC2626;font-weight:600;padding:6px 12px;background:#FEE2E2;border-radius:6px;display:inline-block">❌ Rejected</span>';
+      } else {
+        actionHtml =
+          '<button class="btn-sm-action primary" data-act="approve-app" data-appid="' + escapeHtml(a.id) + '" title="Approve and enroll this student">✅ Approve</button> ' +
+          '<button class="btn-sm-action danger" data-act="reject-app" data-appid="' + escapeHtml(a.id) + '" title="Reject this application">❌ Reject</button>';
       }
 
-      html += '<tr>' +
+      html += '<tr style="' + rowStyle + '">' +
         '<td><code style="color:#0F172A;font-weight:700">' + escapeHtml(a.id) + '</code></td>' +
         '<td><strong style="color:#0F172A">' + escapeHtml(a.name) + '</strong></td>' +
         '<td><div>' + escapeHtml(a.email) + '</div><div style="font-size:.82rem;color:#64748B">' + escapeHtml(a.phone || '') + '</div></td>' +
