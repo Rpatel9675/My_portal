@@ -8,7 +8,3 @@ Official website, Industrial Internship Portal, and Executive Command Center for
 
 ---
 
-
-- `assets/portal.css` — Portal & admin styling
-- `.nojekyll` — Bypasses Jekyll processing on GitHub Pages
-- `404.html` — Custom 404 handler with smart directory redirector
