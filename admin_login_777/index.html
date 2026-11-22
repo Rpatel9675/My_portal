@@ -1,0 +1,575 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Admin Command Center | Yuvantara</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/portal.css"><style>
+/* Admin specific accents */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(220,38,38,.12);
+  border: 1px solid rgba(220,38,38,.3);
+  color: #EF4444;
+  border-radius: 99px;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.admin-card-header {
+  background: linear-gradient(135deg, #090D16 0%, #111827 100%);
+  border: 1px solid #1F2937;
+}
+.kpi-num {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 4px 0 2px;
+  line-height: 1.1;
+}
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 250;
+  display: none;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: block; }
+.modal-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  width: min(580px, 92vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 260;
+  display: none;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,.35);
+}
+.modal-box.open { display: block; }
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+.modal-header h3 { margin: 0; font-size: 1.25rem; color: #0F172A; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #64748B;
+  padding: 4px;
+}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ AUTH MODAL ═══ -->
+<div id="auth-overlay" class="auth-overlay" aria-hidden="true"></div>
+<div id="auth-modal" class="auth-modal" role="dialog" aria-modal="true" aria-label="Login or Sign up" aria-hidden="true">
+  <button class="auth-close" aria-label="Close">✕</button>
+  <div class="auth-tabs">
+    <button class="auth-tab-btn active" data-tab="login">Login</button>
+    <button class="auth-tab-btn" data-tab="signup">Apply / Sign Up</button>
+  </div>
+  <div class="auth-pane active" data-pane="login">
+    <h2 class="auth-title">Welcome back</h2>
+    <p class="auth-sub">Log in to your Yuvantara portal</p>
+    <form id="form-login" class="auth-form" novalidate>
+      <div class="fgroup"><label for="l-email">Email address</label><input id="l-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
+      <div class="fgroup"><label for="l-pass">Password</label><input id="l-pass" type="password" placeholder="••••••••" required autocomplete="current-password"></div>
+      <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-login-q"></span></label><input id="cap-login-a" type="number" placeholder="Your answer" required min="0"></div>
+      <button class="btn p auth-submit" type="submit">Login</button>
+      <p class="auth-switch">Don't have an account? <button type="button" class="auth-tab-btn link" data-tab="signup">Sign up</button></p>
+    </form>
+  </div>
+  <div class="auth-pane" data-pane="signup">
+    <h2 class="auth-title">Apply for Internship</h2>
+    <p class="auth-sub">Join the Yuvantara industrial training program</p>
+    <form id="form-signup" class="auth-form" novalidate>
+      <div class="fgroup"><label for="s-name">Full name</label><input id="s-name" type="text" placeholder="Your full name" required autocomplete="name"></div>
+      <div class="frow">
+        <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
+        <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
+      </div>
+      <div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div>
+      <div class="frow">
+        <div class="fgroup">
+          <label for="s-prog">Internship Track</label>
+          <select id="s-prog" required>
+            <option value="">Select track</option>
+            <option>Cybersecurity &amp; SOC Operations</option>
+            <option>Artificial Intelligence &amp; Machine Learning</option>
+            <option>Cloud Infrastructure &amp; DevOps</option>
+            <option>Python Full-Stack &amp; Automation</option>
+            <option>Robotics &amp; IoT Embedded Systems</option>
+            <option>Data Science &amp; Business Analytics</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label for="s-stream">Stream / Degree</label>
+          <select id="s-stream" required>
+            <option value="">Select stream</option>
+            <option>B.Tech / B.E (CSE, IT, ECE, EE)</option>
+            <option>MCA / M.Tech</option>
+            <option>BCA / B.Sc Computer Science</option>
+            <option>Diploma in Engineering</option>
+            <option>Other Graduate / Post Graduate</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup"><label for="s-college">College / University name</label><input id="s-college" type="text" placeholder="e.g. NIT Patna" required></div>
+      <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-signup-q"></span></label><input id="cap-signup-a" type="number" placeholder="Your answer" required min="0"></div>
+      <button class="btn p auth-submit" type="submit">Submit Application</button>
+      <p class="auth-switch">Already have an account? <button type="button" class="auth-tab-btn link" data-tab="login">Login</button></p>
+    </form>
+  </div>
+</div>
+
+<header><div class="w bar">
+  <a class="logo" href="../index.html"><i></i>Yuvantara</a>
+  <button class="burger" aria-label="Menu">Menu</button>
+  <nav class="nav">
+    <a href="../internships/index.html">Internships</a>
+    <details class="dd mg"><summary>Solutions</summary><div class="menu mega"><div><h4><a href="../cybersecurity-solutions/index.html">Cybersecurity Solutions</a></h4><a href="../cybersecurity-solutions/endpoint-security/index.html">Endpoint Security<small>EDR, antivirus &amp; device hardening</small></a><a href="../cybersecurity-solutions/network-security/index.html">Network Security<small>Firewalls, IPS &amp; segmentation</small></a><a href="../cybersecurity-solutions/siem/index.html">SIEM<small>Log collection &amp; correlation</small></a><a href="../cybersecurity-solutions/email-security/index.html">Email Security<small>Phishing &amp; malware defence</small></a><a href="../cybersecurity-solutions/vulnerability-management/index.html">Vulnerability Management<small>Scanning &amp; patch priority</small></a></div><div><h4><a href="../it-infrastructure-solutions/index.html">IT Infrastructure Solutions</a></h4><a href="../it-infrastructure-solutions/unified-endpoint-management/index.html">Unified Endpoint Management<small>Control &amp; deploy devices</small></a><a href="../it-infrastructure-solutions/cloud-infrastructure-hosting/index.html">Cloud Infrastructure<small>Cloud hosting &amp; migration</small></a><a href="../it-infrastructure-solutions/enterprise-networking/index.html">Enterprise Networking<small>Switching &amp; SD-WAN</small></a><a href="../it-infrastructure-solutions/backup-disaster-recovery/index.html">Backup &amp; Recovery<small>Immutable reliable backup</small></a></div><div><h4><a href="../managed-services/index.html">Managed Services</a></h4><a href="../managed-services/managed-it-services/index.html">Managed IT Services<small>Service desk &amp; support</small></a><a href="../managed-services/managed-cybersecurity/index.html">Managed Cybersecurity<small>Round-the-clock SOC defense</small></a><a href="../managed-services/soc-implementation/index.html">SOC Implementation<small>Build your own SOC</small></a></div></div></details>
+    <details class="dd"><summary>Resources</summary><div class="menu"><a href="../blog/index.html">Blog<small>Technical guides</small></a><a href="../case-studies/index.html">Case Studies<small>Real engagements</small></a><a href="../verify-certificate/index.html">Verify Certificate<small>Instant credential authentication</small></a><a href="../use-cases/index.html">Use Cases<small>Problems we solve</small></a><a href="../resources/downloads/index.html">Downloads<small>Brochures &amp; datasheets</small></a></div></details>
+    <details class="dd"><summary>About</summary><div class="menu"><a href="../about/index.html">Our Company<small>Who we are</small></a><a href="../about/certifications/index.html">Certifications<small>ISO 9001 standard</small></a><a href="../careers/index.html">Careers<small>Join our team</small></a></div></details>
+    <a href="../support/index.html">Support</a>
+    <span class="admin-badge">Admin Clearance</span>
+  </nav>
+</div></header>
+
+<main class="portal-wrap" id="main">
+  <div class="portal-container">
+
+    <!-- ═══ STATE A: ADMIN LOGIN GATE (UNAUTHENTICATED) ═══ -->
+    <div id="admin-login-view" style="display:none;max-width:480px;margin:50px auto">
+      <div class="pcard" style="border:1px solid #CBD5E1;box-shadow:0 20px 40px rgba(15,23,42,.08)">
+        <div style="text-align:center;margin-bottom:24px">
+          <div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#DC2626,#991B1B);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 16px;box-shadow:0 8px 20px rgba(220,38,38,.3)">🛡️</div>
+          <span class="admin-badge">Executive Security Console</span>
+          <h2 style="font-size:1.5rem;color:#0F172A;margin:10px 0 6px">Admin Portal Login</h2>
+          <p style="color:#64748B;font-size:.88rem;margin:0">Authentication required for Yuvantara Management Console.</p>
+        </div>
+
+        <div class="alert-box" id="admin-gate-alert"></div>
+
+        <form id="admin-login-form" class="portal-form">
+          <div>
+            <label for="adm-email">Administrator Email</label>
+            <input id="adm-email" type="email" placeholder="admin@yuvantara.com" required autocomplete="email">
+          </div>
+          <div>
+            <label for="adm-pass">Master Password</label>
+            <input id="adm-pass" type="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:.85rem;color:#64748B">
+            <span>Session: Localhost &amp; GitHub Pages</span>
+            <span>256-bit AES</span>
+          </div>
+          <button class="btn p" style="background:#DC2626;border-color:#DC2626;width:100%;margin-top:8px" type="submit">Authenticate as Admin</button>
+        </form>
+
+        <div style="margin-top:20px;padding:14px;background:#F8FAFC;border-radius:8px;font-size:.85rem;color:#475569;border:1px dashed #CBD5E1">
+          <strong>Default Admin Demo Access:</strong><br>
+          Email: <code>admin@yuvantara.com</code> &nbsp;|&nbsp; Password: <code>admin777</code><br>
+          <a href="#" id="fill-admin-demo" style="color:#DC2626;font-weight:700;display:inline-block;margin-top:6px">Click to Auto-fill Admin Credentials</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STATE B: ADMIN COMMAND CENTER (AUTHENTICATED) ═══ -->
+    <div id="admin-dashboard-view" style="display:none">
+      <!-- Admin Header Card -->
+      <div class="portal-header-card admin-card-header">
+        <div class="portal-user-info">
+          <div class="portal-avatar" style="background:linear-gradient(135deg,#DC2626,#991B1B);box-shadow:0 4px 14px rgba(220,38,38,.4)">AD</div>
+          <div class="portal-user-meta">
+            <h2>Yuvantara Executive Administration</h2>
+            <p>
+              <span class="admin-badge">Super Admin Console</span>
+              <span>📍 Patna, Bihar Headquarters</span>
+              <span>🔑 Level 4 Management Access</span>
+            </p>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" id="btn-export-backup" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff">💾 Export JSON Data</button>
+          <button class="btn" id="btn-admin-logout" style="background:#DC2626;border-color:#DC2626;color:#fff">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- KPI Summary Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <small>Total Enrolled Students</small>
+          <div class="kpi-num" id="kpi-students">0</div>
+          <span>Active in Training Tracks</span>
+        </div>
+        <div class="kpi-card">
+          <small>Pending Applications</small>
+          <div class="kpi-num" id="kpi-apps" style="color:#D97706">0</div>
+          <span>Awaiting Review &amp; Enrollment</span>
+        </div>
+        <div class="kpi-card">
+          <small>Issued Certificates</small>
+          <div class="kpi-num" id="kpi-certs" style="color:#059669">0</div>
+          <span>Verified &amp; Authenticated</span>
+        </div>
+        <div class="kpi-card">
+          <small>Active Tracks</small>
+          <div class="kpi-num" id="kpi-tracks" style="color:#2563EB">22</div>
+          <span>Industrial Programs Offered</span>
+        </div>
+      </div>
+
+      <!-- Admin Small Navigation Bar -->
+      <nav class="portal-nav-bar" aria-label="Admin Navigation Tabs">
+        <button class="portal-tab-btn active" data-admin-tab="students">
+          <span>👥</span> Registered Students (<span id="tab-cnt-students">0</span>)
+        </button>
+        <button class="portal-tab-btn" data-admin-tab="applications">
+          <span>📥</span> Internship Applications (<span id="tab-cnt-apps">0</span>)
+        </button>
+        <button class="portal-tab-btn" data-admin-tab="certificates">
+          <span>🎓</span> Certificate Registry (<span id="tab-cnt-certs">0</span>)
+        </button>
+        <button class="portal-tab-btn" data-admin-tab="data">
+          <span>⚙️</span> System Data &amp; Backup
+        </button>
+      </nav>
+
+      <!-- ── TAB 1: REGISTERED STUDENTS ── -->
+      <section class="portal-pane active" id="pane-students">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>Student Management &amp; Progress Tracking</h3>
+              <p>Monitor enrolled interns, adjust progress percentages, toggle curriculum milestones, and issue certificates.</p>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn p" id="btn-add-student-modal">➕ Enroll New Student</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Candidate Details</th>
+                  <th>College &amp; Stream</th>
+                  <th>Enrolled Track</th>
+                  <th>Progress</th>
+                  <th>Certificate</th>
+                  <th style="text-align:right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-students-tbody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 2: INTERNSHIP APPLICATIONS ── -->
+      <section class="portal-pane" id="pane-applications">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>Incoming Internship Applications</h3>
+              <p>Review applications submitted via the website apply modal. Approve and auto-create student accounts.</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>App ID</th>
+                  <th>Applicant Name</th>
+                  <th>Contact Info</th>
+                  <th>Track Applied For</th>
+                  <th>College &amp; Stream</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th style="text-align:right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-apps-tbody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 3: CERTIFICATES REGISTRY ── -->
+      <section class="portal-pane" id="pane-certificates">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>Official Certificate Registry</h3>
+              <p>All issued credentials and uploaded student certificates. Direct links to verification engine.</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Certificate ID</th>
+                  <th>Student Name</th>
+                  <th>Track Title</th>
+                  <th>Issue Date</th>
+                  <th>Grade</th>
+                  <th>Verification Status</th>
+                  <th style="text-align:right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-certs-tbody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB 4: SYSTEM DATA & BACKUP ── -->
+      <section class="portal-pane" id="pane-data">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>System Data Management &amp; Persistence</h3>
+              <p>Export JSON backups, restore records, or reset database to demo state.</p>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:28px">
+            <div style="border:1px solid #E2E8F0;border-radius:12px;padding:24px;background:#F8FAFC">
+              <h4 style="margin:0 0 8px;color:#0F172A">📥 Download Complete Backup</h4>
+              <p style="color:#64748B;font-size:.88rem;margin:0 0 16px">Export all users, enrolled students, submitted applications, and certificates as a clean JSON file.</p>
+              <button class="btn p" id="btn-download-json">Download JSON Backup</button>
+            </div>
+
+            <div style="border:1px solid #E2E8F0;border-radius:12px;padding:24px;background:#F8FAFC">
+              <h4 style="margin:0 0 8px;color:#0F172A">📤 Restore from JSON</h4>
+              <p style="color:#64748B;font-size:.88rem;margin:0 0 16px">Upload a previously exported Yuvantara JSON file to restore all records.</p>
+              <input type="file" id="json-restore-input" accept=".json" style="display:none">
+              <button class="btn" id="btn-restore-json">Select Backup File</button>
+            </div>
+
+            <div style="border:1px solid #FCA5A5;border-radius:12px;padding:24px;background:#FEF2F2">
+              <h4 style="margin:0 0 8px;color:#DC2626">⚠️ Reset to Demo State</h4>
+              <p style="color:#991B1B;font-size:.88rem;margin:0 0 16px">Reverts database to default demo records (Rohan Sen 75% complete, demo applications).</p>
+              <button class="btn" id="btn-reset-demo" style="background:#DC2626;border-color:#DC2626;color:#fff">Reset Demo Data</button>
+            </div>
+          </div>
+
+          <h4 style="margin:0 0 10px;color:#0F172A">Live LocalStorage Database Preview</h4>
+          <pre id="raw-json-viewer" style="background:#0F172A;color:#38BDF8;padding:20px;border-radius:10px;overflow:auto;max-height:400px;font-size:.82rem"></pre>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</main>
+
+<!-- ═══ MODAL: EDIT STUDENT PROGRESS ═══ -->
+<div class="modal-overlay" id="modal-progress-overlay"></div>
+<div class="modal-box" id="modal-progress">
+  <div class="modal-header">
+    <h3>Update Student Internship Progress</h3>
+    <button class="modal-close" data-close-modal="progress">✕</button>
+  </div>
+  <form id="form-edit-progress" class="portal-form">
+    <input type="hidden" id="prog-stu-email">
+    <div>
+      <label>Student Name</label>
+      <input type="text" id="prog-stu-name" readonly>
+    </div>
+    <div>
+      <label for="prog-range-input">Progress Percentage: <b id="prog-range-val" style="color:var(--ac);font-size:1.1rem">75%</b></label>
+      <input type="range" id="prog-range-input" min="0" max="100" step="5" value="75" style="width:100%">
+    </div>
+
+    <label style="margin-top:10px;display:block">Curriculum Modules Status</label>
+    <div id="prog-modules-container" style="display:flex;flex-direction:column;gap:8px">
+      <!-- Dynamically generated checkboxes -->
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+      <button type="button" class="btn" data-close-modal="progress">Cancel</button>
+      <button type="submit" class="btn p">Save Progress</button>
+    </div>
+  </form>
+</div>
+
+<!-- ═══ MODAL: ISSUE / UPLOAD CERTIFICATE ═══ -->
+<div class="modal-overlay" id="modal-cert-overlay"></div>
+<div class="modal-box" id="modal-cert">
+  <div class="modal-header">
+    <h3>Issue / Manage Student Certificate</h3>
+    <button class="modal-close" data-close-modal="cert">✕</button>
+  </div>
+  <form id="form-issue-cert" class="portal-form">
+    <input type="hidden" id="cert-stu-email">
+    <div>
+      <label>Candidate Name</label>
+      <input type="text" id="cert-stu-name" readonly>
+    </div>
+    <div>
+      <label for="cert-input-id">Certificate ID (e.g. YUV-2026-CS101)</label>
+      <input type="text" id="cert-input-id" required>
+    </div>
+    <div>
+      <label for="cert-input-title">Certification Title / Track</label>
+      <input type="text" id="cert-input-title" required>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <label for="cert-input-duration">Duration</label>
+        <input type="text" id="cert-input-duration" value="6 Months (Jan 2026 – Jun 2026)">
+      </div>
+      <div>
+        <label for="cert-input-grade">Grade / Honors</label>
+        <input type="text" id="cert-input-grade" value="Grade A+ (Distinction)">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <label for="cert-input-date">Issue Date</label>
+        <input type="text" id="cert-input-date">
+      </div>
+      <div>
+        <label for="cert-input-authority">Issuing Authority</label>
+        <input type="text" id="cert-input-authority" value="Yuvantara Cyber Defense Council">
+      </div>
+    </div>
+    <div>
+      <label for="cert-custom-file">Attach Custom Certificate File (Optional Image / PDF)</label>
+      <input type="file" id="cert-custom-file" accept="image/*,application/pdf">
+      <small style="color:#64748B;display:block;margin-top:4px">Uploads directly to student profile record</small>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+      <button type="button" class="btn" data-close-modal="cert">Cancel</button>
+      <button type="submit" class="btn p">Assign &amp; Issue Certificate</button>
+    </div>
+  </form>
+</div>
+
+<!-- ═══ MODAL: ENROLL NEW STUDENT ═══ -->
+<div class="modal-overlay" id="modal-enroll-overlay"></div>
+<div class="modal-box" id="modal-enroll">
+  <div class="modal-header">
+    <h3>Enroll New Student Candidate</h3>
+    <button class="modal-close" data-close-modal="enroll">✕</button>
+  </div>
+  <form id="form-enroll-student" class="portal-form">
+    <div>
+      <label for="new-stu-name">Full Name</label>
+      <input type="text" id="new-stu-name" required placeholder="e.g. Anand Roy">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <label for="new-stu-email">Email Address</label>
+        <input type="email" id="new-stu-email" required placeholder="student@example.com">
+      </div>
+      <div>
+        <label for="new-stu-phone">Phone / WhatsApp</label>
+        <input type="tel" id="new-stu-phone" required placeholder="+91 98765 43210">
+      </div>
+    </div>
+    <div>
+      <label for="new-stu-pass">Initial Password</label>
+      <input type="text" id="new-stu-pass" value="student123" required>
+    </div>
+    <div>
+      <label for="new-stu-track">Internship Track</label>
+      <select id="new-stu-track" required>
+        <option>Cybersecurity &amp; SOC Operations</option>
+        <option>Artificial Intelligence &amp; Machine Learning</option>
+        <option>Cloud Infrastructure &amp; DevOps</option>
+        <option>Python Full-Stack &amp; Automation</option>
+        <option>Robotics &amp; IoT Embedded Systems</option>
+        <option>Data Science &amp; Business Analytics</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <label for="new-stu-college">College / University</label>
+        <input type="text" id="new-stu-college" placeholder="NIT Patna" required>
+      </div>
+      <div>
+        <label for="new-stu-stream">Stream / Degree</label>
+        <input type="text" id="new-stu-stream" placeholder="B.Tech CSE" required>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+      <button type="button" class="btn" data-close-modal="enroll">Cancel</button>
+      <button type="submit" class="btn p">Enroll Candidate</button>
+    </div>
+  </form>
+</div>
+
+<footer><div class="w">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <h3><i></i>Yuvantara</h3>
+      <p>Empowering students and technology teams through advanced industrial internships, enterprise cybersecurity, and robust IT infrastructure solutions.</p>
+      <div class="footer-contact-item"><i>📍</i><span>4A Prantika Building, Kankarbagh, Patna, Bihar - 800006</span></div>
+      <div class="footer-contact-item"><i>✉️</i><a href="mailto:xyv@yuvantara.com">xyv@yuvantara.com</a></div>
+      <div class="footer-contact-item"><i>📞</i><a href="tel:+919876543210">+91 98765 43210</a></div>
+    </div>
+    <div class="footer-col">
+      <h4>Internship Programs</h4>
+      <a href="../internships/index.html" data-auth="signup" data-course="Cybersecurity &amp; SOC Operations">Cybersecurity &amp; SOC</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Artificial Intelligence &amp; Machine Learning">AI &amp; Machine Learning</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Cloud Infrastructure &amp; DevOps">Cloud Infrastructure &amp; DevOps</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Python Full-Stack &amp; Automation">Python Full-Stack &amp; Automation</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Robotics &amp; IoT Embedded Systems">Robotics, IoT &amp; Embedded</a>
+      <a href="../internships/index.html">View All 22+ Programs →</a>
+    </div>
+    <div class="footer-col">
+      <h4>Technology Solutions</h4>
+      <a href="../cybersecurity-solutions/index.html">Cybersecurity Solutions</a>
+      <a href="../cybersecurity-solutions/network-security/index.html">Network Security &amp; Firewalls</a>
+      <a href="../it-infrastructure-solutions/index.html">IT Infrastructure Solutions</a>
+      <a href="../managed-services/index.html">Managed IT Services</a>
+      <a href="../managed-services/soc-implementation/index.html">SOC Implementation</a>
+      <a href="../about/certifications/index.html">ISO 9001 Quality</a>
+    </div>
+    <div class="footer-col">
+      <h4>Admin &amp; Verification</h4>
+      <a href="../verify-certificate/index.html">Verify Certificate</a>
+      <a href="../internships/index.html">Internship Catalog</a>
+      <a href="../portal/index.html">Student Portal</a>
+      <a href="index.html">Admin Command Center</a>
+      <a href="../careers/index.html">Careers &amp; Mentorship</a>
+      <a href="../contact/index.html">Contact Us</a>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <span>© 2026 Yuvantara. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="../privacy-policy/index.html">Privacy Policy</a>
+      <a href="../terms/index.html">Terms of Use</a>
+      <a href="../verify-certificate/index.html">Verify Certificate</a>
+      <a href="../sitemap/index.html">Sitemap</a>
+    </div>
+  </div>
+</div></footer>
+
+<script src="../assets/db.js"></script>
+<script src="../assets/site.js"></script>
+<script src="admin.js"></script>
+</body></html>

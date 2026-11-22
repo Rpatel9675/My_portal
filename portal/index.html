@@ -1,0 +1,472 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Student Portal | Yuvantara</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/portal.css"></head><body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ═══ AUTH MODAL ═══ -->
+<div id="auth-overlay" class="auth-overlay" aria-hidden="true"></div>
+<div id="auth-modal" class="auth-modal" role="dialog" aria-modal="true" aria-label="Login or Sign up" aria-hidden="true">
+  <button class="auth-close" aria-label="Close">✕</button>
+  <div class="auth-tabs">
+    <button class="auth-tab-btn active" data-tab="login">Login</button>
+    <button class="auth-tab-btn" data-tab="signup">Apply / Sign Up</button>
+  </div>
+  <div class="auth-pane active" data-pane="login">
+    <h2 class="auth-title">Welcome back</h2>
+    <p class="auth-sub">Log in to your Yuvantara student portal</p>
+    <form id="form-login" class="auth-form" novalidate>
+      <div class="fgroup"><label for="l-email">Email address</label><input id="l-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
+      <div class="fgroup"><label for="l-pass">Password</label><input id="l-pass" type="password" placeholder="••••••••" required autocomplete="current-password"></div>
+      <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-login-q"></span></label><input id="cap-login-a" type="number" placeholder="Your answer" required min="0"></div>
+      <button class="btn p auth-submit" type="submit">Login</button>
+      <p class="auth-switch">Don't have an account? <button type="button" class="auth-tab-btn link" data-tab="signup">Sign up</button></p>
+    </form>
+  </div>
+  <div class="auth-pane" data-pane="signup">
+    <h2 class="auth-title">Apply for Internship</h2>
+    <p class="auth-sub">Join the Yuvantara industrial training program</p>
+    <form id="form-signup" class="auth-form" novalidate>
+      <div class="fgroup"><label for="s-name">Full name</label><input id="s-name" type="text" placeholder="Your full name" required autocomplete="name"></div>
+      <div class="frow">
+        <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
+        <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
+      </div>
+      <div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div>
+      <div class="frow">
+        <div class="fgroup">
+          <label for="s-prog">Internship Track</label>
+          <select id="s-prog" required>
+            <option value="">Select track</option>
+            <option>Cybersecurity &amp; SOC Operations</option>
+            <option>Artificial Intelligence &amp; Machine Learning</option>
+            <option>Cloud Infrastructure &amp; DevOps</option>
+            <option>Python Full-Stack &amp; Automation</option>
+            <option>Robotics &amp; IoT Embedded Systems</option>
+            <option>Data Science &amp; Business Analytics</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label for="s-stream">Stream / Degree</label>
+          <select id="s-stream" required>
+            <option value="">Select stream</option>
+            <option>B.Tech / B.E (CSE, IT, ECE, EE)</option>
+            <option>MCA / M.Tech</option>
+            <option>BCA / B.Sc Computer Science</option>
+            <option>Diploma in Engineering</option>
+            <option>Other Graduate / Post Graduate</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup"><label for="s-college">College / University name</label><input id="s-college" type="text" placeholder="e.g. NIT Patna" required></div>
+      <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-signup-q"></span></label><input id="cap-signup-a" type="number" placeholder="Your answer" required min="0"></div>
+      <button class="btn p auth-submit" type="submit">Submit Application</button>
+      <p class="auth-switch">Already have an account? <button type="button" class="auth-tab-btn link" data-tab="login">Login</button></p>
+    </form>
+  </div>
+</div>
+
+<header><div class="w bar">
+  <a class="logo" href="../index.html"><i></i>Yuvantara</a>
+  <button class="burger" aria-label="Menu">Menu</button>
+  <nav class="nav">
+    <a href="../internships/index.html">Internships</a>
+    <details class="dd mg"><summary>Solutions</summary><div class="menu mega"><div><h4><a href="../cybersecurity-solutions/index.html">Cybersecurity Solutions</a></h4><a href="../cybersecurity-solutions/endpoint-security/index.html">Endpoint Security<small>EDR, antivirus &amp; device hardening</small></a><a href="../cybersecurity-solutions/network-security/index.html">Network Security<small>Firewalls, IPS &amp; segmentation</small></a><a href="../cybersecurity-solutions/siem/index.html">SIEM<small>Log collection &amp; correlation</small></a><a href="../cybersecurity-solutions/email-security/index.html">Email Security<small>Phishing &amp; malware defence</small></a><a href="../cybersecurity-solutions/vulnerability-management/index.html">Vulnerability Management<small>Scanning &amp; patch priority</small></a></div><div><h4><a href="../it-infrastructure-solutions/index.html">IT Infrastructure Solutions</a></h4><a href="../it-infrastructure-solutions/unified-endpoint-management/index.html">Unified Endpoint Management<small>Control &amp; deploy devices</small></a><a href="../it-infrastructure-solutions/cloud-infrastructure-hosting/index.html">Cloud Infrastructure<small>Cloud hosting &amp; migration</small></a><a href="../it-infrastructure-solutions/enterprise-networking/index.html">Enterprise Networking<small>Switching &amp; SD-WAN</small></a><a href="../it-infrastructure-solutions/backup-disaster-recovery/index.html">Backup &amp; Recovery<small>Immutable reliable backup</small></a></div><div><h4><a href="../managed-services/index.html">Managed Services</a></h4><a href="../managed-services/managed-it-services/index.html">Managed IT Services<small>Service desk &amp; support</small></a><a href="../managed-services/managed-cybersecurity/index.html">Managed Cybersecurity<small>Round-the-clock SOC defense</small></a><a href="../managed-services/soc-implementation/index.html">SOC Implementation<small>Build your own SOC</small></a></div></div></details>
+    <details class="dd"><summary>Resources</summary><div class="menu"><a href="../blog/index.html">Blog<small>Technical guides</small></a><a href="../case-studies/index.html">Case Studies<small>Real engagements</small></a><a href="../verify-certificate/index.html">Verify Certificate<small>Instant credential authentication</small></a><a href="../use-cases/index.html">Use Cases<small>Problems we solve</small></a><a href="../resources/downloads/index.html">Downloads<small>Brochures &amp; datasheets</small></a></div></details>
+    <details class="dd"><summary>About</summary><div class="menu"><a href="../about/index.html">Our Company<small>Who we are</small></a><a href="../about/certifications/index.html">Certifications<small>ISO 9001 standard</small></a><a href="../careers/index.html">Careers<small>Join our team</small></a></div></details>
+    <a href="../support/index.html">Support</a>
+    <button class="btn p" style="margin:0 0 0 8px;padding:9px 18px" data-auth="signup">Apply for Internship</button>
+    <button class="btn" style="margin:0 0 0 4px;padding:9px 16px" data-auth="login">Login</button>
+  </nav>
+</div></header>
+
+<main class="portal-wrap" id="main">
+  <div class="portal-container">
+
+    <!-- ═══ STATE A: LOGGED IN STUDENT VIEW ═══ -->
+    <div id="student-view" style="display:none">
+      <!-- Student Profile Header Card -->
+      <div class="portal-header-card">
+        <div class="portal-user-info">
+          <div class="portal-avatar" id="stu-avatar">RS</div>
+          <div class="portal-user-meta">
+            <h2 id="stu-name">Rohan Sen</h2>
+            <p>
+              <span class="badge-track" id="stu-track">Cybersecurity &amp; SOC Operations</span>
+              <span>🎓 <span id="stu-college">NIT Patna</span></span>
+              <span>✉️ <span id="stu-email">student@yuvantara.com</span></span>
+              <span>🆔 ID: <strong id="stu-id">USR-101</strong></span>
+            </p>
+          </div>
+        </div>
+        <div>
+          <button class="btn" id="btn-quick-logout" style="border-color:rgba(255,255,255,.3);color:#fff">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- Small Navigation Bar -->
+      <nav class="portal-nav-bar" aria-label="Student portal navigation">
+        <button class="portal-tab-btn active" data-tab="progress">
+          <span>📊</span> Internship Progress
+        </button>
+        <button class="portal-tab-btn" data-tab="certificate">
+          <span>🎓</span> Certificate (Download &amp; Upload)
+        </button>
+        <button class="portal-tab-btn" data-tab="profile">
+          <span>👤</span> Edit Profile
+        </button>
+        <button class="portal-tab-btn" data-tab="password">
+          <span>🔒</span> Password Modification
+        </button>
+        <button class="portal-tab-btn logout" id="btn-portal-logout">
+          <span>🚪</span> Logout
+        </button>
+      </nav>
+
+      <!-- TAB 1: INTERNSHIP PROGRESS -->
+      <section class="portal-pane active" id="pane-progress">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>Internship Curriculum &amp; Milestones</h3>
+              <p>Track your hands-on module completion, lab exercises, and mentor assessments.</p>
+            </div>
+            <div>
+              <span class="badge-track" id="stu-track-pill">Track Active</span>
+            </div>
+          </div>
+
+          <div class="progress-summary-box">
+            <div class="progress-meta-row">
+              <div>
+                <strong style="color:#0F172A;font-size:1.1rem">Overall Program Completion</strong>
+                <p style="margin:2px 0 0;font-size:.85rem;color:#64748B">Requirement: 100% to qualify for final industry certificate</p>
+              </div>
+              <div class="progress-pct-text" id="stu-pct-text">75%</div>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="stu-bar-fill" style="width:75%"></div>
+            </div>
+          </div>
+
+          <h4 style="margin:24px 0 14px;color:#0F172A">Technical Modules &amp; Milestones</h4>
+          <div class="module-list" id="stu-module-list">
+            <!-- Dynamically populated by portal.js -->
+          </div>
+
+          <div style="margin-top:28px;padding:20px;border-radius:12px;background:#F8FAFC;border:1px solid #E2E8F0;display:flex;gap:16px;align-items:flex-start">
+            <div style="font-size:2rem">👨‍🏫</div>
+            <div>
+              <strong style="color:#0F172A;display:block;margin-bottom:4px">Assigned Technical Mentor Remarks</strong>
+              <p style="color:#475569;margin:0;font-size:.9rem;line-height:1.6">
+                <strong>Mentor:</strong> Er. Abhishek Sharma (Senior SOC Defense Lead, Yuvantara)<br>
+                <em>"Rohan demonstrates high aptitude in packet inspection and SIEM log correlation. Final Capstone Defense deployment is underway. On track for Grade A+ completion."</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CERTIFICATE (DOWNLOAD & UPLOAD) -->
+      <section class="portal-pane" id="pane-certificate">
+        <!-- Official Certificate Card -->
+        <div class="pcard" id="cert-official-wrap">
+          <div class="pcard-header">
+            <div>
+              <h3>Official Industrial Certificate of Completion</h3>
+              <p>Issued by Yuvantara Academic Council &amp; Cyber Defense Division.</p>
+            </div>
+            <div id="cert-actions-top">
+              <button class="btn p" id="btn-print-certificate">🖨️ Download / Print Certificate</button>
+            </div>
+          </div>
+
+          <!-- Printable Certificate View -->
+          <div id="cert-printable-area">
+            <div class="cert-preview-card" id="cert-view-box">
+              <div class="cert-watermark">YUVANTARA</div>
+              <div class="cert-top-branding">
+                <p style="text-transform:uppercase;letter-spacing:3px;font-size:.8rem;color:#64748B;font-weight:700">Official Credential Verification Council</p>
+                <h2 style="font-size:2.2rem;font-weight:800;color:#0F172A;letter-spacing:1px;margin:8px 0 4px">YUVANTARA TECHNOLOGIES</h2>
+                <p style="font-size:.92rem;color:#475569">4A Prantika Building, Kankarbagh, Patna, Bihar - 800006 | ISO 9001:2015 Certified</p>
+              </div>
+
+              <div class="cert-body-text">
+                <span style="text-transform:uppercase;letter-spacing:2px;font-size:.85rem;color:#64748B;font-weight:600">Certificate of Industrial Internship</span><br>
+                <span style="font-size:.95rem;color:#64748B;display:inline-block;margin-top:8px">This is to proudly certify that</span>
+                <span class="cert-candidate-name" id="cert-c-name">Rohan Sen</span>
+                <span style="font-size:1rem;color:#334155;line-height:1.8">
+                  of <strong><span id="cert-c-college">National Institute of Technology (NIT), Patna</span></strong> has successfully completed the rigorous industrial internship program in
+                </span>
+                <div style="font-size:1.35rem;font-weight:700;color:#0F172A;margin:12px 0" id="cert-c-track">
+                  Cybersecurity &amp; SOC Operations
+                </div>
+                <span style="font-size:.95rem;color:#475569">
+                  Duration: <strong id="cert-c-duration">6 Months (Jan 2026 – Jun 2026)</strong> &nbsp;|&nbsp; Performance Grade: <strong style="color:#047857" id="cert-c-grade">Grade A+ (Distinction)</strong>
+                </span>
+              </div>
+
+              <div class="cert-meta-grid">
+                <div>
+                  <small style="color:#64748B;text-transform:uppercase;font-weight:700;font-size:.75rem">Certificate ID</small>
+                  <div style="font-family:monospace;font-weight:700;font-size:1.05rem;color:#1D4ED8" id="cert-c-id">YUV-2026-CS101</div>
+                </div>
+                <div>
+                  <small style="color:#64748B;text-transform:uppercase;font-weight:700;font-size:.75rem">Issue Date</small>
+                  <div style="font-weight:600;font-size:.95rem;color:#0F172A" id="cert-c-date">June 20, 2026</div>
+                </div>
+                <div>
+                  <small style="color:#64748B;text-transform:uppercase;font-weight:700;font-size:.75rem">Verification Authority</small>
+                  <div style="font-weight:600;font-size:.95rem;color:#0F172A" id="cert-c-authority">Yuvantara Cyber Defense Council</div>
+                </div>
+                <div>
+                  <small style="color:#64748B;text-transform:uppercase;font-weight:700;font-size:.75rem">Status</small>
+                  <div style="font-weight:700;font-size:.95rem;color:#047857" id="cert-c-status">Valid &amp; Verified</div>
+                </div>
+              </div>
+
+              <div class="cert-signatures">
+                <div style="text-align:center">
+                  <div style="font-family:'Courier New', monospace;font-size:1.2rem;font-weight:bold;color:#1E293B;border-bottom:1px solid #94A3B8;padding-bottom:4px;margin-bottom:4px">Dr. R. K. Verma</div>
+                  <small style="color:#64748B;font-weight:600">Director of Technical Education</small>
+                </div>
+
+                <div class="cert-seal">
+                  OFFICIAL<br>SEAL<br>★
+                </div>
+
+                <div style="text-align:center">
+                  <div style="font-family:'Courier New', monospace;font-size:1.2rem;font-weight:bold;color:#1E293B;border-bottom:1px solid #94A3B8;padding-bottom:4px;margin-bottom:4px">A. K. Sharma</div>
+                  <small style="color:#64748B;font-weight:600">Chief Technology Officer</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:14px">
+            <button class="btn p" id="btn-print-certificate-2">📥 Download / Print Official Certificate</button>
+            <a class="btn" id="btn-verify-cert-link" href="../verify-certificate/index.html?id=YUV-2026-CS101" target="_blank">🔍 Verify Online in National Portal</a>
+          </div>
+        </div>
+
+        <!-- No Official Certificate Placeholder (if user not completed yet) -->
+        <div class="pcard" id="cert-empty-wrap" style="display:none;text-align:center;padding:48px 24px">
+          <div style="font-size:3rem;margin-bottom:12px">⏳</div>
+          <h3 style="color:#0F172A;margin-bottom:8px">Certificate In Progress</h3>
+          <p style="color:#64748B;max-width:540px;margin:0 auto 20px">
+            Your official Yuvantara Certificate is issued once you achieve 100% curriculum completion or upon project approval by your mentor/admin.
+          </p>
+          <button class="btn" onclick="document.querySelector('[data-tab=\'progress\']').click()">View Remaining Modules</button>
+        </div>
+
+        <!-- Upload Certificate Feature -->
+        <div class="pcard" style="margin-top:24px">
+          <div class="pcard-header">
+            <div>
+              <h3>Upload &amp; Archive Certificate</h3>
+              <p>Upload a copy of your signed internship certificate, completion letter, or college endorsement.</p>
+            </div>
+            <div>
+              <span class="badge-track">Self-Service Archive</span>
+            </div>
+          </div>
+
+          <div class="alert-box" id="upload-alert"></div>
+
+          <div style="background:#F8FAFC;border:2px dashed #CBD5E1;border-radius:12px;padding:32px 20px;text-align:center;margin-bottom:20px">
+            <div style="font-size:2.4rem;margin-bottom:10px">📁</div>
+            <strong style="color:#0F172A;display:block;margin-bottom:4px">Select Certificate Document (Image or PDF)</strong>
+            <p style="color:#64748B;font-size:.85rem;margin:0 0 16px">Supports JPG, PNG, WEBP, or PDF (stored directly in your verified student profile)</p>
+            <input type="file" id="cert-file-input" accept="image/*,application/pdf" style="display:none">
+            <button class="btn p" type="button" id="btn-browse-file">Choose File</button>
+            <span id="selected-filename" style="margin-left:12px;font-size:.9rem;color:#475569"></span>
+          </div>
+
+          <div id="uploaded-cert-preview" style="display:none;margin-top:18px;padding:16px;background:#F1F5FA;border-radius:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-size:1.8rem">📄</span>
+              <div>
+                <strong id="uploaded-doc-title" style="color:#0F172A;display:block">Uploaded_Certificate.pdf</strong>
+                <small id="uploaded-doc-date" style="color:#64748B">Uploaded on today</small>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <a class="btn" id="btn-view-uploaded" href="#" target="_blank" download="Yuvantara_Certificate">View / Download</a>
+              <button class="btn" id="btn-remove-uploaded" style="color:#DC2626;border-color:#FCA5A5">Remove</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: EDIT PROFILE -->
+      <section class="portal-pane" id="pane-profile">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>Edit Student Profile</h3>
+              <p>Update your personal information, college enrollment, and contact details.</p>
+            </div>
+          </div>
+
+          <div class="alert-box" id="profile-alert"></div>
+
+          <form id="form-profile" class="portal-form">
+            <div>
+              <label for="p-name">Full Name</label>
+              <input id="p-name" type="text" required>
+            </div>
+            <div>
+              <label for="p-email">Email Address (Registered Account ID)</label>
+              <input id="p-email" type="email" readonly>
+            </div>
+            <div>
+              <label for="p-phone">WhatsApp / Phone Number</label>
+              <input id="p-phone" type="tel" required>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div>
+                <label for="p-stream">Degree &amp; Stream</label>
+                <input id="p-stream" type="text" placeholder="e.g. B.Tech Computer Science" required>
+              </div>
+              <div>
+                <label for="p-college">College / University Name</label>
+                <input id="p-college" type="text" placeholder="e.g. NIT Patna" required>
+              </div>
+            </div>
+            <div>
+              <label for="p-track">Enrolled Internship Track</label>
+              <select id="p-track">
+                <option>Cybersecurity &amp; SOC Operations</option>
+                <option>Artificial Intelligence &amp; Machine Learning</option>
+                <option>Cloud Infrastructure &amp; DevOps</option>
+                <option>Python Full-Stack &amp; Automation</option>
+                <option>Robotics &amp; IoT Embedded Systems</option>
+                <option>Data Science &amp; Business Analytics</option>
+                <option>Full-Stack Web Engineering</option>
+                <option>Mobile App Development (Flutter / Kotlin)</option>
+              </select>
+            </div>
+            <div style="margin-top:10px">
+              <button class="btn p" type="submit">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 4: PASSWORD MODIFICATION -->
+      <section class="portal-pane" id="pane-password">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>Password Modification</h3>
+              <p>Keep your account secure by using a strong, unique password.</p>
+            </div>
+          </div>
+
+          <div class="alert-box" id="pass-alert"></div>
+
+          <form id="form-password" class="portal-form">
+            <div>
+              <label for="pwd-current">Current Password</label>
+              <input id="pwd-current" type="password" placeholder="Enter current password" required autocomplete="current-password">
+            </div>
+            <div>
+              <label for="pwd-new">New Password</label>
+              <input id="pwd-new" type="password" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
+            </div>
+            <div>
+              <label for="pwd-confirm">Confirm New Password</label>
+              <input id="pwd-confirm" type="password" placeholder="Re-type new password" required minlength="6" autocomplete="new-password">
+            </div>
+            <div style="margin-top:10px">
+              <button class="btn p" type="submit">Update Password</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- ═══ STATE B: NOT LOGGED IN VIEW ═══ -->
+    <div id="login-gate" style="display:none;max-width:480px;margin:40px auto">
+      <div class="pcard" style="text-align:center">
+        <div style="width:58px;height:58px;border-radius:50%;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 16px">🎓</div>
+        <h2 style="margin:0 0 8px;color:#0F172A">Student Portal Login</h2>
+        <p style="color:#64748B;font-size:.9rem;margin:0 0 24px">Access your internship tracker, download your verified certificate, or edit your profile.</p>
+
+        <div class="alert-box" id="gate-alert"></div>
+
+        <form id="gate-login-form" class="portal-form" style="text-align:left">
+          <div>
+            <label for="gate-email">Email Address</label>
+            <input id="gate-email" type="email" placeholder="student@yuvantara.com" required autocomplete="email">
+          </div>
+          <div>
+            <label for="gate-pass">Password</label>
+            <input id="gate-pass" type="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <button class="btn p" style="width:100%;margin-top:10px" type="submit">Sign In to Student Portal</button>
+        </form>
+
+        <div style="margin-top:20px;padding:12px;background:#F8FAFC;border-radius:8px;font-size:.85rem;color:#475569">
+          <strong>Demo Account:</strong> <code>student@yuvantara.com</code> / <code>student123</code><br>
+          <a href="#" id="fill-demo-btn" style="color:var(--ac);font-weight:600;display:inline-block;margin-top:4px">Auto-fill Demo Credentials</a>
+        </div>
+
+        <p style="margin:20px 0 0;font-size:.88rem;color:#64748B">
+          Don't have an account? <button type="button" class="btn-sm-action primary" data-auth="signup">Apply for Internship</button>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer><div class="w">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <h3><i></i>Yuvantara</h3>
+      <p>Empowering students and technology teams through advanced industrial internships, enterprise cybersecurity, and robust IT infrastructure solutions.</p>
+      <div class="footer-contact-item"><i>📍</i><span>4A Prantika Building, Kankarbagh, Patna, Bihar - 800006</span></div>
+      <div class="footer-contact-item"><i>✉️</i><a href="mailto:xyv@yuvantara.com">xyv@yuvantara.com</a></div>
+      <div class="footer-contact-item"><i>📞</i><a href="tel:+919876543210">+91 98765 43210</a></div>
+    </div>
+    <div class="footer-col">
+      <h4>Internship Programs</h4>
+      <a href="../internships/index.html" data-auth="signup" data-course="Cybersecurity &amp; SOC Operations">Cybersecurity &amp; SOC</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Artificial Intelligence &amp; Machine Learning">AI &amp; Machine Learning</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Cloud Infrastructure &amp; DevOps">Cloud Infrastructure &amp; DevOps</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Python Full-Stack &amp; Automation">Python Full-Stack &amp; Automation</a>
+      <a href="../internships/index.html" data-auth="signup" data-course="Robotics &amp; IoT Embedded Systems">Robotics, IoT &amp; Embedded</a>
+      <a href="../internships/index.html">View All 22+ Programs →</a>
+    </div>
+    <div class="footer-col">
+      <h4>Technology Solutions</h4>
+      <a href="../cybersecurity-solutions/index.html">Cybersecurity Solutions</a>
+      <a href="../cybersecurity-solutions/network-security/index.html">Network Security &amp; Firewalls</a>
+      <a href="../it-infrastructure-solutions/index.html">IT Infrastructure Solutions</a>
+      <a href="../managed-services/index.html">Managed IT Services</a>
+      <a href="../managed-services/soc-implementation/index.html">SOC Implementation</a>
+      <a href="../about/certifications/index.html">ISO 9001 Quality</a>
+    </div>
+    <div class="footer-col">
+      <h4>Student &amp; Verification</h4>
+      <a href="../verify-certificate/index.html">Verify Certificate</a>
+      <a href="../internships/index.html">Internship Catalog</a>
+      <a href="#" data-auth="signup">Apply for Internship</a>
+      <a href="index.html">Student Portal</a>
+      <a href="../careers/index.html">Careers &amp; Mentorship</a>
+      <a href="../contact/index.html">Contact Us</a>
+    </div>
+  </div>
+  <div class="footer-bar">
+    <span>© 2026 Yuvantara. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="../privacy-policy/index.html">Privacy Policy</a>
+      <a href="../terms/index.html">Terms of Use</a>
+      <a href="../verify-certificate/index.html">Verify Certificate</a>
+      <a href="../sitemap/index.html">Sitemap</a>
+    </div>
+  </div>
+</div></footer>
+
+<script src="../assets/db.js"></script>
+<script src="../assets/site.js"></script>
+<script src="portal.js"></script>
+</body></html>

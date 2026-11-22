@@ -13,15 +13,30 @@ document.addEventListener('click', e => {
   d.forEach(x => { if (!x.contains(e.target)) x.open = false; });
 });
 
-// 2. Image loader with relative path detection
+// 2. Base Path Resolution & Image Loader
 (function() {
+  // Compute site root (empty "" on index.html, "../" on 1-depth subpages, "../../" on 2-depth)
   var linkTag = document.querySelector('link[href*="style.css"]');
-  var pathPrefix = '';
+  var siteRoot = '';
   if (linkTag) {
-    var href = linkTag.getAttribute('href');
-    pathPrefix = href.replace(/style\.css(\?.*)?$/i, '');
+    var href = linkTag.getAttribute('href') || '';
+    var m = href.match(/^(\.\.\/)+/);
+    if (m) {
+      siteRoot = m[0]; // e.g. "../" or "../../"
+    }
   }
-  var baseImgDir = pathPrefix + 'images/';
+  window.__yuvantaraBasePath = siteRoot;
+
+  var assetsDir = siteRoot + 'assets/';
+
+  // Ensure db.js is loaded
+  if (!window.YuvantaraDB) {
+    var dbScript = document.createElement('script');
+    dbScript.src = assetsDir + 'db.js';
+    document.head.appendChild(dbScript);
+  }
+
+  var baseImgDir = assetsDir + 'images/';
 
   var IM = {
     'technologies':    baseImgDir + 'innovation.jpg',
@@ -49,7 +64,6 @@ document.addEventListener('click', e => {
       if (IM[b]) {
         i.src = IM[b];
         i.onerror = function() {
-          // If cyber.png failed, fallback to cyber.jpg
           if (b === 'cybersecurity' && i.src.indexOf('.png') !== -1) {
             i.src = baseImgDir + 'cyber.jpg';
             return;
@@ -71,7 +85,36 @@ document.addEventListener('click', e => {
   window.imgs = imgs;
 })();
 
-// 3. Login / Sign-up Modal
+// 3. Dynamic User State in Navigation
+function updateNavUserState() {
+  if (!window.YuvantaraDB) return;
+  var user = YuvantaraDB.getCurrentUser();
+  if (!user) return;
+
+  var basePath = window.__yuvantaraBasePath || '';
+  var loginBtns = document.querySelectorAll('[data-auth="login"]');
+  loginBtns.forEach(function(btn) {
+    btn.removeAttribute('data-auth');
+    if (user.role === 'admin') {
+      btn.textContent = 'Admin Console';
+      btn.onclick = function(e) {
+        e.preventDefault();
+        window.location.href = basePath + 'admin_login_777/index.html';
+      };
+    } else {
+      btn.textContent = 'My Portal (' + (user.name ? user.name.split(' ')[0] : 'Student') + ')';
+      btn.onclick = function(e) {
+        e.preventDefault();
+        window.location.href = basePath + 'portal/index.html';
+      };
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(updateNavUserState, 150);
+});
+
+// 4. Login / Sign-up Modal
 (function() {
   var modal = document.getElementById('auth-modal');
   var overlay = document.getElementById('auth-overlay');
@@ -145,7 +188,7 @@ document.addEventListener('click', e => {
   newCaptcha('cap-login-q');
   newCaptcha('cap-signup-q');
 
-  // Login form handler
+  // Login form handler with YuvantaraDB Authentication
   var loginForm = document.getElementById('form-login');
   if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
@@ -160,9 +203,30 @@ document.addEventListener('click', e => {
         return;
       }
       if (inp) inp.setCustomValidity('');
-      var email = document.getElementById('l-email').value;
-      alert('Welcome back, ' + email + '! (Student portal authenticated)');
-      closeModal();
+
+      var email = document.getElementById('l-email').value.trim();
+      var pass = document.getElementById('l-pass').value;
+
+      if (window.YuvantaraDB) {
+        var res = YuvantaraDB.login(email, pass);
+        if (res.success) {
+          closeModal();
+          var basePath = window.__yuvantaraBasePath || '';
+          if (res.user.role === 'admin') {
+            window.location.href = basePath + 'admin_login_777/index.html';
+          } else {
+            window.location.href = basePath + 'portal/index.html';
+          }
+          return;
+        } else {
+          alert('Login failed: ' + (res.message || 'Invalid email or password.'));
+          newCaptcha('cap-login-q');
+          return;
+        }
+      } else {
+        alert('Welcome back, ' + email + '! Logging in...');
+        closeModal();
+      }
     });
   }
 
@@ -181,19 +245,61 @@ document.addEventListener('click', e => {
         return;
       }
       if (inp) inp.setCustomValidity('');
-      var name = document.getElementById('s-name').value;
-      var prog = document.getElementById('s-prog').value;
-      alert('Congratulations ' + name + '! Your application for the ' + prog + ' Internship has been submitted successfully.\n\nOur academic coordinator will reach out to you within 24 hours with orientation details.');
-      signupForm.reset();
-      newCaptcha('cap-signup-q');
-      closeModal();
+
+      var name = document.getElementById('s-name').value.trim();
+      var email = document.getElementById('s-email').value.trim();
+      var phone = document.getElementById('s-phone').value.trim();
+      var pass = document.getElementById('s-pass').value;
+      var prog = document.getElementById('s-prog') ? document.getElementById('s-prog').value : '';
+      var stream = document.getElementById('s-stream') ? document.getElementById('s-stream').value : '';
+      var college = document.getElementById('s-college') ? document.getElementById('s-college').value.trim() : '';
+
+      if (window.YuvantaraDB) {
+        // Submit application
+        YuvantaraDB.submitApplication({
+          name: name,
+          email: email,
+          phone: phone,
+          track: prog,
+          stream: stream,
+          college: college
+        });
+
+        // Register student account
+        var reg = YuvantaraDB.registerStudent({
+          name: name,
+          email: email,
+          password: pass,
+          phone: phone,
+          track: prog,
+          stream: stream,
+          college: college
+        });
+
+        if (reg.success) {
+          YuvantaraDB.login(email, pass);
+          closeModal();
+          alert('Congratulations ' + name + '! Your application for the ' + prog + ' Internship has been submitted successfully.\n\nRedirecting to your student portal...');
+          var basePath = window.__yuvantaraBasePath || '';
+          window.location.href = basePath + 'portal/index.html';
+          return;
+        } else {
+          alert('Notice: ' + (reg.message || 'Could not complete registration.'));
+          return;
+        }
+      } else {
+        alert('Congratulations ' + name + '! Your application for ' + prog + ' has been received.');
+        signupForm.reset();
+        newCaptcha('cap-signup-q');
+        closeModal();
+      }
     });
   }
 
   window.openAuthModal = openModal;
 })();
 
-// 4. Certificate Verification Engine
+// 5. Certificate Verification Engine
 (function() {
   var verifyForm = document.getElementById('verify-cert-form');
   var resultBox = document.getElementById('cert-result-box');
@@ -202,7 +308,7 @@ document.addEventListener('click', e => {
   var mockCertificates = {
     'YUV-2026-CS101': {
       name: 'Rohan Sen',
-      course: 'Cybersecurity & SOC Operations Internship',
+      course: 'Cybersecurity & SOC Operations Industrial Internship',
       duration: '6 Months (Jan 2026 – Jun 2026)',
       grade: 'Grade A+ (Distinction)',
       date: 'June 20, 2026',
@@ -246,7 +352,33 @@ document.addEventListener('click', e => {
     id = (id || '').trim().toUpperCase();
     if (!id) return;
 
-    var cert = mockCertificates[id];
+    var cert = null;
+
+    // First check YuvantaraDB users for dynamically issued certificates
+    if (window.YuvantaraDB) {
+      var students = YuvantaraDB.getStudents();
+      for (var i = 0; i < students.length; i++) {
+        var s = students[i];
+        if (s.certificate && s.certificate.id && s.certificate.id.toUpperCase() === id) {
+          cert = {
+            name: s.name,
+            course: s.certificate.title || s.track,
+            duration: s.certificate.duration || '6 Months Industrial Internship',
+            grade: s.certificate.grade || 'Grade A+ (Distinction)',
+            date: s.certificate.issueDate || '2026',
+            status: s.certificate.status || 'Valid & Authenticated',
+            college: s.college || 'Affiliated University',
+            council: s.certificate.authority || 'Yuvantara Academic & Skill Council'
+          };
+          break;
+        }
+      }
+    }
+
+    if (!cert) {
+      cert = mockCertificates[id];
+    }
+
     // Dynamic fallback for any entered credential ID format
     if (!cert) {
       cert = {
@@ -256,7 +388,7 @@ document.addEventListener('click', e => {
         grade: 'Grade A (Passed with Distinction)',
         date: 'October 15, 2026',
         status: 'Valid & Verified in National Database',
-        college: 'Affiliated Technical Institution, WB',
+        college: 'Affiliated Technical Institution, Bihar',
         council: 'Yuvantara Academic & Skill Council'
       };
     }
@@ -297,5 +429,14 @@ document.addEventListener('click', e => {
       e.preventDefault();
       window.print();
     });
+  }
+
+  // Auto-verify if URL has ?id=... parameter
+  var urlParams = new URLSearchParams(window.location.search);
+  var qId = urlParams.get('id');
+  if (qId) {
+    var inp = document.getElementById('cert-id-input');
+    if (inp) inp.value = qId;
+    displayCertificate(qId);
   }
 })();
