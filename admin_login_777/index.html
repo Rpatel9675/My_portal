@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Admin Command Center | Yuvantara</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/portal.css"><style>
+﻿<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Admin Command Center | Yuvantara</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/portal.css"><style>
 /* Admin specific accents */
 .admin-badge {
   display: inline-flex;
@@ -98,7 +98,7 @@
         <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
         <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
       </div>
-      <div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div>
+      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div></div>
       <div class="frow">
         <div class="fgroup">
           <label for="s-prog">Internship Track</label>
@@ -166,7 +166,10 @@
             <input id="adm-email" type="email" placeholder="admin@yuvantara.com" required autocomplete="email">
           </div>
           <div>
-            <label for="adm-pass">Master Password</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <label for="adm-pass" style="margin:0">Master Password</label>
+              <a href="../forgot-password/index.html" style="font-size:.82rem;color:#DC2626;text-decoration:none">Forgot password?</a>
+            </div>
             <input id="adm-pass" type="password" placeholder="••••••••" required autocomplete="current-password">
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;font-size:.85rem;color:#64748B">
@@ -177,9 +180,16 @@
         </form>
 
         <div style="margin-top:20px;padding:14px;background:#F8FAFC;border-radius:8px;font-size:.85rem;color:#475569;border:1px dashed #CBD5E1">
-          <strong>Default Admin Demo Access:</strong><br>
-          Email: <code>admin@yuvantara.com</code> &nbsp;|&nbsp; Password: <code>admin777</code><br>
-          <a href="#" id="fill-admin-demo" style="color:#DC2626;font-weight:700;display:inline-block;margin-top:6px">Click to Auto-fill Admin Credentials</a>
+          <strong style="color:#0F172A">System Administrative Credentials:</strong><br>
+          <div style="margin-top:6px;line-height:1.6">
+            👑 <strong>Super Admin:</strong> <code>a4dr_00@supper</code> &nbsp;|&nbsp; Password: <code>!!a4dr@00</code><br>
+            🛡️ <strong>6 Admins:</strong> <code>adk_01@admin</code>, <code>alk_01@admin</code>, <code>dhb_03@admin</code>, <code>abk_04@admin</code>, <code>anp_05@admin</code>, <code>rop_06@admin</code><br>
+            <small style="color:#64748B">Admin passwords follow pattern: <code>!adk_01@</code>, <code>!alk_01@</code>, etc.</small>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:14px;flex-wrap:wrap">
+            <a href="#" id="fill-super-demo" style="color:#DC2626;font-weight:700">👑 Auto-fill Super Admin</a>
+            <a href="#" id="fill-admin-demo" style="color:#2563EB;font-weight:700">🛡️ Auto-fill Admin 1</a>
+          </div>
         </div>
       </div>
     </div>
@@ -200,6 +210,7 @@
           </div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" id="btn-cloud-sync" style="background:#0284C7;border-color:#0284C7;color:#fff">☁️ Sync Cloud DB</button>
           <button class="btn" id="btn-export-backup" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff">💾 Export JSON Data</button>
           <button class="btn" id="btn-admin-logout" style="background:#DC2626;border-color:#DC2626;color:#fff">Sign Out</button>
         </div>
@@ -240,6 +251,12 @@
         <button class="portal-tab-btn" data-admin-tab="certificates">
           <span>🎓</span> Certificate Registry (<span id="tab-cnt-certs">0</span>)
         </button>
+        <button class="portal-tab-btn" data-admin-tab="audit">
+          <span>📋</span> Audit Trail &amp; Locks (<span id="tab-cnt-audit">0</span>)
+        </button>
+        <button class="portal-tab-btn" id="tab-btn-super-admins" data-admin-tab="super-admins" style="display:none;color:#DC2626;font-weight:700">
+          <span>👑</span> Admin Credentials (<span id="tab-cnt-admins">6</span>)
+        </button>
         <button class="portal-tab-btn" data-admin-tab="data">
           <span>⚙️</span> System Data &amp; Backup
         </button>
@@ -268,6 +285,7 @@
                   <th>Enrolled Track</th>
                   <th>Progress</th>
                   <th>Certificate</th>
+                  <th>Enrolled / Handled By</th>
                   <th style="text-align:right">Actions</th>
                 </tr>
               </thead>
@@ -300,6 +318,7 @@
                   <th>College &amp; Stream</th>
                   <th>Date</th>
                   <th>Status</th>
+                  <th>Reviewed By (Locked)</th>
                   <th style="text-align:right">Action</th>
                 </tr>
               </thead>
@@ -331,10 +350,75 @@
                   <th>Issue Date</th>
                   <th>Grade</th>
                   <th>Verification Status</th>
+                  <th>Issued By (Locked)</th>
                   <th style="text-align:right">Actions</th>
                 </tr>
               </thead>
               <tbody id="admin-certs-tbody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: SYSTEM AUDIT LOG & ACTION LOCKS ── -->
+      <section class="portal-pane" id="pane-audit">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div>
+              <h3>📋 System Audit Trail &amp; Locked Action Ownership</h3>
+              <p>Every administrative action (enrolling students, updating progress, issuing/revoking certificates, approving applications) is cryptographically logged and locked to the executing administrator.</p>
+            </div>
+            <button class="btn sm" id="btn-refresh-audit">🔄 Refresh Logs</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Log ID</th>
+                  <th>Timestamp</th>
+                  <th>Responsible Administrator</th>
+                  <th>Action Type</th>
+                  <th>Target ID / Record</th>
+                  <th>Action Details</th>
+                </tr>
+              </thead>
+              <tbody id="admin-audit-tbody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── TAB: SUPER ADMIN ROSTER & CREDENTIAL MANAGEMENT ── -->
+      <section class="portal-pane" id="pane-super-admins">
+        <div class="pcard">
+          <div class="pcard-header">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-size:2rem">👑</span>
+              <div>
+                <h3 style="margin:0">Super Admin Command: Administrator Roster &amp; Credentials</h3>
+                <p style="margin:4px 0 0">Super Admin Exclusive Console: Change passwords, suspend privileges, or permanently revoke access for all 6 system administrators.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Administrator ID / Email</th>
+                  <th>Display Name</th>
+                  <th>Access Status</th>
+                  <th>Audit Activity</th>
+                  <th>Contact</th>
+                  <th style="text-align:right">Super Admin Control</th>
+                </tr>
+              </thead>
+              <tbody id="super-admin-roster-tbody">
                 <!-- Dynamically rendered -->
               </tbody>
             </table>
@@ -488,9 +572,15 @@
         <input type="tel" id="new-stu-phone" required placeholder="+91 98765 43210">
       </div>
     </div>
-    <div>
-      <label for="new-stu-pass">Initial Password</label>
-      <input type="text" id="new-stu-pass" value="student123" required>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <label for="new-stu-dob">Date of Birth</label>
+        <input type="date" id="new-stu-dob" required max="2010-01-01">
+      </div>
+      <div>
+        <label for="new-stu-pass">Initial Password</label>
+        <input type="text" id="new-stu-pass" value="student123" required>
+      </div>
     </div>
     <div>
       <label for="new-stu-track">Internship Track</label>
@@ -517,6 +607,30 @@
     <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
       <button type="button" class="btn" data-close-modal="enroll">Cancel</button>
       <button type="submit" class="btn p">Enroll Candidate</button>
+    </div>
+  </form>
+</div>
+
+<!-- ═══ MODAL: SUPER ADMIN CHANGE ADMIN PASSWORD ═══ -->
+<div class="modal-overlay" id="modal-admin-pass-overlay"></div>
+<div class="modal-box" id="modal-admin-pass">
+  <div class="modal-header">
+    <h3>🔑 Reset Administrator Password</h3>
+    <button class="modal-close" data-close-modal="admin-pass">✕</button>
+  </div>
+  <form id="form-change-admin-pass" class="portal-form">
+    <div>
+      <label>Target Administrator (Locked)</label>
+      <input type="text" id="target-admin-email" readonly style="background:#F8FAFC;font-weight:700;color:#0F172A">
+    </div>
+    <div>
+      <label for="new-admin-password">New Password for Administrator</label>
+      <input type="text" id="new-admin-password" required placeholder="Enter new password (min 6 characters)" minlength="6">
+      <small style="color:#64748B;margin-top:4px;display:block">Takes effect immediately. The admin must use this password on next login.</small>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px">
+      <button type="button" class="btn" data-close-modal="admin-pass">Cancel</button>
+      <button type="submit" class="btn p" style="background:#DC2626;border-color:#DC2626">Update Password</button>
     </div>
   </form>
 </div>
@@ -569,7 +683,9 @@
   </div>
 </div></footer>
 
+<script src="../assets/config.js"></script>
 <script src="../assets/db.js"></script>
+<script src="../assets/cloud-db.js"></script>
 <script src="../assets/site.js"></script>
 <script src="admin.js"></script>
 </body></html>

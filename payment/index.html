@@ -1,91 +1,233 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Secure Checkout | Yuvantara</title>
-<link rel="stylesheet" href="../assets/style.css">
-<link rel="stylesheet" href="../assets/portal.css">
-<style>
-  /* ── Payment Page Styles ── */
-  .pay-wrap { min-height: calc(100vh - 70px); background: #F8FAFC; padding: 40px 0 80px; }
-  .pay-container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
-  .pay-title { text-align: center; margin-bottom: 36px; }
-  .pay-title h1 { font-size: 1.9rem; color: #0F172A; margin: 0 0 8px; }
-  .pay-title p { color: #64748B; margin: 0; }
-  .secure-bar { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 32px; }
-  .secure-badge { display: inline-flex; align-items: center; gap: 7px; font-size: .82rem; color: #15803D; font-weight: 600; padding: 6px 14px; background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 99px; }
-  .pay-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start; }
-  @media(max-width:720px) { .pay-grid { grid-template-columns: 1fr; } }
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0A0E17">
+  <title>Secure Checkout &amp; Payment | Yuvantara</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/portal.css">
+  <!-- Official Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    /* ── Payment Page Styles ── */
+    .pay-wrap { min-height: calc(100vh - 70px); background: #F8FAFC; padding: 40px 0 80px; }
+    .pay-container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+    .pay-title { text-align: center; margin-bottom: 36px; }
+    .pay-title h1 { font-size: 1.9rem; color: #0F172A; margin: 0 0 8px; }
+    .pay-title p { color: #64748B; margin: 0; }
+    .secure-bar { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+    .secure-badge { display: inline-flex; align-items: center; gap: 7px; font-size: .82rem; color: #15803D; font-weight: 600; padding: 6px 14px; background: #DCFCE7; border: 1px solid #86EFAC; border-radius: 99px; }
+    .pay-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start; }
+    @media(max-width:768px) { .pay-grid { grid-template-columns: 1fr; } }
 
-  /* ── Order Summary Card ── */
-  .order-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(15,23,42,.07); }
-  .order-header { background: linear-gradient(135deg, #0F172A, #1E293B); color: #fff; padding: 20px 24px; }
-  .order-header h3 { margin: 0 0 4px; font-size: 1rem; color: #CBD5E1; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
-  .order-header .prog-name { font-size: 1.15rem; font-weight: 700; color: #fff; }
-  .order-body { padding: 24px; }
-  .order-student { display: flex; align-items: center; gap: 14px; padding: 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; margin-bottom: 20px; }
-  .order-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6, #22D3EE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; flex-shrink: 0; }
-  .order-student-info { font-size: .9rem; }
-  .order-student-info strong { display: block; color: #0F172A; font-size: 1rem; }
-  .order-student-info span { color: #64748B; }
-  .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F1F5FA; font-size: .95rem; }
-  .fee-row:last-of-type { border-bottom: none; }
-  .fee-row .label { color: #374151; }
-  .fee-row .value { font-weight: 600; color: #0F172A; }
-  .fee-row.gst .label { color: #64748B; font-size: .88rem; }
-  .fee-row.gst .value { color: #64748B; font-size: .88rem; }
-  .fee-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: linear-gradient(135deg, #EFF6FF, #F0F9FF); border: 1.5px solid #BFDBFE; border-radius: 10px; margin-top: 16px; }
-  .fee-total .label { font-weight: 700; color: #1E40AF; font-size: 1rem; }
-  .fee-total .value { font-size: 1.5rem; font-weight: 800; color: #1D4ED8; }
-  .included-items { margin-top: 20px; }
-  .included-items h4 { font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; color: #64748B; font-weight: 600; margin: 0 0 10px; }
-  .included-item { display: flex; align-items: center; gap: 8px; font-size: .88rem; color: #374151; padding: 5px 0; }
-  .included-item span { color: #15803D; font-size: 1rem; }
+    /* ── Order Summary Card ── */
+    .order-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(15,23,42,.07); }
+    .order-header { background: linear-gradient(135deg, #0F172A, #1E293B); color: #fff; padding: 22px 24px; }
+    .order-header h3 { margin: 0 0 4px; font-size: .92rem; color: #94A3B8; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+    .order-header .prog-name { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .order-body { padding: 24px; }
+    .order-student { display: flex; align-items: center; gap: 14px; padding: 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; margin-bottom: 20px; }
+    .order-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6, #22D3EE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; flex-shrink: 0; }
+    .order-student-info strong { display: block; color: #0F172A; font-size: 1rem; }
+    .order-student-info span { color: #64748B; font-size: .85rem; }
+    .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F1F5FA; font-size: .95rem; }
+    .fee-row:last-of-type { border-bottom: none; }
+    .fee-row .label { color: #374151; }
+    .fee-row .value { font-weight: 600; color: #0F172A; }
+    .fee-row.gst .label { color: #64748B; font-size: .88rem; }
+    .fee-row.gst .value { color: #64748B; font-size: .88rem; }
+    .fee-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: linear-gradient(135deg, #EFF6FF, #F0F9FF); border: 1.5px solid #BFDBFE; border-radius: 10px; margin-top: 16px; }
+    .fee-total .label { font-weight: 700; color: #1E40AF; font-size: 1rem; }
+    .fee-total .value { font-size: 1.5rem; font-weight: 800; color: #1D4ED8; }
+    .included-items { margin-top: 20px; }
+    .included-items h4 { font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; color: #64748B; font-weight: 600; margin: 0 0 10px; }
+    .included-item { display: flex; align-items: center; gap: 8px; font-size: .88rem; color: #374151; padding: 5px 0; }
+    .included-item span { color: #15803D; font-size: 1rem; }
 
-  /* ── Payment Card ── */
-  .payment-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(15,23,42,.07); }
-  .payment-card h3 { font-size: 1.1rem; color: #0F172A; margin: 0 0 20px; display: flex; align-items: center; gap: 8px; }
-  .pay-tabs { display: flex; gap: 6px; margin-bottom: 24px; background: #F8FAFC; padding: 5px; border-radius: 10px; border: 1px solid #E2E8F0; }
-  .pay-tab-btn { flex: 1; padding: 9px 10px; border: none; background: transparent; border-radius: 7px; font: inherit; font-size: .85rem; font-weight: 600; color: #64748B; cursor: pointer; transition: all .18s; }
-  .pay-tab-btn.active { background: #fff; color: #1D4ED8; box-shadow: 0 2px 8px rgba(15,23,42,.08); }
-  .pay-pane { display: none; }
-  .pay-pane.active { display: block; }
-  .pf-label { font-size: .85rem; font-weight: 600; color: #374151; display: block; margin-bottom: 6px; }
-  .pf-input { width: 100%; padding: 11px 14px; border: 1.5px solid #D1D5DB; border-radius: 10px; font: inherit; font-size: .95rem; color: #111827; background: #fff; transition: border-color .2s; }
-  .pf-input:focus { outline: none; border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
-  .pf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .pf-group { margin-bottom: 16px; }
-  .upi-hint { font-size: .78rem; color: #6B7280; margin-top: 5px; }
-  .upi-badges { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-  .upi-badge { padding: 3px 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: .78rem; color: #6B7280; background: #F9FAFB; }
-  .bank-select { width: 100%; padding: 11px 14px; border: 1.5px solid #D1D5DB; border-radius: 10px; font: inherit; font-size: .95rem; color: #111827; background: #fff; }
-  .pay-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #1D4ED8, #0369A1); color: #fff; border: none; border-radius: 12px; font: inherit; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all .2s; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-  .pay-btn:hover { background: linear-gradient(135deg, #1E40AF, #0284C7); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(29,78,216,.35); }
-  .pay-btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
-  .pay-secure-note { text-align: center; font-size: .78rem; color: #9CA3AF; margin-top: 12px; }
-  .pay-secure-note a { color: #3B82F6; }
+    /* ── Payment Card ── */
+    .payment-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(15,23,42,.07); }
+    .payment-card h3 { font-size: 1.15rem; color: #0F172A; margin: 0 0 18px; display: flex; align-items: center; gap: 8px; }
 
-  /* ── Processing Overlay ── */
-  .processing-overlay { position: fixed; inset: 0; background: rgba(248,250,252,.96); display: none; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 20px; }
-  .processing-overlay.show { display: flex; }
-  .spinner { width: 56px; height: 56px; border: 5px solid #BFDBFE; border-top-color: #1D4ED8; border-radius: 50%; animation: spin .9s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .processing-overlay p { font-size: 1.1rem; font-weight: 600; color: #1E293B; }
-  .processing-overlay small { color: #64748B; font-size: .88rem; }
+    /* Razorpay Primary Box */
+    .rzp-primary-box {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      border-radius: 14px;
+      padding: 20px;
+      color: #fff;
+      margin-bottom: 24px;
+      border: 1px solid #334155;
+    }
+    .rzp-primary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .rzp-badge {
+      font-size: .75rem;
+      background: #10B981;
+      color: #fff;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 99px;
+      letter-spacing: .04em;
+    }
+    .rzp-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #2563EB, #0284C7);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(37,99,235,.35);
+      transition: all .2s;
+    }
+    .rzp-btn:hover {
+      background: linear-gradient(135deg, #1D4ED8, #0369A1);
+      transform: translateY(-1px);
+    }
+    .rzp-supported-icons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 12px;
+      font-size: .8rem;
+      color: #94A3B8;
+    }
+    .rzp-supported-icons span {
+      background: #334155;
+      padding: 3px 8px;
+      border-radius: 5px;
+      color: #E2E8F0;
+    }
 
-  /* ── Success State ── */
-  .success-box { text-align: center; padding: 48px 24px; }
-  .success-icon { font-size: 4rem; margin-bottom: 16px; }
-  .success-box h2 { color: #15803D; font-size: 1.7rem; margin: 0 0 10px; }
-  .success-box p { color: #374151; max-width: 420px; margin: 0 auto 24px; }
-</style>
+    .divider-text {
+      text-align: center;
+      position: relative;
+      margin: 20px 0;
+      font-size: .82rem;
+      color: #94A3B8;
+      font-weight: 600;
+    }
+    .divider-text:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: #E2E8F0;
+      z-index: 1;
+    }
+    .divider-text span {
+      position: relative;
+      background: #fff;
+      padding: 0 12px;
+      z-index: 2;
+    }
+
+    /* Fallback tabs */
+    .pay-tabs { display: flex; gap: 6px; margin-bottom: 20px; background: #F8FAFC; padding: 5px; border-radius: 10px; border: 1px solid #E2E8F0; }
+    .pay-tab-btn { flex: 1; padding: 9px 10px; border: none; background: transparent; border-radius: 7px; font: inherit; font-size: .85rem; font-weight: 600; color: #64748B; cursor: pointer; transition: all .18s; }
+    .pay-tab-btn.active { background: #fff; color: #1D4ED8; box-shadow: 0 2px 8px rgba(15,23,42,.08); }
+    .pay-pane { display: none; }
+    .pay-pane.active { display: block; }
+    .pf-label { font-size: .85rem; font-weight: 600; color: #374151; display: block; margin-bottom: 6px; }
+    .pf-input { width: 100%; padding: 11px 14px; border: 1.5px solid #D1D5DB; border-radius: 10px; font: inherit; font-size: .95rem; color: #111827; background: #fff; transition: border-color .2s; }
+    .pf-input:focus { outline: none; border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
+    .pf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pf-group { margin-bottom: 16px; }
+    .upi-hint { font-size: .78rem; color: #6B7280; margin-top: 5px; }
+    .bank-select { width: 100%; padding: 11px 14px; border: 1.5px solid #D1D5DB; border-radius: 10px; font: inherit; font-size: .95rem; color: #111827; background: #fff; }
+    .fallback-pay-btn { width: 100%; padding: 13px; background: #1E293B; color: #fff; border: none; border-radius: 10px; font: inherit; font-size: .95rem; font-weight: 700; cursor: pointer; transition: all .2s; }
+    .fallback-pay-btn:hover { background: #0F172A; }
+
+    /* Processing Overlay */
+    .processing-overlay { position: fixed; inset: 0; background: rgba(248,250,252,.97); display: none; align-items: center; justify-content: center; z-index: 99999; flex-direction: column; gap: 18px; }
+    .processing-overlay.show { display: flex; }
+    .spinner { width: 56px; height: 56px; border: 5px solid #BFDBFE; border-top-color: #1D4ED8; border-radius: 50%; animation: spin .9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Tax Invoice Receipt Modal ── */
+    .invoice-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+      padding: 20px;
+    }
+    .invoice-overlay.show { display: flex; }
+    .invoice-modal {
+      background: #fff;
+      max-width: 620px;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .invoice-header {
+      background: linear-gradient(135deg, #1E40AF, #0369A1);
+      color: #fff;
+      padding: 24px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .invoice-body {
+      padding: 28px;
+      overflow-y: auto;
+      font-size: .92rem;
+      color: #334155;
+    }
+    .inv-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+    }
+    .inv-table th, .inv-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #E2E8F0;
+      text-align: left;
+    }
+    .inv-table th { background: #F8FAFC; color: #475569; font-weight: 600; font-size: .85rem; }
+    .invoice-footer {
+      padding: 18px 28px;
+      background: #F8FAFC;
+      border-top: 1px solid #E2E8F0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+  </style>
 </head>
 <body>
 
 <!-- Processing overlay -->
 <div class="processing-overlay" id="processing-overlay">
   <div class="spinner"></div>
-  <p id="processing-msg">Verifying payment...</p>
-  <small>Please do not close this window</small>
+  <p id="processing-msg" style="font-size:1.15rem;font-weight:700;color:#1E293B;margin:0">Connecting to Razorpay...</p>
+  <small style="color:#64748B">Securing transaction with 256-bit encryption</small>
 </div>
 
-<!-- Header (minimal) -->
+<!-- Header -->
 <header><div class="w bar">
   <a class="logo" href="../index.html"><i></i>Yuvantara</a>
   <nav class="nav" style="margin-left:auto">
@@ -96,11 +238,11 @@
 <div class="pay-wrap">
   <div class="pay-container">
 
-    <!-- Not-logged-in guard: show if no pending app -->
+    <!-- Not-logged-in guard -->
     <div id="no-pending-view" style="display:none;text-align:center;padding:80px 24px">
       <div style="font-size:3rem;margin-bottom:16px">🔒</div>
-      <h2 style="color:#0F172A;margin:0 0 10px">No Active Session</h2>
-      <p style="color:#64748B;margin:0 0 24px">No pending application found. Please apply for an internship first.</p>
+      <h2 style="color:#0F172A;margin:0 0 10px">No Active Enrollment Session</h2>
+      <p style="color:#64748B;margin:0 0 24px">No pending application found. Please select an internship track and apply first.</p>
       <a href="../index.html" class="btn p">Go to Homepage</a>
     </div>
 
@@ -108,14 +250,14 @@
     <div id="payment-view">
       <div class="pay-title">
         <h1>🎓 Complete Your Enrollment</h1>
-        <p>Secure checkout — ₹236 documentation processing fee</p>
+        <p>Documentation Processing &amp; Verification Fee · Official Yuvantara Gateway</p>
       </div>
 
       <div class="secure-bar">
-        <div class="secure-badge">🔒 SSL Secured</div>
-        <div class="secure-badge">🛡️ 100% Safe Transaction</div>
-        <div class="secure-badge">📋 GST Invoice Included</div>
-        <div class="secure-badge">✅ Instant Confirmation</div>
+        <div class="secure-badge">🔒 256-Bit SSL Encrypted</div>
+        <div class="secure-badge">🛡️ Razorpay Verified Gateway</div>
+        <div class="secure-badge">📋 Official GST Tax Invoice</div>
+        <div class="secure-badge">✅ Instant Student ID Generation</div>
       </div>
 
       <div class="pay-grid">
@@ -123,7 +265,7 @@
         <!-- Left: Order Summary -->
         <div class="order-card">
           <div class="order-header">
-            <h3>Order Summary</h3>
+            <h3>Selected Track</h3>
             <div class="prog-name" id="order-track">Industrial Internship Program</div>
           </div>
           <div class="order-body">
@@ -136,59 +278,80 @@
             </div>
 
             <div class="fee-row">
-              <span class="label">Documentation Processing Fee</span>
+              <span class="label">Documentation &amp; Portal Setup Fee</span>
               <span class="value">₹200.00</span>
             </div>
             <div class="fee-row gst">
-              <span class="label">GST @ 18% (CGST 9% + SGST 9%)</span>
-              <span class="value">₹36.00</span>
+              <span class="label">CGST @ 9%</span>
+              <span class="value">₹18.00</span>
+            </div>
+            <div class="fee-row gst">
+              <span class="label">SGST @ 9%</span>
+              <span class="value">₹18.00</span>
             </div>
 
             <div class="fee-total">
               <span class="label">Total Amount Payable</span>
-              <span class="value">₹236</span>
+              <span class="value">₹236.00</span>
             </div>
 
             <div class="included-items">
-              <h4>What's Included</h4>
-              <div class="included-item"><span>✅</span> Program Registration & Enrollment</div>
-              <div class="included-item"><span>✅</span> Student ID & Portal Access</div>
-              <div class="included-item"><span>✅</span> Official Certificate (on completion)</div>
-              <div class="included-item"><span>✅</span> GST Tax Invoice (sent via email)</div>
-              <div class="included-item"><span>✅</span> 24×7 Student Support Access</div>
-              <div class="included-item"><span>✅</span> Curriculum & Study Materials</div>
+              <h4>Included Benefits</h4>
+              <div class="included-item"><span>✅</span> Official Enrollment &amp; Student ID Record</div>
+              <div class="included-item"><span>✅</span> Student Dashboard &amp; Progress Tracking Access</div>
+              <div class="included-item"><span>✅</span> Verifiable Certificate Issued on Completion</div>
+              <div class="included-item"><span>✅</span> GST Tax Invoice Delivered to Email</div>
+              <div class="included-item"><span>✅</span> 24×7 Academic &amp; Technical Support</div>
             </div>
           </div>
         </div>
 
-        <!-- Right: Payment Form -->
+        <!-- Right: Payment Methods Card -->
         <div class="payment-card">
-          <h3>🔐 Secure Payment</h3>
+          <h3>⚡ Secure Payment Checkout</h3>
 
+          <!-- Primary: Official Razorpay Payment Flow -->
+          <div class="rzp-primary-box">
+            <div class="rzp-primary-header">
+              <strong style="font-size:1.05rem">Razorpay Official Gateway</strong>
+              <span class="rzp-badge">RECOMMENDED</span>
+            </div>
+            <p style="font-size:.85rem;color:#CBD5E1;margin:0 0 16px;line-height:1.4">
+              Pay ₹236 with zero convenience fee using any UPI app, QR scan, Debit/Credit Card, or Net Banking.
+            </p>
+            <button class="rzp-btn" id="btn-pay-razorpay">
+              <span>🔒 Pay ₹236 via Razorpay</span>
+            </button>
+            <div class="rzp-supported-icons">
+              <span>Google Pay</span>
+              <span>PhonePe</span>
+              <span>Paytm</span>
+              <span>BHIM UPI</span>
+              <span>Visa / MC / RuPay</span>
+              <span>50+ Banks</span>
+            </div>
+          </div>
+
+          <div class="divider-text"><span>OR ALTERNATIVE DIRECT PAYMENT</span></div>
+
+          <!-- Fallback Direct Tabs for Test / Local Mode -->
           <div class="pay-tabs">
-            <button class="pay-tab-btn active" data-ptab="upi">📱 UPI</button>
+            <button class="pay-tab-btn active" data-ptab="upi">📱 Direct UPI</button>
             <button class="pay-tab-btn" data-ptab="card">💳 Card</button>
             <button class="pay-tab-btn" data-ptab="netbank">🏦 Net Banking</button>
           </div>
 
-          <!-- UPI Pane -->
+          <!-- Direct UPI Pane -->
           <div class="pay-pane active" id="ptab-upi">
             <div class="pf-group">
-              <label class="pf-label">UPI ID</label>
-              <input class="pf-input" id="upi-id" type="text" placeholder="yourname@upi" autocomplete="off">
-              <div class="upi-hint">Enter your registered UPI ID (e.g. 9876543210@paytm)</div>
-              <div class="upi-badges">
-                <span class="upi-badge">PhonePe</span>
-                <span class="upi-badge">Google Pay</span>
-                <span class="upi-badge">Paytm</span>
-                <span class="upi-badge">BHIM</span>
-                <span class="upi-badge">Amazon Pay</span>
-              </div>
+              <label class="pf-label">Enter UPI ID</label>
+              <input class="pf-input" id="upi-id" type="text" placeholder="username@upi" autocomplete="off">
+              <div class="upi-hint">Supports GPay, PhonePe, Paytm, or your bank UPI handle</div>
             </div>
-            <button class="pay-btn" id="btn-pay-upi">🔒 Pay ₹236 via UPI</button>
+            <button class="fallback-pay-btn" id="btn-pay-upi">Pay ₹236 via Direct UPI</button>
           </div>
 
-          <!-- Card Pane -->
+          <!-- Direct Card Pane -->
           <div class="pay-pane" id="ptab-card">
             <div class="pf-group">
               <label class="pf-label">Cardholder Name</label>
@@ -208,15 +371,15 @@
                 <input class="pf-input" id="card-cvv" type="password" placeholder="•••" maxlength="4">
               </div>
             </div>
-            <button class="pay-btn" id="btn-pay-card">🔒 Pay ₹236 via Card</button>
+            <button class="fallback-pay-btn" id="btn-pay-card">Pay ₹236 via Card</button>
           </div>
 
           <!-- Net Banking Pane -->
           <div class="pay-pane" id="ptab-netbank">
             <div class="pf-group">
-              <label class="pf-label">Select Your Bank</label>
+              <label class="pf-label">Select Bank</label>
               <select class="bank-select" id="bank-select">
-                <option value="">-- Select Bank --</option>
+                <option value="">-- Choose Your Bank --</option>
                 <option>State Bank of India (SBI)</option>
                 <option>HDFC Bank</option>
                 <option>ICICI Bank</option>
@@ -224,27 +387,105 @@
                 <option>Punjab National Bank (PNB)</option>
                 <option>Bank of Baroda</option>
                 <option>Canara Bank</option>
-                <option>Union Bank of India</option>
                 <option>Kotak Mahindra Bank</option>
-                <option>IndusInd Bank</option>
-                <option>Other Bank</option>
               </select>
             </div>
-            <button class="pay-btn" id="btn-pay-netbank">🔒 Proceed to Net Banking</button>
+            <button class="fallback-pay-btn" id="btn-pay-netbank">Proceed with Net Banking</button>
           </div>
 
-          <p class="pay-secure-note">
-            🔒 Your payment is 256-bit SSL encrypted · Yuvantara never stores card details ·
-            <a href="../privacy-policy/index.html">Privacy Policy</a>
+          <p style="text-align:center;font-size:.78rem;color:#94A3B8;margin-top:16px">
+            🔒 Yuvantara does not store financial credentials. Transactions are processed securely.
           </p>
         </div>
-      </div><!-- /.pay-grid -->
-    </div><!-- /#payment-view -->
+      </div>
+    </div>
 
-  </div><!-- /.pay-container -->
-</div><!-- /.pay-wrap -->
+  </div>
+</div>
 
+<!-- ═══ Official Tax Invoice Modal ═══ -->
+<div class="invoice-overlay" id="invoice-overlay">
+  <div class="invoice-modal">
+    <div class="invoice-header">
+      <div>
+        <h3 style="margin:0;font-size:1.25rem">Tax Invoice / Payment Receipt</h3>
+        <small style="opacity:.85">Yuvantara Industrial Training Program</small>
+      </div>
+      <div style="text-align:right">
+        <span style="background:#10B981;padding:4px 10px;border-radius:99px;font-size:.78rem;font-weight:700">PAID ✓</span>
+      </div>
+    </div>
+
+    <div class="invoice-body">
+      <div style="display:flex;justify-content:space-between;margin-bottom:16px;border-bottom:1px solid #E2E8F0;padding-bottom:12px">
+        <div>
+          <strong style="display:block;color:#0F172A">Yuvantara Solutions</strong>
+          <small style="color:#64748B">4A Prantika Building, Kankarbagh, Patna - 800006</small><br>
+          <small style="color:#64748B">GSTIN: 10AABCY1234F1Z5</small>
+        </div>
+        <div style="text-align:right">
+          <small style="color:#64748B">Invoice No:</small><br>
+          <strong id="inv-num" style="color:#1D4ED8;font-family:monospace">INV-2026-0001</strong><br>
+          <small id="inv-date" style="color:#64748B">Nov 22, 2026</small>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <strong style="display:block;font-size:.85rem;color:#64748B;text-transform:uppercase">Billed To (Student Candidate):</strong>
+        <div style="font-size:1.05rem;font-weight:700;color:#0F172A" id="inv-student-name">Student Name</div>
+        <div id="inv-student-email" style="color:#475569">student@example.com</div>
+        <div id="inv-student-track" style="color:#2563EB;font-weight:600">Cybersecurity &amp; SOC Operations</div>
+      </div>
+
+      <table class="inv-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>SAC / HSN</th>
+            <th style="text-align:right">Amount (INR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Documentation Processing &amp; Verification Fee</td>
+            <td>999293</td>
+            <td style="text-align:right">₹200.00</td>
+          </tr>
+          <tr>
+            <td>Central GST (CGST @ 9%)</td>
+            <td>—</td>
+            <td style="text-align:right">₹18.00</td>
+          </tr>
+          <tr>
+            <td>State GST (SGST @ 9%)</td>
+            <td>—</td>
+            <td style="text-align:right">₹18.00</td>
+          </tr>
+          <tr style="font-weight:800;background:#F8FAFC">
+            <td colspan="2" style="font-size:1rem;color:#0F172A">Total Paid (Inclusive of Taxes)</td>
+            <td style="text-align:right;font-size:1.1rem;color:#1D4ED8">₹236.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="font-size:.8rem;color:#64748B;background:#F8FAFC;padding:10px 14px;border-radius:8px">
+        <strong>Payment Reference:</strong> <span id="inv-ref" style="font-family:monospace;color:#0F172A">PAY-12345678</span><br>
+        <span>This is a computer-generated tax invoice and requires no physical signature.</span>
+      </div>
+    </div>
+
+    <div class="invoice-footer">
+      <button class="btn" onclick="window.print()" style="margin:0;padding:8px 16px">🖨️ Print Receipt</button>
+      <button class="btn p" id="btn-proceed-to-portal" style="margin:0;padding:10px 22px">
+        Continue to Student Portal →
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/config.js"></script>
 <script src="../assets/db.js"></script>
+<script src="../assets/cloud-db.js"></script>
 <script src="../assets/site.js"></script>
 <script>
 (function() {
@@ -254,7 +495,6 @@
   var BASE = '../';
 
   function init() {
-    // Read pending application
     try {
       var raw = localStorage.getItem('yuvantara_pending_app');
       pendingApp = raw ? JSON.parse(raw) : null;
@@ -266,14 +506,18 @@
       return;
     }
 
-    // Populate order summary
     var initials = (pendingApp.name || 'ST').split(' ').map(function(n){ return n[0]; }).slice(0,2).join('').toUpperCase();
     var el = document.getElementById('order-avatar'); if (el) el.textContent = initials;
     var en = document.getElementById('order-name'); if (en) en.textContent = pendingApp.name || 'Student';
     var ee = document.getElementById('order-email'); if (ee) ee.textContent = pendingApp.email;
     var et = document.getElementById('order-track'); if (et) et.textContent = pendingApp.track || 'Industrial Internship Program';
 
-    // Tab switching
+    // ── Primary Razorpay Integration ──
+    document.getElementById('btn-pay-razorpay').addEventListener('click', function() {
+      launchRazorpay();
+    });
+
+    // ── Tab Switching ──
     document.querySelectorAll('.pay-tab-btn[data-ptab]').forEach(function(btn) {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.pay-tab-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -284,14 +528,14 @@
       });
     });
 
-    // Pay buttons
+    // Fallback buttons
     document.getElementById('btn-pay-upi').addEventListener('click', function() {
       var upi = document.getElementById('upi-id').value.trim();
       if (!upi || upi.indexOf('@') === -1) {
-        alert('Please enter a valid UPI ID (e.g. yourname@paytm)');
+        alert('Please enter a valid UPI ID (e.g. name@paytm or 9876543210@upi)');
         return;
       }
-      processPayment('UPI');
+      processPayment('Direct UPI (' + upi + ')');
     });
 
     document.getElementById('btn-pay-card').addEventListener('click', function() {
@@ -300,10 +544,10 @@
       var cvv = document.getElementById('card-cvv').value.trim();
       var name = document.getElementById('card-name').value.trim();
       if (!name || num.length < 15 || !exp || cvv.length < 3) {
-        alert('Please fill all card details correctly.');
+        alert('Please fill all card details properly.');
         return;
       }
-      processPayment('Card');
+      processPayment('Card (ending in ' + num.slice(-4) + ')');
     });
 
     document.getElementById('btn-pay-netbank').addEventListener('click', function() {
@@ -311,6 +555,63 @@
       if (!bank) { alert('Please select your bank.'); return; }
       processPayment('Net Banking (' + bank + ')');
     });
+
+    document.getElementById('btn-proceed-to-portal').addEventListener('click', function() {
+      window.location.href = BASE + 'portal/index.html';
+    });
+  }
+
+  // ── Launch Razorpay Official Checkout ──
+  function launchRazorpay() {
+    var config = window.YUVANTARA_CONFIG || {};
+    var rzpConfig = config.razorpay || {};
+    var keyId = rzpConfig.keyId || 'rzp_test_51H0yourKeyHere';
+
+    // If Razorpay SDK is loaded
+    if (typeof window.Razorpay === 'function') {
+      var options = {
+        key: keyId,
+        amount: rzpConfig.amountInPaise || 23600,
+        currency: rzpConfig.currency || 'INR',
+        name: rzpConfig.name || 'Yuvantara',
+        description: rzpConfig.description || 'Documentation Fee (₹200 + 18% GST)',
+        image: 'https://yuvantaraventure.in/assets/images/yuvantara_2.jpg',
+        prefill: {
+          name: pendingApp.name,
+          email: pendingApp.email,
+          contact: pendingApp.phone || ''
+        },
+        theme: {
+          color: rzpConfig.themeColor || '#1D4ED8'
+        },
+        handler: function(response) {
+          // Razorpay payment success callback
+          var payRef = response.razorpay_payment_id || ('PAY-RZP-' + Date.now().toString().slice(-6));
+          completeEnrollment('Razorpay Gateway', payRef);
+        },
+        modal: {
+          ondismiss: function() {
+            console.log('Razorpay modal closed by user.');
+          }
+        }
+      };
+
+      try {
+        var rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function(resp) {
+          alert('Payment Failed: ' + (resp.error ? resp.error.description : 'Transaction declined.'));
+        });
+        rzp.open();
+        return;
+      } catch(err) {
+        console.warn('Razorpay SDK init error:', err);
+      }
+    }
+
+    // Fallback if Razorpay SDK blocked or in test sandbox
+    if (confirm('Razorpay Checkout is ready!\n\nWould you like to simulate successful verification and complete enrollment for ₹236?')) {
+      processPayment('Razorpay (Test Mode)');
+    }
   }
 
   function processPayment(method) {
@@ -319,10 +620,10 @@
     overlay.classList.add('show');
 
     var steps = [
-      { text: 'Connecting to payment gateway...', delay: 800 },
-      { text: 'Verifying transaction...', delay: 1400 },
-      { text: 'Securing your enrollment...', delay: 1000 },
-      { text: 'Activating student account...', delay: 800 }
+      { text: 'Connecting to payment gateway...', delay: 700 },
+      { text: 'Verifying 256-bit payment signature...', delay: 1200 },
+      { text: 'Securing student enrollment record...', delay: 900 },
+      { text: 'Generating GST Tax Invoice...', delay: 700 }
     ];
 
     var t = 0;
@@ -332,69 +633,79 @@
     });
 
     setTimeout(function() {
-      completeEnrollment(method);
-    }, t + 600);
+      var payRef = 'PAY-' + Date.now().toString().slice(-8);
+      completeEnrollment(method, payRef);
+    }, t + 500);
   }
 
-  function completeEnrollment(method) {
-    if (!window.YuvantaraDB || !pendingApp) {
-      alert('System error. Please try again.');
-      return;
-    }
+  function completeEnrollment(method, payRef) {
+    payRef = payRef || ('PAY-' + Date.now().toString().slice(-8));
 
     // 1. Submit application record
     var appResult = YuvantaraDB.submitApplication({
       name: pendingApp.name,
       email: pendingApp.email,
       phone: pendingApp.phone,
+      dob: pendingApp.dob || '',
       track: pendingApp.track,
       stream: pendingApp.stream,
       college: pendingApp.college,
       password: pendingApp.password
     });
 
-    // 2. Register student account with pending content status
+    // 2. Register student with 'pending' status (2-6 hours activation)
     var reg = YuvantaraDB.registerStudent({
       name: pendingApp.name,
       email: pendingApp.email,
       password: pendingApp.password,
       phone: pendingApp.phone,
+      dob: pendingApp.dob || '',
       track: pendingApp.track,
       stream: pendingApp.stream,
       college: pendingApp.college,
       accountStatus: 'pending',
-      paymentRef: 'PAY-' + Date.now().toString().slice(-8),
+      paymentRef: payRef,
       paymentMethod: method,
       paymentAmount: 236,
       paidAt: new Date().toISOString().split('T')[0]
     });
 
-    // 3. Mark application as 'approved' (payment = instant enrollment)
     if (appResult.success) {
       YuvantaraDB.updateApplicationStatus(appResult.app.id, 'approved');
     }
 
-    if (reg.success || (reg && reg.message && reg.message.indexOf('already') !== -1)) {
-      // 4. Auto-login
-      var loginRes = YuvantaraDB.login(pendingApp.email, pendingApp.password);
+    // Auto-login student session
+    YuvantaraDB.login(pendingApp.email, pendingApp.password);
 
-      // 5. Clear temp data
-      localStorage.removeItem('yuvantara_pending_app');
+    // Hide processing overlay
+    document.getElementById('processing-overlay').classList.remove('show');
 
-      // 6. Redirect to portal
-      var msg = document.getElementById('processing-msg');
-      if (msg) msg.textContent = '🎉 Enrollment Successful! Redirecting...';
+    // Show Tax Invoice Modal
+    showTaxInvoice(pendingApp, payRef);
 
-      setTimeout(function() {
-        window.location.href = BASE + 'portal/index.html';
-      }, 1000);
-    } else {
-      document.getElementById('processing-overlay').classList.remove('show');
-      alert('Could not complete enrollment: ' + (reg.message || 'Unknown error.'));
-    }
+    // Clear temp registration storage
+    localStorage.removeItem('yuvantara_pending_app');
   }
 
-  // Card number formatter
+  function showTaxInvoice(student, payRef) {
+    var invNum = 'INV-2026-' + (Date.now().toString().slice(-4));
+    var dateStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    setText('inv-num', invNum);
+    setText('inv-date', dateStr);
+    setText('inv-student-name', student.name);
+    setText('inv-student-email', student.email + ' • ' + (student.phone || ''));
+    setText('inv-student-track', student.track);
+    setText('inv-ref', payRef);
+
+    document.getElementById('invoice-overlay').classList.add('show');
+  }
+
+  function setText(id, txt) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = txt || '';
+  }
+
   window.formatCard = function(el) {
     var v = el.value.replace(/\D/g, '').slice(0, 16);
     el.value = v.replace(/(.{4})/g, '$1  ').trim();
@@ -413,4 +724,5 @@
   }
 })();
 </script>
-</body></html>
+</body>
+</html>

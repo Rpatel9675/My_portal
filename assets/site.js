@@ -29,12 +29,16 @@ document.addEventListener('click', e => {
 
   var assetsDir = siteRoot + 'assets/';
 
-  // Ensure db.js is loaded
-  if (!window.YuvantaraDB) {
-    var dbScript = document.createElement('script');
-    dbScript.src = assetsDir + 'db.js';
-    document.head.appendChild(dbScript);
-  }
+  // Ensure config.js, db.js, cloud-db.js are loaded
+  var requiredScripts = ['config.js', 'db.js', 'cloud-db.js'];
+  requiredScripts.forEach(function(s) {
+    var hasScript = document.querySelector('script[src*="' + s + '"]');
+    if (!hasScript) {
+      var sc = document.createElement('script');
+      sc.src = assetsDir + s;
+      document.head.appendChild(sc);
+    }
+  });
 
   var baseImgDir = assetsDir + 'images/';
 
@@ -191,6 +195,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // Login form handler with YuvantaraDB Authentication
   var loginForm = document.getElementById('form-login');
   if (loginForm) {
+    // Ensure Forgot Password link is present in modal
+    var passLabel = loginForm.querySelector('label[for="l-pass"]');
+    if (passLabel && !loginForm.querySelector('a[href*="forgot-password"]')) {
+      var basePath = window.__yuvantaraBasePath || '';
+      var fpLink = document.createElement('a');
+      fpLink.href = basePath + 'forgot-password/index.html';
+      fpLink.textContent = 'Forgot password?';
+      fpLink.style.cssText = 'font-size:.82rem;color:var(--ac);text-decoration:none;float:right;font-weight:normal';
+      passLabel.appendChild(fpLink);
+    }
     loginForm.addEventListener('submit', function(e) {
       e.preventDefault();
       var inp = document.getElementById('cap-login-a');
@@ -249,10 +263,18 @@ document.addEventListener('DOMContentLoaded', function() {
       var name = document.getElementById('s-name').value.trim();
       var email = document.getElementById('s-email').value.trim();
       var phone = document.getElementById('s-phone').value.trim();
+      var dobEl = document.getElementById('s-dob');
+      var dob = dobEl ? dobEl.value.trim() : '';
       var pass = document.getElementById('s-pass').value;
       var prog = document.getElementById('s-prog') ? document.getElementById('s-prog').value : '';
       var stream = document.getElementById('s-stream') ? document.getElementById('s-stream').value : '';
       var college = document.getElementById('s-college') ? document.getElementById('s-college').value.trim() : '';
+
+      if (!dob) {
+        alert('Please select your Date of Birth.');
+        if (dobEl) dobEl.focus();
+        return;
+      }
 
       if (window.YuvantaraDB) {
         // Password strength check
@@ -281,9 +303,9 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
         }
 
-        // Store application data temporarily for payment page
+        // Store application data with DOB for checkout & enrollment
         var pendingData = {
-          name: name, email: email, phone: phone,
+          name: name, email: email, phone: phone, dob: dob,
           password: pass, track: prog, stream: stream, college: college,
           createdAt: Date.now()
         };
@@ -294,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
         }
 
-        // Redirect to payment/checkout page
+        // Proceed directly to cart & documentation payment (No OTP required)
         closeModal();
         var basePath = window.__yuvantaraBasePath || '';
         window.location.href = basePath + 'payment/index.html';
@@ -366,8 +388,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!id) return;
 
     var cert = null;
+    var errBox = document.getElementById('cert-error-box');
+    var successBox = document.getElementById('cert-success-box');
+    var errMsg = document.getElementById('cert-error-msg');
 
-    // First check YuvantaraDB users for dynamically issued certificates
+    // First check YuvantaraDB users for dynamically issued/revoked certificates
     if (window.YuvantaraDB) {
       var students = YuvantaraDB.getStudents();
       for (var i = 0; i < students.length; i++) {
@@ -379,7 +404,8 @@ document.addEventListener('DOMContentLoaded', function() {
             duration: s.certificate.duration || '6 Months Industrial Internship',
             grade: s.certificate.grade || 'Grade A+ (Distinction)',
             date: s.certificate.issueDate || '2026',
-            status: s.certificate.status || 'Valid & Authenticated',
+            status: s.certificate.status || 'valid',
+            revokedAt: s.certificate.revokedAt,
             college: s.college || 'Affiliated University',
             council: s.certificate.authority || 'Yuvantara Academic & Skill Council'
           };
@@ -388,23 +414,56 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    if (!cert) {
+    if (!cert && mockCertificates[id]) {
       cert = mockCertificates[id];
     }
 
-    // Dynamic fallback for any entered credential ID format
     if (!cert) {
-      cert = {
-        name: 'Student Candidate',
-        course: 'Advanced Industrial Training & Internship',
-        duration: '6 Months Industrial Internship',
-        grade: 'Grade A (Passed with Distinction)',
-        date: 'October 15, 2026',
-        status: 'Valid & Verified in National Database',
-        college: 'Affiliated Technical Institution, Bihar',
-        council: 'Yuvantara Academic & Skill Council'
-      };
+      // Record not found in official registry
+      if (errBox) {
+        errBox.style.display = 'block';
+        if (errMsg) errMsg.textContent = 'No certificate record found matching ID "' + id + '". Please verify the credential code or contact administrative registry.';
+      }
+      if (successBox) successBox.style.display = 'none';
+      resultBox.classList.add('active');
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
     }
+
+    // Record found
+    if (errBox) errBox.style.display = 'none';
+    if (successBox) successBox.style.display = 'block';
+
+    var isRevoked = (cert.status === 'revoked' || cert.status === 'Revoked');
+    var badgeEl = document.getElementById('c-badge');
+    var statusEl = document.getElementById('c-status');
+
+    if (badgeEl) {
+      if (isRevoked) {
+        badgeEl.textContent = '⚠️ CERTIFICATE REVOKED';
+        badgeEl.style.background = '#FEE2E2';
+        badgeEl.style.color = '#DC2626';
+        badgeEl.style.borderColor = '#FECACA';
+      } else {
+        badgeEl.textContent = 'Official Record Verified';
+        badgeEl.style.background = '';
+        badgeEl.style.color = '';
+        badgeEl.style.borderColor = '';
+      }
+    }
+
+    if (statusEl) {
+      if (isRevoked) {
+        statusEl.textContent = 'REVOKED & NULLIFIED' + (cert.revokedAt ? ' (' + cert.revokedAt + ')' : '');
+        statusEl.style.color = '#DC2626';
+      } else {
+        statusEl.textContent = cert.status || 'Valid & Authenticated';
+        statusEl.style.color = '#16A34A';
+      }
+    }
+
+    var authorityEl = document.getElementById('c-authority');
+    if (authorityEl) authorityEl.textContent = cert.council || 'Yuvantara Academic & Cyber Defense Council';
 
     document.getElementById('c-id').textContent = id;
     document.getElementById('c-name').textContent = cert.name;
@@ -413,7 +472,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('c-grade').textContent = cert.grade;
     document.getElementById('c-date').textContent = cert.date;
     document.getElementById('c-college').textContent = cert.college;
-    document.getElementById('c-status').textContent = cert.status;
 
     resultBox.classList.add('active');
     resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

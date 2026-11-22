@@ -65,6 +65,7 @@
     setVal('p-name', currentUser.name || '');
     setVal('p-email', currentUser.email || '');
     setVal('p-phone', currentUser.phone || '');
+    setVal('p-dob', currentUser.dob || '');
     setVal('p-stream', currentUser.stream || '');
     setVal('p-college', currentUser.college || '');
     setVal('p-track', currentUser.track || 'Cybersecurity & SOC Operations');

@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Student Portal | Yuvantara</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/portal.css"></head><body>
+﻿<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0A0E17"><title>Student Portal | Yuvantara</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/portal.css"></head><body>
 <a class="skip" href="#main">Skip to content</a>
 
 <!-- ═══ AUTH MODAL ═══ -->
@@ -14,7 +14,13 @@
     <p class="auth-sub">Log in to your Yuvantara student portal</p>
     <form id="form-login" class="auth-form" novalidate>
       <div class="fgroup"><label for="l-email">Email address</label><input id="l-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
-      <div class="fgroup"><label for="l-pass">Password</label><input id="l-pass" type="password" placeholder="••••••••" required autocomplete="current-password"></div>
+      <div class="fgroup">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <label for="l-pass" style="margin:0">Password</label>
+          <a href="../forgot-password/index.html" style="font-size:.82rem;color:var(--ac);text-decoration:none">Forgot password?</a>
+        </div>
+        <input id="l-pass" type="password" placeholder="••••••••" required autocomplete="current-password">
+      </div>
       <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-login-q"></span></label><input id="cap-login-a" type="number" placeholder="Your answer" required min="0"></div>
       <button class="btn p auth-submit" type="submit">Login</button>
       <p class="auth-switch">Don't have an account? <button type="button" class="auth-tab-btn link" data-tab="signup">Sign up</button></p>
@@ -29,7 +35,7 @@
         <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
         <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
       </div>
-      <div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div>
+      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div></div>
       <div class="frow">
         <div class="fgroup">
           <label for="s-prog">Internship Track</label>
@@ -316,9 +322,15 @@
               <label for="p-email">Email Address (Registered Account ID)</label>
               <input id="p-email" type="email" readonly>
             </div>
-            <div>
-              <label for="p-phone">WhatsApp / Phone Number</label>
-              <input id="p-phone" type="tel" required>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div>
+                <label for="p-phone">WhatsApp / Phone Number</label>
+                <input id="p-phone" type="tel" required>
+              </div>
+              <div>
+                <label for="p-dob">Date of Birth (DOB)</label>
+                <input id="p-dob" type="date" readonly style="background:#F8FAFC;color:#374151">
+              </div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
               <div>
@@ -393,7 +405,10 @@
             <input id="gate-email" type="email" placeholder="student@yuvantara.com" required autocomplete="email">
           </div>
           <div>
-            <label for="gate-pass">Password</label>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <label for="gate-pass" style="margin:0">Password</label>
+              <a href="../forgot-password/index.html" style="font-size:.82rem;color:var(--ac);text-decoration:none">Forgot password?</a>
+            </div>
             <input id="gate-pass" type="password" placeholder="••••••••" required autocomplete="current-password">
           </div>
           <button class="btn p" style="width:100%;margin-top:10px" type="submit">Sign In to Student Portal</button>
@@ -461,7 +476,9 @@
   </div>
 </div></footer>
 
+<script src="../assets/config.js"></script>
 <script src="../assets/db.js"></script>
+<script src="../assets/cloud-db.js"></script>
 <script src="../assets/site.js"></script>
 <script src="portal.js"></script>
 </body></html>
