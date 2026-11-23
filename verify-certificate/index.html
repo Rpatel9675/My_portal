@@ -29,7 +29,8 @@
         <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
         <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
       </div>
-      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div></div>
+      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create password" required autocomplete="new-password"></div></div>
+      <div class="fgroup"><label for="s-pass-confirm">Confirm Password</label><input id="s-pass-confirm" type="password" placeholder="Confirm your password" required autocomplete="new-password"></div>
       <div class="frow">
         <div class="fgroup">
           <label for="s-prog">Internship Track</label>
@@ -56,6 +57,7 @@
         </div>
       </div>
       <div class="fgroup"><label for="s-college">College / University name</label><input id="s-college" type="text" placeholder="e.g. Jadavpur University" required></div>
+      <div class="fgroup checkbox-group" style="margin:10px 0 12px"><label style="display:flex;align-items:flex-start;gap:8px;font-size:0.83rem;color:#334155;cursor:pointer;line-height:1.4"><input type="checkbox" id="s-declaration" required style="margin-top:2px;accent-color:#0284C7;width:16px;height:16px;flex-shrink:0"><span><strong>Self-Declaration:</strong> I hereby declare that all details provided are genuine and accurate. I agree to abide by Yuvantara Corporate Policies and IT Act compliance.</span></label></div>
       <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-signup-q"></span></label><input id="cap-signup-a" type="number" placeholder="Your answer" required min="0"></div>
       <button class="btn p auth-submit" type="submit">Submit Application</button>
       <p class="auth-switch">Already have an account? <button type="button" class="auth-tab-btn link" data-tab="login">Login</button></p>
@@ -129,6 +131,10 @@
           <div class="cert-field">
             <small>Program / Domain</small>
             <strong id="c-course">Cybersecurity &amp; SOC Operations Internship</strong>
+          </div>
+          <div class="cert-field">
+            <small>Accreditation</small>
+            <strong id="c-accreditation">ISO 9001:2015 Certified</strong>
           </div>
           <div class="cert-field">
             <small>Duration</small>

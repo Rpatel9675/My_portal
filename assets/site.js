@@ -29,8 +29,8 @@ document.addEventListener('click', e => {
 
   var assetsDir = siteRoot + 'assets/';
 
-  // Ensure config.js, db.js, cloud-db.js are loaded
-  var requiredScripts = ['config.js', 'db.js', 'cloud-db.js'];
+  // Ensure config.js, db.js, cloud-db.js, qr-generator.js are loaded
+  var requiredScripts = ['config.js', 'db.js', 'cloud-db.js', 'qr-generator.js'];
   requiredScripts.forEach(function(s) {
     var hasScript = document.querySelector('script[src*="' + s + '"]');
     if (!hasScript) {
@@ -221,6 +221,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var email = document.getElementById('l-email').value.trim();
       var pass = document.getElementById('l-pass').value;
 
+      if (window.YuvantaraDB && YuvantaraDB.validateEmail) {
+        var emailCheck = YuvantaraDB.validateEmail(email);
+        if (!emailCheck.valid) {
+          alert(emailCheck.message);
+          return;
+        }
+      }
+
       if (window.YuvantaraDB) {
         var res = YuvantaraDB.login(email, pass);
         if (res.success) {
@@ -266,6 +274,9 @@ document.addEventListener('DOMContentLoaded', function() {
       var dobEl = document.getElementById('s-dob');
       var dob = dobEl ? dobEl.value.trim() : '';
       var pass = document.getElementById('s-pass').value;
+      var passConfirmEl = document.getElementById('s-pass-confirm');
+      var passConfirm = passConfirmEl ? passConfirmEl.value : '';
+      var declEl = document.getElementById('s-declaration');
       var prog = document.getElementById('s-prog') ? document.getElementById('s-prog').value : '';
       var stream = document.getElementById('s-stream') ? document.getElementById('s-stream').value : '';
       var college = document.getElementById('s-college') ? document.getElementById('s-college').value.trim() : '';
@@ -276,7 +287,37 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
+      if (passConfirmEl && pass !== passConfirm) {
+        alert('Passwords do not match. Please ensure both passwords are identical.');
+        passConfirmEl.focus();
+        return;
+      }
+
+      if (declEl && !declEl.checked) {
+        alert('Please check the Self-Declaration box to confirm that your details are accurate.');
+        declEl.focus();
+        return;
+      }
+
       if (window.YuvantaraDB) {
+        // Strict anti-fake email verification
+        var ev = YuvantaraDB.validateEmail(email);
+        if (!ev.valid) {
+          alert(ev.message);
+          var ee = document.getElementById('s-email'); if (ee) ee.focus();
+          return;
+        }
+        email = ev.email;
+
+        // Strict anti-fake phone verification
+        var pv = YuvantaraDB.validatePhone(phone);
+        if (!pv.valid) {
+          alert(pv.message);
+          var pe = document.getElementById('s-phone'); if (pe) pe.focus();
+          return;
+        }
+        phone = pv.phone;
+
         // Password strength check
         if (!pass || pass.length < 8) {
           alert('Password must be at least 8 characters long.');
@@ -400,10 +441,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (s.certificate && s.certificate.id && s.certificate.id.toUpperCase() === id) {
           cert = {
             name: s.name,
+            dob: s.dob || (s.certificate && s.certificate.dob) || '2002-05-15',
             course: s.certificate.title || s.track,
             duration: s.certificate.duration || '6 Months Industrial Internship',
             grade: s.certificate.grade || 'Grade A+ (Distinction)',
-            date: s.certificate.issueDate || '2026',
+            date: s.certificate.issueDate || s.certificate.date || '2026',
             status: s.certificate.status || 'valid',
             revokedAt: s.certificate.revokedAt,
             college: s.college || 'Affiliated University',
@@ -472,6 +514,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('c-grade').textContent = cert.grade;
     document.getElementById('c-date').textContent = cert.date;
     document.getElementById('c-college').textContent = cert.college;
+    var accEl = document.getElementById('c-accreditation');
+    if (accEl) accEl.textContent = 'ISO 9001:2015 Certified';
 
     resultBox.classList.add('active');
     resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

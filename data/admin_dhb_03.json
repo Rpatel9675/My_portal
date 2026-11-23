@@ -1,0 +1,107 @@
+{
+  "adminId": "ADM-03",
+  "adminEmail": "dhb_03@admin",
+  "adminName": "Admin DHB-03",
+  "role": "admin",
+  "cluster": "Patna Cloud & Platform Engineering Center",
+  "assignedTrack": "Cloud Infrastructure & DevOps",
+  "status": "active",
+  "phone": "+91 98765 00003",
+  "lastSynced": "2026-11-23T09:30:00.000Z",
+  "totalStudents": 2,
+  "students": [
+    {
+      "id": "USR-103",
+      "name": "Aarav Mehta",
+      "email": "aarav.mehta@example.com",
+      "phone": "+91 98334 55667",
+      "dob": "2001-12-05",
+      "track": "Cloud Infrastructure & DevOps",
+      "stream": "B.Tech (CSE)",
+      "college": "Delhi Technological University (DTU), Delhi",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-01-18T09:15:00.000Z",
+      "progress": 100,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "completed" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "completed" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "completed" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-103",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260118-03",
+        "paymentDate": "2026-01-18T09:30:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "dhb_03@admin",
+        "approvedAt": "2026-01-18T10:00:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1003"
+      },
+      "certificate": {
+        "certNumber": "YUV-2026-CL103",
+        "id": "YUV-2026-CL103",
+        "name": "Aarav Mehta",
+        "college": "Delhi Technological University (DTU), Delhi",
+        "domain": "Cloud Infrastructure & DevOps",
+        "date": "April 28, 2026",
+        "grade": "Grade A+ (Distinction)",
+        "status": "Valid & Verified",
+        "issuedByAdmin": "dhb_03@admin",
+        "qrCodeUrl": "https://yuvantaraventure.in/verify-certificate/index.html?id=YUV-2026-CL103"
+      }
+    },
+    {
+      "id": "USR-109",
+      "name": "Sneha Kumari",
+      "email": "sneha.k@example.com",
+      "phone": "+91 97722 55667",
+      "dob": "2002-09-05",
+      "track": "Cloud Infrastructure & DevOps",
+      "stream": "B.Tech (ECE)",
+      "college": "Birla Institute of Technology (BIT), Patna",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-02-15T12:00:00.000Z",
+      "progress": 40,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "pending" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "pending" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "pending" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-109",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260215-09",
+        "paymentDate": "2026-02-15T12:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "dhb_03@admin",
+        "approvedAt": "2026-02-15T12:45:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1009"
+      },
+      "certificate": null
+    }
+  ]
+}

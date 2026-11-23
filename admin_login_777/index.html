@@ -98,7 +98,8 @@
         <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
         <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
       </div>
-      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div></div>
+      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create password" required autocomplete="new-password"></div></div>
+      <div class="fgroup"><label for="s-pass-confirm">Confirm Password</label><input id="s-pass-confirm" type="password" placeholder="Confirm your password" required autocomplete="new-password"></div>
       <div class="frow">
         <div class="fgroup">
           <label for="s-prog">Internship Track</label>
@@ -125,6 +126,7 @@
         </div>
       </div>
       <div class="fgroup"><label for="s-college">College / University name</label><input id="s-college" type="text" placeholder="e.g. NIT Patna" required></div>
+      <div class="fgroup checkbox-group" style="margin:10px 0 12px"><label style="display:flex;align-items:flex-start;gap:8px;font-size:0.83rem;color:#334155;cursor:pointer;line-height:1.4"><input type="checkbox" id="s-declaration" required style="margin-top:2px;accent-color:#0284C7;width:16px;height:16px;flex-shrink:0"><span><strong>Self-Declaration:</strong> I hereby declare that all details provided are genuine and accurate. I agree to abide by Yuvantara Corporate Policies and IT Act compliance.</span></label></div>
       <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-signup-q"></span></label><input id="cap-signup-a" type="number" placeholder="Your answer" required min="0"></div>
       <button class="btn p auth-submit" type="submit">Submit Application</button>
       <p class="auth-switch">Already have an account? <button type="button" class="auth-tab-btn link" data-tab="login">Login</button></p>
@@ -178,19 +180,6 @@
           </div>
           <button class="btn p" style="background:#DC2626;border-color:#DC2626;width:100%;margin-top:8px" type="submit">Authenticate as Admin</button>
         </form>
-
-        <div style="margin-top:20px;padding:14px;background:#F8FAFC;border-radius:8px;font-size:.85rem;color:#475569;border:1px dashed #CBD5E1">
-          <strong style="color:#0F172A">System Administrative Credentials:</strong><br>
-          <div style="margin-top:6px;line-height:1.6">
-            👑 <strong>Super Admin:</strong> <code>a4dr_00@supper</code> &nbsp;|&nbsp; Password: <code>!!a4dr@00</code><br>
-            🛡️ <strong>6 Admins:</strong> <code>adk_01@admin</code>, <code>alk_01@admin</code>, <code>dhb_03@admin</code>, <code>abk_04@admin</code>, <code>anp_05@admin</code>, <code>rop_06@admin</code><br>
-            <small style="color:#64748B">Admin passwords follow pattern: <code>!adk_01@</code>, <code>!alk_01@</code>, etc.</small>
-          </div>
-          <div style="margin-top:10px;display:flex;gap:14px;flex-wrap:wrap">
-            <a href="#" id="fill-super-demo" style="color:#DC2626;font-weight:700">👑 Auto-fill Super Admin</a>
-            <a href="#" id="fill-admin-demo" style="color:#2563EB;font-weight:700">🛡️ Auto-fill Admin 1</a>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -272,6 +261,65 @@
             </div>
             <div style="display:flex;gap:8px">
               <button class="btn p" id="btn-add-student-modal">➕ Enroll New Student</button>
+            </div>
+          </div>
+
+          <!-- Filter & Search Toolbar -->
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:16px;margin:16px 0 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+            <div style="flex:1;min-width:180px">
+              <label for="filter-stu-timeframe" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">📅 Enrollment Timeframe</label>
+              <select id="filter-stu-timeframe" style="width:100%;padding:8px 10px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="7days">Last 7 Days</option>
+                <option value="30days">Last 30 Days</option>
+                <option value="this_month">This Month</option>
+                <option value="custom">Custom Date Range...</option>
+              </select>
+            </div>
+
+            <div id="filter-stu-custom-dates" style="display:none;gap:8px;align-items:flex-end">
+              <div>
+                <label for="filter-stu-from" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">From</label>
+                <input type="date" id="filter-stu-from" style="padding:7px 10px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+              </div>
+              <div>
+                <label for="filter-stu-to" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">To</label>
+                <input type="date" id="filter-stu-to" style="padding:7px 10px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+              </div>
+            </div>
+
+            <div style="flex:1;min-width:160px">
+              <label for="filter-stu-track" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">🎯 Track</label>
+              <select id="filter-stu-track" style="width:100%;padding:8px 10px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+                <option value="all">All Tracks</option>
+                <option value="Cybersecurity & SOC Operations">Cybersecurity &amp; SOC Operations</option>
+                <option value="Artificial Intelligence & Machine Learning">AI &amp; Machine Learning</option>
+                <option value="Cloud Infrastructure & DevOps">Cloud Infrastructure &amp; DevOps</option>
+                <option value="Python Full-Stack & Automation">Python Full-Stack &amp; Automation</option>
+                <option value="Robotics & IoT Embedded Systems">Robotics &amp; IoT</option>
+                <option value="Data Science & Business Analytics">Data Science</option>
+              </select>
+            </div>
+
+            <div style="flex:1;min-width:140px">
+              <label for="filter-stu-status" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">⚡ Status</label>
+              <select id="filter-stu-status" style="width:100%;padding:8px 10px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+                <option value="all">All Statuses</option>
+                <option value="active">Active Enrolled</option>
+                <option value="pending">Pending Activation</option>
+                <option value="certified">Certified (Has Cert)</option>
+                <option value="revoked">Certificate Revoked</option>
+              </select>
+            </div>
+
+            <div style="flex:1.5;min-width:200px">
+              <label for="filter-stu-search" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">🔍 Search Student</label>
+              <input type="text" id="filter-stu-search" placeholder="Search by name, email, phone, ID..." style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+            </div>
+
+            <div>
+              <button class="btn sm" id="btn-reset-stu-filters" style="padding:8px 14px">Reset</button>
             </div>
           </div>
 
@@ -373,16 +421,53 @@
             <button class="btn sm" id="btn-refresh-audit">🔄 Refresh Logs</button>
           </div>
 
+          <!-- Filter Toolbar for Audit Log -->
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:16px;margin:16px 0 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+            <div style="flex:1;min-width:200px">
+              <label for="filter-audit-admin" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">👤 Filter By Admin</label>
+              <select id="filter-audit-admin" style="width:100%;padding:8px 10px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+                <option value="all">All Administrators</option>
+                <option value="a4dr_00@supper">👑 a4dr_00@supper (Super Admin)</option>
+                <option value="adk_01@admin">🛡️ adk_01@admin</option>
+                <option value="alk_01@admin">🛡️ alk_01@admin</option>
+                <option value="dhb_03@admin">🛡️ dhb_03@admin</option>
+                <option value="abk_04@admin">🛡️ abk_04@admin</option>
+                <option value="anp_05@admin">🛡️ anp_05@admin</option>
+                <option value="rop_06@admin">🛡️ rop_06@admin</option>
+              </select>
+            </div>
+
+            <div style="flex:1;min-width:180px">
+              <label for="filter-audit-action" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">⚡ Action Type</label>
+              <select id="filter-audit-action" style="width:100%;padding:8px 10px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+                <option value="all">All Action Types</option>
+                <option value="CERT">Certificate Issued / Revoked</option>
+                <option value="APPROVE">Application Approved</option>
+                <option value="REGISTER">Student Enrolled</option>
+                <option value="PROGRESS">Progress Updated</option>
+                <option value="ADMIN">Admin Credential Modified</option>
+              </select>
+            </div>
+
+            <div style="flex:1.5;min-width:220px">
+              <label for="filter-audit-search" style="display:block;font-size:.78rem;font-weight:700;color:#475569;margin-bottom:4px;text-transform:uppercase">🔍 Search User / Details</label>
+              <input type="text" id="filter-audit-search" placeholder="Search target candidate, email, or remarks..." style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid #CBD5E1;font-size:.85rem;background:#fff">
+            </div>
+
+            <div>
+              <button class="btn sm" id="btn-reset-audit-filters" style="padding:8px 14px">Reset</button>
+            </div>
+          </div>
+
           <div class="table-responsive">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Log ID</th>
                   <th>Timestamp</th>
                   <th>Responsible Administrator</th>
-                  <th>Action Type</th>
-                  <th>Target ID / Record</th>
-                  <th>Action Details</th>
+                  <th>Action Performed</th>
+                  <th>Target Candidate / User</th>
+                  <th>Action Details &amp; Audit Verification</th>
                 </tr>
               </thead>
               <tbody id="admin-audit-tbody">
@@ -448,6 +533,22 @@
               <p style="color:#64748B;font-size:.88rem;margin:0 0 16px">Upload a previously exported Yuvantara JSON file to restore all records.</p>
               <input type="file" id="json-restore-input" accept=".json" style="display:none">
               <button class="btn" id="btn-restore-json">Select Backup File</button>
+            </div>
+
+            <div style="border:1px solid #BFDBFE;border-radius:12px;padding:24px;background:#EFF6FF">
+              <h4 style="margin:0 0 8px;color:#1D4ED8">🗂️ 9 JSON Data Architecture Files</h4>
+              <p style="color:#1E40AF;font-size:.88rem;margin:0 0 12px">Access all 6 Admin JSONs, Super Admin Master, Audit Trail, and Admin Registry directly:</p>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                <a href="../data/admin_adk_01.json" target="_blank" class="btn" style="font-size:.78rem;padding:5px 10px;background:#fff">adk_01.json</a>
+                <a href="../data/admin_alk_01.json" target="_blank" class="btn" style="font-size:.78rem;padding:5px 10px;background:#fff">alk_01.json</a>
+                <a href="../data/admin_dhb_03.json" target="_blank" class="btn" style="font-size:.78rem;padding:5px 10px;background:#fff">dhb_03.json</a>
+                <a href="../data/admin_abk_04.json" target="_blank" class="btn" style="font-size:.78rem;padding:5px 10px;background:#fff">abk_04.json</a>
+                <a href="../data/admin_anp_05.json" target="_blank" class="btn" style="font-size:.78rem;padding:5px 10px;background:#fff">anp_05.json</a>
+                <a href="../data/admin_rop_06.json" target="_blank" class="btn" style="font-size:.78rem;padding:5px 10px;background:#fff">rop_06.json</a>
+                <a href="../data/master_students.json" target="_blank" class="btn p" style="font-size:.78rem;padding:5px 10px">👑 master_students.json</a>
+                <a href="../data/audit_trail.json" target="_blank" class="btn p" style="font-size:.78rem;padding:5px 10px;background:#059669;border-color:#059669">🔒 audit_trail.json</a>
+                <a href="../data/admins_registry.json" target="_blank" class="btn p" style="font-size:.78rem;padding:5px 10px;background:#7C3AED;border-color:#7C3AED">🛡️ admins_registry.json</a>
+              </div>
             </div>
 
             <div style="border:1px solid #FCA5A5;border-radius:12px;padding:24px;background:#FEF2F2">

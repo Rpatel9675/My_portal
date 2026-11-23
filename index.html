@@ -61,8 +61,12 @@
         </div>
         <div class="fgroup">
           <label for="s-pass">Password</label>
-          <input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password">
+          <input id="s-pass" type="password" placeholder="Create password" required autocomplete="new-password">
         </div>
+      </div>
+      <div class="fgroup">
+        <label for="s-pass-confirm">Confirm Password</label>
+        <input id="s-pass-confirm" type="password" placeholder="Confirm your password" required autocomplete="new-password">
       </div>
       <div class="frow">
         <div class="fgroup">
@@ -95,6 +99,12 @@
       <div class="fgroup">
         <label for="s-college">College / University name</label>
         <input id="s-college" type="text" placeholder="e.g. Jadavpur University" required>
+      </div>
+      <div class="fgroup checkbox-group" style="margin:10px 0 12px">
+        <label style="display:flex;align-items:flex-start;gap:8px;font-size:0.83rem;color:#334155;cursor:pointer;line-height:1.4">
+          <input type="checkbox" id="s-declaration" required style="margin-top:2px;accent-color:#0284C7;width:16px;height:16px;flex-shrink:0">
+          <span><strong>Self-Declaration:</strong> I hereby declare that all details provided are genuine and accurate. I agree to abide by Yuvantara Corporate Policies and IT Act compliance.</span>
+        </label>
       </div>
       <div class="fgroup captcha-group">
         <label>Captcha — <span class="captcha-q" id="cap-signup-q"></span></label>
@@ -304,6 +314,148 @@
 
   </div>
 </div></section>
+
+<!-- ═══════════════ WHY CHOOSE US & HOW WE ARE THE BEST ═══════════════ -->
+<section id="why-choose-us" style="background:#0B132B;color:#fff;padding:64px 0">
+  <div class="w">
+    <div style="text-align:center;max-width:760px;margin:0 auto 48px">
+      <span class="tag" style="background:rgba(59,130,246,.2);color:#93C5FD;border-color:rgba(59,130,246,.4)">The Yuvantara Advantage</span>
+      <h2 style="color:#fff;font-size:2.2rem;margin:12px 0 16px">Why Choose Us &amp; How We Are The Best</h2>
+      <p style="color:#94A3B8;font-size:1.05rem;line-height:1.6">Traditional college degrees and outdated training institutes teach yesterday's theory. At Yuvantara, you work inside live cyber defense ranges, cloud VPCs, and production microservices under active tier-1 technology leaders.</p>
+    </div>
+
+    <!-- Comparison Grid: Conventional Training vs Yuvantara -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:20px">
+      <!-- Card 1: Live Sandboxes vs Dry Theory -->
+      <div style="background:#1C2541;border:1px solid #3A506B;border-radius:14px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:12px">⚡</div>
+        <h3 style="color:#60A5FA;margin:0 0 10px;font-size:1.2rem">Live SOC &amp; Cloud Sandboxes (Not Slides)</h3>
+        <p style="color:#CBD5E1;font-size:.92rem;line-height:1.65;margin:0">
+          Engage in real-time threat hunting with Wazuh &amp; Suricata, train computer vision models with PyTorch, or deploy multi-region Kubernetes clusters. No static PowerPoint lectures—100% hands-on terminal and IDE execution.
+        </p>
+      </div>
+
+      <!-- Card 2: 1-on-1 Tier-1 Engineering Mentorship -->
+      <div style="background:#1C2541;border:1px solid #3A506B;border-radius:14px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:12px">👨‍🏫</div>
+        <h3 style="color:#60A5FA;margin:0 0 10px;font-size:1.2rem">Direct 1-on-1 Tier-1 Mentorship</h3>
+        <p style="color:#CBD5E1;font-size:.92rem;line-height:1.65;margin:0">
+          You aren't left chatting with automated bots. Assigned senior architects and security leads review your pull requests, conduct weekly code reviews, and personally guide your engineering milestone delivery.
+        </p>
+      </div>
+
+      <!-- Card 3: 100% Project-Based Capstone Defense -->
+      <div style="background:#1C2541;border:1px solid #3A506B;border-radius:14px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:12px">🏆</div>
+        <h3 style="color:#60A5FA;margin:0 0 10px;font-size:1.2rem">Production-Grade Capstone Defense</h3>
+        <p style="color:#CBD5E1;font-size:.92rem;line-height:1.65;margin:0">
+          Graduate with a high-impact, verifiable engineering repository on GitHub. Defend your architecture live before the Technical Review Board, proving your real problem-solving capabilities to future employers.
+        </p>
+      </div>
+
+      <!-- Card 4: Dual Cryptographic QR Verification -->
+      <div style="background:#1C2541;border:1px solid #3A506B;border-radius:14px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:12px">🔐</div>
+        <h3 style="color:#60A5FA;margin:0 0 10px;font-size:1.2rem">Dual QR Code Cryptographic Verification</h3>
+        <p style="color:#CBD5E1;font-size:.92rem;line-height:1.65;margin:0">
+          Both your Internship Offer Letter and Certificate of Completion carry machine-scannable anti-tamper QR codes verifiable in real-time on our national verification registry. Zero risk of rejection by recruiters.
+        </p>
+      </div>
+
+      <!-- Card 5: ISO 9001:2015 & Corporate Legitimacy -->
+      <div style="background:#1C2541;border:1px solid #3A506B;border-radius:14px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:12px">🏛️</div>
+        <h3 style="color:#60A5FA;margin:0 0 10px;font-size:1.2rem">ISO 9001:2015 &amp; Legal Corporate Entity</h3>
+        <p style="color:#CBD5E1;font-size:.92rem;line-height:1.65;margin:0">
+          Issued by Yuvantara Solutions Private Limited (CIN: U72900BR2024PTC068942, GSTIN: 10AABCY1234F1Z5). Our quality management meets international standards, accepted by tier-1 MNCs and top universities worldwide.
+        </p>
+      </div>
+
+      <!-- Card 6: Placement Preparation & Mock Technical Interviews -->
+      <div style="background:#1C2541;border:1px solid #3A506B;border-radius:14px;padding:28px 24px">
+        <div style="font-size:2rem;margin-bottom:12px">🎯</div>
+        <h3 style="color:#60A5FA;margin:0 0 10px;font-size:1.2rem">Technical Mock Interviews &amp; LORs</h3>
+        <p style="color:#CBD5E1;font-size:.92rem;line-height:1.65;margin:0">
+          Rigorous FAANG-style behavioral and system design interview prep. Top performers (Grade A+) receive personalized Letters of Recommendation (LOR) from our CTO and Academic Council for placements and master's degrees.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ WHAT YOU WILL GET AFTER JOINING ═══════════════ -->
+<section id="what-you-get" style="padding:64px 0;background:#fff">
+  <div class="w">
+    <div style="text-align:center;max-width:760px;margin:0 auto 48px">
+      <span class="tag">Tangible Career Deliverables</span>
+      <h2 style="font-size:2.2rem;margin:12px 0 16px;color:#0F172A">What You Will Get After Joining This Program</h2>
+      <p style="color:#475569;font-size:1.05rem;line-height:1.6">When you join a Yuvantara Industrial Program, you don't just gain knowledge—you walk away with a comprehensive suite of verified corporate assets and career credentials.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px">
+      <!-- Item 1: Digitally Signed Offer Letter -->
+      <div style="border:1.5px solid #E2E8F0;border-radius:14px;padding:26px 22px;background:#F8FAFC;transition:all .2s ease">
+        <div style="width:48px;height:48px;border-radius:10px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">📜</div>
+        <h4 style="margin:0 0 8px;font-size:1.1rem;color:#0F172A">1. Digitally Signed Offer Letter</h4>
+        <p style="margin:0;font-size:.88rem;color:#64748B;line-height:1.6">Official appointment letter bearing company CIN, corporate letterhead, unique Ref No, and machine-scannable verification QR code.</p>
+      </div>
+
+      <!-- Item 2: Production GitHub Portfolio -->
+      <div style="border:1.5px solid #E2E8F0;border-radius:14px;padding:26px 22px;background:#F8FAFC;transition:all .2s ease">
+        <div style="width:48px;height:48px;border-radius:10px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">💻</div>
+        <h4 style="margin:0 0 8px;font-size:1.1rem;color:#0F172A">2. Production GitHub Portfolio</h4>
+        <p style="margin:0;font-size:.88rem;color:#64748B;line-height:1.6">A fully documented, containerized engineering project with unit tests and clean Conventional Commits to showcase to recruiters.</p>
+      </div>
+
+      <!-- Item 3: ISO 9001:2015 Industrial Certificate -->
+      <div style="border:1.5px solid #E2E8F0;border-radius:14px;padding:26px 22px;background:#F8FAFC;transition:all .2s ease">
+        <div style="width:48px;height:48px;border-radius:10px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">🎓</div>
+        <h4 style="margin:0 0 8px;font-size:1.1rem;color:#0F172A">3. Verified Industrial Certificate</h4>
+        <p style="margin:0;font-size:.88rem;color:#64748B;line-height:1.6">Instantly generated upon 100% completion with unique Certificate ID and dynamic QR code linked to our public verification portal.</p>
+      </div>
+
+      <!-- Item 4: GST Tax Invoice (SAC 9992) -->
+      <div style="border:1.5px solid #E2E8F0;border-radius:14px;padding:26px 22px;background:#F8FAFC;transition:all .2s ease">
+        <div style="width:48px;height:48px;border-radius:10px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">🧾</div>
+        <h4 style="margin:0 0 8px;font-size:1.1rem;color:#0F172A">4. Official GST Tax Invoice</h4>
+        <p style="margin:0;font-size:.88rem;color:#64748B;line-height:1.6">Legitimate tax invoice (₹200 + 18% GST = ₹236) with SAC 9992 documentation code suitable for college fee reimbursement.</p>
+      </div>
+
+      <!-- Item 5: 1-on-1 Mock Interviews -->
+      <div style="border:1.5px solid #E2E8F0;border-radius:14px;padding:26px 22px;background:#F8FAFC;transition:all .2s ease">
+        <div style="width:48px;height:48px;border-radius:10px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">🧑‍💼</div>
+        <h4 style="margin:0 0 8px;font-size:1.1rem;color:#0F172A">5. Technical Mock Interviews</h4>
+        <p style="margin:0;font-size:.88rem;color:#64748B;line-height:1.6">1-on-1 sprint evaluations, resume optimization, and mock technical interview rounds mirroring Tier-1 MNC hiring standards.</p>
+      </div>
+
+      <!-- Item 6: Letter of Recommendation (LOR) -->
+      <div style="border:1.5px solid #E2E8F0;border-radius:14px;padding:26px 22px;background:#F8FAFC;transition:all .2s ease">
+        <div style="width:48px;height:48px;border-radius:10px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">🌟</div>
+        <h4 style="margin:0 0 8px;font-size:1.1rem;color:#0F172A">6. Recommendation Letter (LOR)</h4>
+        <p style="margin:0;font-size:.88rem;color:#64748B;line-height:1.6">High-performing interns (Grade A+) receive an official corporate Letter of Recommendation from our Chief Technology Officer.</p>
+      </div>
+
+      <!-- Item 7: Lifetime Community & Lab Access -->
+      <div style="border:1.5px solid #E2E8F0;border-radius:14px;padding:26px 22px;background:#F8FAFC;transition:all .2s ease">
+        <div style="width:48px;height:48px;border-radius:10px;background:#EFF6FF;color:#2563EB;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">🌐</div>
+        <h4 style="margin:0 0 8px;font-size:1.1rem;color:#0F172A">7. Alumni Network &amp; Sandboxes</h4>
+        <p style="margin:0;font-size:.88rem;color:#64748B;line-height:1.6">Ongoing access to Yuvantara alumni channels, peer networking, job opportunity referrals, and cloud sandbox sandpits.</p>
+      </div>
+    </div>
+
+    <!-- Quick CTA banner inside What You Get -->
+    <div style="margin-top:40px;background:linear-gradient(135deg,#1E3A8A,#0F172A);border-radius:16px;padding:32px 36px;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px">
+      <div>
+        <h3 style="margin:0 0 6px;color:#fff;font-size:1.4rem">Ready to accelerate your engineering career?</h3>
+        <p style="margin:0;color:#93C5FD;font-size:.95rem">Applications for upcoming 2026 industrial cohorts are open. Secure your track today.</p>
+      </div>
+      <div style="display:flex;gap:12px">
+        <button class="btn p" data-auth="signup" style="background:#2563EB;border-color:#2563EB">Apply for Internship</button>
+        <a class="btn" href="internships/index.html" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)">View All 22+ Tracks</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ═══════════════ SOLUTIONS ═══════════════ -->
 <section id="solutions"><div class="w">

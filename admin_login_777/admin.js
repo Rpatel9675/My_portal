@@ -6,6 +6,119 @@
 
   var currentAdmin = null;
 
+  var studentFilterState = {
+    timeframe: 'all',
+    from: '',
+    to: '',
+    track: 'all',
+    status: 'all',
+    search: ''
+  };
+
+  var auditFilterState = {
+    admin: 'all',
+    action: 'all',
+    search: ''
+  };
+
+  function applyStudentFilters(students) {
+    if (!students) return [];
+    var now = new Date();
+    var todayStr = now.toISOString().substring(0, 10);
+
+    return students.filter(function(s) {
+      // 1. Timeframe
+      if (studentFilterState.timeframe !== 'all') {
+        var stuDateStr = s.registeredAt || s.paidAt || (s.certificate && s.certificate.date) || '';
+        var stuDate = stuDateStr ? new Date(stuDateStr) : null;
+
+        if (studentFilterState.timeframe === 'today') {
+          if (!stuDateStr || stuDateStr.substring(0, 10) !== todayStr) return false;
+        } else if (studentFilterState.timeframe === '7days') {
+          if (!stuDate) return false;
+          var diff7 = (now - stuDate) / (1000 * 60 * 60 * 24);
+          if (diff7 < 0 || diff7 > 7) return false;
+        } else if (studentFilterState.timeframe === '30days') {
+          if (!stuDate) return false;
+          var diff30 = (now - stuDate) / (1000 * 60 * 60 * 24);
+          if (diff30 < 0 || diff30 > 30) return false;
+        } else if (studentFilterState.timeframe === 'this_month') {
+          if (!stuDate) return false;
+          if (stuDate.getMonth() !== now.getMonth() || stuDate.getFullYear() !== now.getFullYear()) return false;
+        } else if (studentFilterState.timeframe === 'custom') {
+          if (studentFilterState.from) {
+            var fDate = new Date(studentFilterState.from);
+            if (!stuDate || stuDate < fDate) return false;
+          }
+          if (studentFilterState.to) {
+            var tDate = new Date(studentFilterState.to + 'T23:59:59');
+            if (!stuDate || stuDate > tDate) return false;
+          }
+        }
+      }
+
+      // 2. Track
+      if (studentFilterState.track !== 'all') {
+        if ((s.track || '') !== studentFilterState.track) return false;
+      }
+
+      // 3. Status
+      if (studentFilterState.status !== 'all') {
+        if (studentFilterState.status === 'active' && s.accountStatus === 'pending') return false;
+        if (studentFilterState.status === 'pending' && s.accountStatus !== 'pending') return false;
+        if (studentFilterState.status === 'certified' && (!s.certificate || !s.certificate.id || s.certificate.status === 'revoked')) return false;
+        if (studentFilterState.status === 'revoked' && (!s.certificate || s.certificate.status !== 'revoked')) return false;
+      }
+
+      // 4. Search
+      if (studentFilterState.search) {
+        var q = studentFilterState.search.toLowerCase().trim();
+        var match = (s.name && s.name.toLowerCase().indexOf(q) !== -1) ||
+                    (s.email && s.email.toLowerCase().indexOf(q) !== -1) ||
+                    (s.phone && s.phone.toLowerCase().indexOf(q) !== -1) ||
+                    (s.college && s.college.toLowerCase().indexOf(q) !== -1) ||
+                    (s.id && s.id.toLowerCase().indexOf(q) !== -1) ||
+                    (s.track && s.track.toLowerCase().indexOf(q) !== -1) ||
+                    (s.enrolledByAdmin && s.enrolledByAdmin.toLowerCase().indexOf(q) !== -1);
+        if (!match) return false;
+      }
+
+      return true;
+    });
+  }
+
+  function applyAuditFilters(logs) {
+    if (!logs) return [];
+    return logs.filter(function(l) {
+      // 1. Admin
+      if (auditFilterState.admin !== 'all') {
+        if (l.adminEmail !== auditFilterState.admin) return false;
+      }
+
+      // 2. Action
+      if (auditFilterState.action !== 'all') {
+        if (l.actionType.indexOf(auditFilterState.action) === -1) return false;
+      }
+
+      // 3. Search
+      if (auditFilterState.search) {
+        var q = auditFilterState.search.toLowerCase().trim();
+        var targetInfo = '';
+        if (l.targetUser) {
+          targetInfo = (l.targetUser.name || '') + ' ' + (l.targetUser.email || '') + ' ' + (l.targetUser.track || '');
+        }
+        var match = (l.adminEmail && l.adminEmail.toLowerCase().indexOf(q) !== -1) ||
+                    (l.actionType && l.actionType.toLowerCase().indexOf(q) !== -1) ||
+                    (l.targetId && l.targetId.toLowerCase().indexOf(q) !== -1) ||
+                    (l.details && l.details.toLowerCase().indexOf(q) !== -1) ||
+                    (targetInfo.toLowerCase().indexOf(q) !== -1);
+        if (!match) return false;
+      }
+
+      return true;
+    });
+  }
+
   function initAdmin() {
     currentAdmin = window.YuvantaraDB ? YuvantaraDB.getCurrentUser() : null;
 
@@ -100,13 +213,15 @@
     var tbody = document.getElementById('admin-students-tbody');
     if (!tbody) return;
 
-    if (!students || students.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#64748B">No enrolled students found. Use "Enroll New Student" to add candidates.</td></tr>';
+    var filtered = applyStudentFilters(students);
+
+    if (!filtered || filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#64748B">No enrolled students match current filter criteria.</td></tr>';
       return;
     }
 
     var html = '';
-    students.forEach(function(s) {
+    filtered.forEach(function(s) {
       var pct = typeof s.progress === 'number' ? s.progress : 0;
       var hasCert = s.certificate && s.certificate.id && s.certificate.status !== 'revoked';
       var certRevoked = s.certificate && s.certificate.status === 'revoked';
@@ -273,27 +388,72 @@
     var tbody = document.getElementById('admin-audit-tbody');
     if (!tbody) return;
 
-    if (!logs || logs.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#64748B">No audit logs recorded yet.</td></tr>';
+    var filteredLogs = applyAuditFilters(logs);
+
+    if (!filteredLogs || filteredLogs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:#64748B">No audit logs match current filters.</td></tr>';
       return;
     }
 
+    var students = YuvantaraDB.getStudents() || [];
+    var studentsMap = {};
+    students.forEach(function(s) {
+      studentsMap[s.email] = s;
+      if (s.id) studentsMap[s.id] = s;
+      if (s.certificate && s.certificate.id) studentsMap[s.certificate.id] = s;
+    });
+
     var html = '';
-    logs.forEach(function(l) {
+    filteredLogs.forEach(function(l) {
+      var isSuper = (l.adminEmail === 'a4dr_00@supper');
+      var adminBadgeStyle = isSuper
+        ? 'background:#FEF2F2;color:#DC2626;border:1px solid #FECACA'
+        : 'background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE';
+
       var badgeStyle = 'background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE';
+      var actionIcon = '⚡';
       if (l.actionType.indexOf('REVOKE') !== -1 || l.actionType.indexOf('SUSPEND') !== -1 || l.actionType.indexOf('REMOVE') !== -1) {
         badgeStyle = 'background:#FEF2F2;color:#DC2626;border-color:#FECACA';
-      } else if (l.actionType.indexOf('APPROVE') !== -1 || l.actionType.indexOf('REGISTER') !== -1) {
+        actionIcon = '🚫';
+      } else if (l.actionType.indexOf('APPROVE') !== -1) {
         badgeStyle = 'background:#DCFCE7;color:#15803D;border-color:#86EFAC';
+        actionIcon = '✅';
+      } else if (l.actionType.indexOf('REGISTER') !== -1 || l.actionType.indexOf('ENROLL') !== -1) {
+        badgeStyle = 'background:#DCFCE7;color:#15803D;border-color:#86EFAC';
+        actionIcon = '➕';
+      } else if (l.actionType.indexOf('CERT') !== -1) {
+        badgeStyle = 'background:#F3E8FF;color:#7E22CE;border-color:#D8B4FE';
+        actionIcon = '🎓';
+      }
+
+      var targetUserHtml = '';
+      if (l.targetUser && (l.targetUser.name || l.targetUser.email)) {
+        targetUserHtml =
+          '<div style="font-weight:700;color:#0F172A">' + escapeHtml(l.targetUser.name || 'Candidate') + '</div>' +
+          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(l.targetUser.email || l.targetId) + '</div>' +
+          (l.targetUser.track ? '<div style="font-size:.78rem;color:#2563EB;margin-top:2px">🎯 ' + escapeHtml(l.targetUser.track) + '</div>' : '');
+      } else {
+        var matched = studentsMap[l.targetId] || null;
+        if (matched) {
+          targetUserHtml =
+            '<div style="font-weight:700;color:#0F172A">' + escapeHtml(matched.name) + '</div>' +
+            '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(matched.email) + '</div>' +
+            (matched.track ? '<div style="font-size:.78rem;color:#2563EB;margin-top:2px">🎯 ' + escapeHtml(matched.track) + '</div>' : '');
+        } else {
+          targetUserHtml = '<strong style="font-family:monospace;color:#1E293B">' + escapeHtml(l.targetId || '—') + '</strong>';
+        }
       }
 
       html += '<tr>' +
-        '<td><code style="font-family:monospace;color:#64748B">' + escapeHtml(l.id) + '</code></td>' +
-        '<td><span style="font-size:.85rem;color:#475569">' + escapeHtml(l.timestamp) + '</span></td>' +
-        '<td><strong style="color:#0F172A;font-family:monospace">' + escapeHtml(l.adminEmail) + '</strong></td>' +
-        '<td><span class="badge-track" style="font-size:.72rem;' + badgeStyle + '">' + escapeHtml(l.actionType) + '</span></td>' +
-        '<td><code style="font-size:.82rem;color:#1E293B">' + escapeHtml(l.targetId) + '</code></td>' +
-        '<td style="font-size:.88rem;color:#334155">' + escapeHtml(l.details) + '</td>' +
+        '<td><span style="font-size:.85rem;color:#475569;white-space:nowrap">' + escapeHtml(l.timestamp) + '</span></td>' +
+        '<td>' +
+          '<span class="badge-track" style="font-size:.78rem;' + adminBadgeStyle + '">' +
+            (isSuper ? '👑 ' : '🛡️ ') + escapeHtml(l.adminEmail) +
+          '</span>' +
+        '</td>' +
+        '<td><span class="badge-track" style="font-size:.74rem;' + badgeStyle + '">' + actionIcon + ' ' + escapeHtml(l.actionType) + '</span></td>' +
+        '<td>' + targetUserHtml + '</td>' +
+        '<td style="font-size:.86rem;color:#334155;line-height:1.4">' + escapeHtml(l.details) + '</td>' +
       '</tr>';
     });
 
@@ -377,6 +537,120 @@
     if (refreshAuditBtn) {
       refreshAuditBtn.addEventListener('click', function() {
         renderAuditTable(YuvantaraDB.getAuditLogs());
+      });
+    }
+
+    // ── Student Filters ──
+    var filterStuTf = document.getElementById('filter-stu-timeframe');
+    var customDatesWrap = document.getElementById('filter-stu-custom-dates');
+    var filterStuFrom = document.getElementById('filter-stu-from');
+    var filterStuTo = document.getElementById('filter-stu-to');
+    var filterStuTrack = document.getElementById('filter-stu-track');
+    var filterStuStatus = document.getElementById('filter-stu-status');
+    var filterStuSearch = document.getElementById('filter-stu-search');
+    var btnResetStu = document.getElementById('btn-reset-stu-filters');
+
+    function refreshStudentsView() {
+      renderStudentsTable(YuvantaraDB.getStudents());
+    }
+
+    if (filterStuTf) {
+      filterStuTf.addEventListener('change', function() {
+        studentFilterState.timeframe = filterStuTf.value;
+        if (customDatesWrap) {
+          customDatesWrap.style.display = (filterStuTf.value === 'custom') ? 'flex' : 'none';
+        }
+        refreshStudentsView();
+      });
+    }
+
+    if (filterStuFrom) {
+      filterStuFrom.addEventListener('change', function() {
+        studentFilterState.from = filterStuFrom.value;
+        refreshStudentsView();
+      });
+    }
+
+    if (filterStuTo) {
+      filterStuTo.addEventListener('change', function() {
+        studentFilterState.to = filterStuTo.value;
+        refreshStudentsView();
+      });
+    }
+
+    if (filterStuTrack) {
+      filterStuTrack.addEventListener('change', function() {
+        studentFilterState.track = filterStuTrack.value;
+        refreshStudentsView();
+      });
+    }
+
+    if (filterStuStatus) {
+      filterStuStatus.addEventListener('change', function() {
+        studentFilterState.status = filterStuStatus.value;
+        refreshStudentsView();
+      });
+    }
+
+    if (filterStuSearch) {
+      filterStuSearch.addEventListener('input', function() {
+        studentFilterState.search = filterStuSearch.value;
+        refreshStudentsView();
+      });
+    }
+
+    if (btnResetStu) {
+      btnResetStu.addEventListener('click', function() {
+        studentFilterState = { timeframe: 'all', from: '', to: '', track: 'all', status: 'all', search: '' };
+        if (filterStuTf) filterStuTf.value = 'all';
+        if (customDatesWrap) customDatesWrap.style.display = 'none';
+        if (filterStuFrom) filterStuFrom.value = '';
+        if (filterStuTo) filterStuTo.value = '';
+        if (filterStuTrack) filterStuTrack.value = 'all';
+        if (filterStuStatus) filterStuStatus.value = 'all';
+        if (filterStuSearch) filterStuSearch.value = '';
+        refreshStudentsView();
+      });
+    }
+
+    // ── Audit Filters ──
+    var filterAudAdmin = document.getElementById('filter-audit-admin');
+    var filterAudAction = document.getElementById('filter-audit-action');
+    var filterAudSearch = document.getElementById('filter-audit-search');
+    var btnResetAudit = document.getElementById('btn-reset-audit-filters');
+
+    function refreshAuditView() {
+      renderAuditTable(YuvantaraDB.getAuditLogs());
+    }
+
+    if (filterAudAdmin) {
+      filterAudAdmin.addEventListener('change', function() {
+        auditFilterState.admin = filterAudAdmin.value;
+        refreshAuditView();
+      });
+    }
+
+    if (filterAudAction) {
+      filterAudAction.addEventListener('change', function() {
+        auditFilterState.action = filterAudAction.value;
+        refreshAuditView();
+      });
+    }
+
+    if (filterAudSearch) {
+      filterAudSearch.addEventListener('input', function() {
+        auditFilterState.search = filterAudSearch.value;
+        refreshAuditView();
+      });
+    }
+
+    if (btnResetAudit) {
+      btnResetAudit.addEventListener('click', function() {
+        auditFilterState = { admin: 'all', action: 'all', search: '' };
+        if (filterAudAdmin) filterAudAdmin.value = 'all';
+        if (filterAudAction) filterAudAction.value = 'all';
+        if (filterAudSearch) filterAudSearch.value = '';
+        refreshAuditView();
       });
     }
 
@@ -836,24 +1110,6 @@
   function bindLoginEvents() {
     var form = document.getElementById('admin-login-form');
     var alertBox = document.getElementById('admin-gate-alert');
-    var fillSuper = document.getElementById('fill-super-demo');
-    var fillAdmin = document.getElementById('fill-admin-demo');
-
-    if (fillSuper) {
-      fillSuper.addEventListener('click', function(e) {
-        e.preventDefault();
-        setVal('adm-email', 'a4dr_00@supper');
-        setVal('adm-pass', '!!a4dr@00');
-      });
-    }
-
-    if (fillAdmin) {
-      fillAdmin.addEventListener('click', function(e) {
-        e.preventDefault();
-        setVal('adm-email', 'adk_01@admin');
-        setVal('adm-pass', '!adk_01@');
-      });
-    }
 
     if (form) {
       form.addEventListener('submit', function(e) {

@@ -1,0 +1,107 @@
+{
+  "adminId": "ADM-01",
+  "adminEmail": "adk_01@admin",
+  "adminName": "Admin ADK-01",
+  "role": "admin",
+  "cluster": "Patna Security Operations Center",
+  "assignedTrack": "Cybersecurity & SOC Operations",
+  "status": "active",
+  "phone": "+91 98765 00001",
+  "lastSynced": "2026-11-23T09:30:00.000Z",
+  "totalStudents": 2,
+  "students": [
+    {
+      "id": "USR-101",
+      "name": "Rohan Sen",
+      "email": "student@yuvantara.com",
+      "phone": "+91 98765 43210",
+      "dob": "2002-05-15",
+      "track": "Cybersecurity & SOC Operations",
+      "stream": "B.Tech (Computer Science)",
+      "college": "National Institute of Technology (NIT), Patna",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-01-15T09:30:00.000Z",
+      "progress": 100,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "completed" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "completed" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "completed" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-101",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260115-01",
+        "paymentDate": "2026-01-15T09:45:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "adk_01@admin",
+        "approvedAt": "2026-01-15T10:30:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1001"
+      },
+      "certificate": {
+        "certNumber": "YUV-2026-CS101",
+        "id": "YUV-2026-CS101",
+        "name": "Rohan Sen",
+        "college": "National Institute of Technology (NIT), Patna",
+        "domain": "Cybersecurity & SOC Operations",
+        "date": "June 20, 2026",
+        "grade": "Grade A+ (Distinction)",
+        "status": "Valid & Verified",
+        "issuedByAdmin": "adk_01@admin",
+        "qrCodeUrl": "https://yuvantaraventure.in/verify-certificate/index.html?id=YUV-2026-CS101"
+      }
+    },
+    {
+      "id": "USR-107",
+      "name": "Amit Kumar Verma",
+      "email": "amit.verma@example.com",
+      "phone": "+91 98112 44556",
+      "dob": "2002-03-12",
+      "track": "Cybersecurity & SOC Operations",
+      "stream": "B.Tech (IT)",
+      "college": "Birla Institute of Technology (BIT), Mesra",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-02-10T11:00:00.000Z",
+      "progress": 60,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "completed" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "in-progress" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "pending" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-107",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260210-07",
+        "paymentDate": "2026-02-10T11:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "adk_01@admin",
+        "approvedAt": "2026-02-10T11:45:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1007"
+      },
+      "certificate": null
+    }
+  ]
+}

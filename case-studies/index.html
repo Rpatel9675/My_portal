@@ -27,7 +27,8 @@
         <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
         <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
       </div>
-      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div></div>
+      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create password" required autocomplete="new-password"></div></div>
+      <div class="fgroup"><label for="s-pass-confirm">Confirm Password</label><input id="s-pass-confirm" type="password" placeholder="Confirm your password" required autocomplete="new-password"></div>
       <div class="frow">
         <div class="fgroup">
           <label for="s-prog">Internship Track</label>
@@ -55,6 +56,7 @@
         </div>
       </div>
       <div class="fgroup"><label for="s-college">College / University name</label><input id="s-college" type="text" placeholder="e.g. NIT Patna" required></div>
+      <div class="fgroup checkbox-group" style="margin:10px 0 12px"><label style="display:flex;align-items:flex-start;gap:8px;font-size:0.83rem;color:#334155;cursor:pointer;line-height:1.4"><input type="checkbox" id="s-declaration" required style="margin-top:2px;accent-color:#0284C7;width:16px;height:16px;flex-shrink:0"><span><strong>Self-Declaration:</strong> I hereby declare that all details provided are genuine and accurate. I agree to abide by Yuvantara Corporate Policies and IT Act compliance.</span></label></div>
       <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-signup-q"></span></label><input id="cap-signup-a" type="number" placeholder="Your answer" required min="0"></div>
       <button class="btn p auth-submit" type="submit">Submit Application</button>
       <p class="auth-switch">Already have an account? <button type="button" class="auth-tab-btn link" data-tab="login">Login</button></p>
@@ -72,7 +74,72 @@
     <button class="btn p" style="margin:0 0 0 8px;padding:9px 18px" data-auth="signup">Apply for Internship</button>
     <button class="btn" style="margin:0 0 0 4px;padding:9px 16px" data-auth="login">Login</button>
   </nav>
-</div></header><main id="main"><section class="hero"><div class="w"><div class="crumb"><a href="../index.html">Home</a> / Case Studies</div><h1>Case studies</h1><p class="lead">Selected engagements.</p></div></section><section><div class="w"><h2>Case studies</h2><div class="grid"><a class="card" href="../case-studies/global-insurance-services-endpoint-itsm/index.html"><span class="tag">In delivery</span><h3>Unified endpoint management and service desk for a global insurance services firm</h3><p>BFSI</p></a><a class="card" href="../case-studies/manufacturing-security-awareness/index.html"><span class="tag">Delivered</span><h3>Security awareness programme for a steel manufacturer</h3><p>Manufacturing</p></a><a class="card" href="../case-studies/hospital-dpdp-readiness/index.html"><span class="tag">In progress</span><h3>DPDP Act readiness assessment for a hospital</h3><p>Healthcare</p></a></div></div></section><section><div class="w"><div class="cta"><h2>Let’s discuss your technology requirements.</h2><p>Tell us about your environment and what you need. We reply with a clear next step within one business day.</p><a class="btn p" href="../contact/index.html">Talk to an Expert</a><a class="btn" href="../support/index.html">Get Support</a><p><a href="mailto:xyv@yuvantara.com">xyv@yuvantara.com</a> &nbsp; <a href="tel:+91 98765 43210">+91 98765 43210</a></p></div></div></section></main><footer><div class="w">
+</div></header><main id="main"><section class="hero"><div class="w"><div class="crumb"><a href="../index.html">Home</a> / Case Studies</div><h1>Engineering Case Studies</h1><p class="lead">Real-world enterprise engagements and outstanding industrial internship Capstone engineering achievements.</p></div></section>
+
+<!-- Section 1: Featured Student Capstones -->
+<section><div class="w">
+  <div style="margin-bottom:24px">
+    <span class="tag" style="background:#EFF6FF;color:#2563EB;border-color:#BFDBFE">Student Capstone Defenses</span>
+    <h2 style="margin:6px 0 0">Featured Industrial Internship Case Studies</h2>
+    <p style="color:#64748B;font-size:1rem;margin:4px 0 0">Exemplary production-grade engineering projects designed, built, and defended by Yuvantara interns.</p>
+  </div>
+
+  <div class="grid">
+    <!-- Internship Case 1 -->
+    <a class="card" href="../case-studies/fintech-siem-threat-hunting-capstone/index.html">
+      <span class="tag" style="background:#EFF6FF;color:#2563EB;border-color:#BFDBFE">Grade A+ &bull; Cybersecurity</span>
+      <h3>Automated Real-Time Threat Intelligence &amp; SIEM Log Correlation Engine for FinTech Infrastructure</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">Candidate: Rohan Sen (NIT Patna) &bull; 50k Events/Sec Ingested</p>
+    </a>
+
+    <!-- Internship Case 2 -->
+    <a class="card" href="../case-studies/industrial-defect-detection-ai/index.html">
+      <span class="tag" style="background:#FFFBEB;color:#D97706;border-color:#FDE68A">Grade A+ &bull; Computer Vision</span>
+      <h3>Edge AI Computer Vision for Real-Time Industrial Surface Defect Detection</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">Candidate: Aarav Mehta (Jadavpur Univ) &bull; 98.4% Accuracy</p>
+    </a>
+
+    <!-- Internship Case 3 -->
+    <a class="card" href="../case-studies/multi-region-kubernetes-gitops/index.html">
+      <span class="tag" style="background:#F0FDF4;color:#16A34A;border-color:#BBF7D0">Grade A+ &bull; Cloud &amp; DevOps</span>
+      <h3>Zero-Downtime Multi-Region Kubernetes Deployment with Automated GitOps</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">Candidate: Priya Sharma (BIT Mesra) &bull; 99.99% Availability</p>
+    </a>
+
+    <!-- Internship Case 4 -->
+    <a class="card" href="../case-studies/distributed-fintech-ledger-microservices/index.html">
+      <span class="tag" style="background:#EFF6FF;color:#2563EB;border-color:#BFDBFE">Grade A+ &bull; Full-Stack</span>
+      <h3>High-Throughput Distributed Microservices Ledger for Scalable Digital Banking</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">Candidate: Sneha Patel (Heritage Inst) &bull; 12k Tx/Sec ACID</p>
+    </a>
+  </div>
+</div></section>
+
+<!-- Section 2: Enterprise Client Case Studies -->
+<section class="alt"><div class="w">
+  <div style="margin-bottom:24px">
+    <span class="tag">Corporate Engagements</span>
+    <h2 style="margin:6px 0 0">Enterprise Client Deployments</h2>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="../case-studies/global-insurance-services-endpoint-itsm/index.html">
+      <span class="tag">In delivery</span>
+      <h3>Unified endpoint management and service desk for a global insurance services firm</h3>
+      <p>BFSI &bull; Infrastructure</p>
+    </a>
+    <a class="card" href="../case-studies/manufacturing-security-awareness/index.html">
+      <span class="tag">Delivered</span>
+      <h3>Security awareness programme for a steel manufacturer</h3>
+      <p>Manufacturing &bull; Cybersecurity</p>
+    </a>
+    <a class="card" href="../case-studies/hospital-dpdp-readiness/index.html">
+      <span class="tag">In progress</span>
+      <h3>DPDP Act readiness assessment for a hospital</h3>
+      <p>Healthcare &bull; Compliance</p>
+    </a>
+  </div>
+</div></section><section><div class="w"><div class="cta"><h2>Let’s discuss your technology requirements.</h2><p>Tell us about your environment and what you need. We reply with a clear next step within one business day.</p><a class="btn p" href="../contact/index.html">Talk to an Expert</a><a class="btn" href="../support/index.html">Get Support</a><p><a href="mailto:xyv@yuvantara.com">xyv@yuvantara.com</a> &nbsp; <a href="tel:+91 98765 43210">+91 98765 43210</a></p></div></div></section></main><footer><div class="w">
   <div class="footer-top">
     <div class="footer-brand">
       <h3><i></i>Yuvantara</h3>

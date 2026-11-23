@@ -1,0 +1,107 @@
+{
+  "adminId": "ADM-02",
+  "adminEmail": "alk_01@admin",
+  "adminName": "Admin ALK-01",
+  "role": "admin",
+  "cluster": "Patna AI & Cognitive Engineering Lab",
+  "assignedTrack": "Artificial Intelligence & Machine Learning",
+  "status": "active",
+  "phone": "+91 98765 00002",
+  "lastSynced": "2026-11-23T09:30:00.000Z",
+  "totalStudents": 2,
+  "students": [
+    {
+      "id": "USR-102",
+      "name": "Priya Sharma",
+      "email": "priya@example.com",
+      "phone": "+91 98765 11223",
+      "dob": "2003-08-20",
+      "track": "Artificial Intelligence & Machine Learning",
+      "stream": "B.Tech (IT)",
+      "college": "Indian Institute of Technology (IIT), Patna",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-02-01T10:00:00.000Z",
+      "progress": 50,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "in-progress" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "pending" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "pending" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-102",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260201-02",
+        "paymentDate": "2026-02-01T10:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "alk_01@admin",
+        "approvedAt": "2026-02-01T10:30:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1002"
+      },
+      "certificate": null
+    },
+    {
+      "id": "USR-108",
+      "name": "Saurav Mukherjee",
+      "email": "saurav.m@example.com",
+      "phone": "+91 98223 66778",
+      "dob": "2002-07-14",
+      "track": "Artificial Intelligence & Machine Learning",
+      "stream": "M.Tech (Data Science)",
+      "college": "Jadavpur University, Kolkata",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-01-20T14:00:00.000Z",
+      "progress": 100,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "completed" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "completed" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "completed" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-108",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260120-08",
+        "paymentDate": "2026-01-20T14:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "alk_01@admin",
+        "approvedAt": "2026-01-20T14:40:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1008"
+      },
+      "certificate": {
+        "certNumber": "YUV-2026-AI108",
+        "id": "YUV-2026-AI108",
+        "name": "Saurav Mukherjee",
+        "college": "Jadavpur University, Kolkata",
+        "domain": "Artificial Intelligence & Machine Learning",
+        "date": "May 10, 2026",
+        "grade": "Grade A+ (Distinction)",
+        "status": "Valid & Verified",
+        "issuedByAdmin": "alk_01@admin",
+        "qrCodeUrl": "https://yuvantaraventure.in/verify-certificate/index.html?id=YUV-2026-AI108"
+      }
+    }
+  ]
+}

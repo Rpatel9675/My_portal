@@ -176,15 +176,43 @@
         { name: 'Module 5: Capstone Enterprise Defense Project', status: 'pending' }
       ],
       certificate: {
+        certNumber: 'YUV-2026-CS101',
         id: 'YUV-2026-CS101',
+        name: 'Rohan Sen',
+        domain: 'Cybersecurity & SOC Operations',
+        dob: '2002-05-15',
+        email: 'student@yuvantara.com',
+        phone: '+91 98765 43210',
+        date: 'June 20, 2026',
+        issueDate: 'June 20, 2026',
         title: 'Cybersecurity & SOC Operations Industrial Internship',
         duration: '6 Months (Jan 2026 – Jun 2026)',
         grade: 'Grade A+ (Distinction)',
-        issueDate: 'June 20, 2026',
         authority: 'Yuvantara Cyber Defense Council',
         status: 'Issued & Verified',
         issuedByAdmin: 'dhb_03@admin',
+        qrCodeUrl: 'https://yuvantaraventure.in/verify-certificate/index.html?id=YUV-2026-CS101',
         fileUrl: ''
+      },
+      offerLetter: {
+        refNo: 'YUV/HR/INT-2026/USR-101',
+        date: 'January 15, 2026',
+        joiningDate: 'January 15, 2026',
+        track: 'Cybersecurity & SOC Operations',
+        duration: '6 Months',
+        college: 'National Institute of Technology (NIT), Patna',
+        stream: 'B.Tech (Computer Science)',
+        status: 'Confirmed & Active'
+      },
+      invoice: {
+        invNumber: 'INV-2026-101',
+        date: 'January 15, 2026',
+        amount: 236,
+        baseAmount: 200,
+        gstAmount: 36,
+        sacCode: '9992',
+        paymentRef: 'PAY-RZP-20260115-01',
+        status: 'PAID'
       }
     },
     {
@@ -210,7 +238,27 @@
         { name: 'Module 4: Computer Vision with OpenCV', status: 'pending' },
         { name: 'Module 5: MLOps Model Deployment', status: 'pending' }
       ],
-      certificate: null
+      certificate: null,
+      offerLetter: {
+        refNo: 'YUV/HR/INT-2026/USR-102',
+        date: 'February 01, 2026',
+        joiningDate: 'February 01, 2026',
+        track: 'Artificial Intelligence & Machine Learning',
+        duration: '6 Months',
+        college: 'Indian Institute of Technology (IIT), Patna',
+        stream: 'B.Tech (IT)',
+        status: 'Confirmed & Active'
+      },
+      invoice: {
+        invNumber: 'INV-2026-102',
+        date: 'February 01, 2026',
+        amount: 236,
+        baseAmount: 200,
+        gstAmount: 36,
+        sacCode: '9992',
+        paymentRef: 'PAY-RZP-20260201-02',
+        status: 'PAID'
+      }
     }
   ];
 
@@ -251,6 +299,7 @@
       adminEmail: 'adk_01@admin',
       actionType: 'ENROLL_STUDENT',
       targetId: 'student@yuvantara.com',
+      targetUser: 'Rohan Sen (student@yuvantara.com)',
       details: 'Enrolled Rohan Sen into Cybersecurity & SOC Operations'
     },
     {
@@ -259,6 +308,7 @@
       adminEmail: 'dhb_03@admin',
       actionType: 'ISSUE_CERTIFICATE',
       targetId: 'YUV-2026-CS101',
+      targetUser: 'Rohan Sen (student@yuvantara.com)',
       details: 'Issued official verified certificate YUV-2026-CS101 to Rohan Sen'
     },
     {
@@ -267,6 +317,7 @@
       adminEmail: 'adk_01@admin',
       actionType: 'APPROVE_APPLICATION',
       targetId: 'APP-902',
+      targetUser: 'Sneha Kumari (sneha.k@example.com)',
       details: 'Approved application APP-902 for Sneha Kumari'
     }
   ];
@@ -311,11 +362,93 @@
       setStorage(STORAGE_KEYS.USERS, users);
     }
 
-    // Ensure seed students have DOB populated
+    // Ensure seed students have DOB, Offer Letter, Invoice and Certificate metadata
     var modified = false;
     users.forEach(function(u) {
-      if (u.email === 'student@yuvantara.com' && !u.dob) { u.dob = '2002-05-15'; modified = true; }
-      if (u.email === 'priya@example.com' && !u.dob) { u.dob = '2003-08-20'; modified = true; }
+      if (u.email === 'student@yuvantara.com') {
+        if (!u.dob) { u.dob = '2002-05-15'; modified = true; }
+        if (!u.offerLetter) {
+          u.offerLetter = {
+            refNo: 'YUV/HR/INT-2026/USR-101',
+            date: 'January 15, 2026',
+            joiningDate: 'January 15, 2026',
+            track: u.track || 'Cybersecurity & SOC Operations',
+            duration: '6 Months',
+            college: u.college || 'National Institute of Technology (NIT), Patna',
+            stream: u.stream || 'B.Tech (Computer Science)',
+            status: 'Confirmed & Active'
+          };
+          modified = true;
+        }
+        if (!u.invoice) {
+          u.invoice = {
+            invNumber: 'INV-2026-101',
+            date: 'January 15, 2026',
+            amount: 236,
+            baseAmount: 200,
+            gstAmount: 36,
+            sacCode: '9992',
+            paymentRef: 'PAY-RZP-20260115-01',
+            status: 'PAID'
+          };
+          modified = true;
+        }
+        if (u.certificate) {
+          u.certificate.certNumber = u.certificate.certNumber || u.certificate.id || 'YUV-2026-CS101';
+          u.certificate.name = u.certificate.name || u.name;
+          u.certificate.domain = u.certificate.domain || u.track;
+          u.certificate.dob = u.certificate.dob || u.dob || '2002-05-15';
+          u.certificate.email = u.certificate.email || u.email;
+          u.certificate.phone = u.certificate.phone || u.phone;
+          u.certificate.date = u.certificate.date || u.certificate.issueDate || 'June 20, 2026';
+          u.certificate.qrCodeUrl = 'https://yuvantaraventure.in/verify-certificate/index.html?id=' + encodeURIComponent(u.certificate.certNumber);
+          modified = true;
+        }
+      }
+      if (u.email === 'priya@example.com') {
+        if (!u.dob) { u.dob = '2003-08-20'; modified = true; }
+        if (!u.offerLetter) {
+          u.offerLetter = {
+            refNo: 'YUV/HR/INT-2026/USR-102',
+            date: 'February 01, 2026',
+            joiningDate: 'February 01, 2026',
+            track: u.track || 'Artificial Intelligence & Machine Learning',
+            duration: '6 Months',
+            college: u.college || 'Indian Institute of Technology (IIT), Patna',
+            stream: u.stream || 'B.Tech (IT)',
+            status: 'Confirmed & Active'
+          };
+          modified = true;
+        }
+        if (!u.invoice) {
+          u.invoice = {
+            invNumber: 'INV-2026-102',
+            date: 'February 01, 2026',
+            amount: 236,
+            baseAmount: 200,
+            gstAmount: 36,
+            sacCode: '9992',
+            paymentRef: 'PAY-RZP-20260201-02',
+            status: 'PAID'
+          };
+          modified = true;
+        }
+      }
+      if (u.role === 'student') {
+        if (!u.offerLetter) {
+          u.offerLetter = {
+            refNo: 'YUV/HR/INT-2026/' + (u.id || 'USR-000'),
+            date: u.registeredAt || '2026-01-01',
+            joiningDate: u.registeredAt || '2026-01-01',
+            track: u.track || 'Industrial Internship Program',
+            duration: '6 Months',
+            college: u.college || 'Affiliated Institution',
+            stream: u.stream || 'Engineering & Technology',
+            status: 'Confirmed & Active'
+          };
+          modified = true;
+        }
+      }
     });
     if (modified) {
       setStorage(STORAGE_KEYS.USERS, users);
@@ -366,8 +499,86 @@
       this._setLockouts(lockouts);
     },
 
+    // ── Strict Anti-Fake Validation (Email & Phone) ──
+    validateEmail: function(email) {
+      if (!email || typeof email !== 'string') return { valid: false, message: 'Email address is required.' };
+      email = email.trim().toLowerCase();
+
+      var re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+      if (!re.test(email)) {
+        return { valid: false, message: 'Please enter a valid email address with a proper domain (e.g. name@gmail.com).' };
+      }
+
+      var parts = email.split('@');
+      var userPart = parts[0];
+      var domainPart = parts[1];
+
+      // Block disposable & temporary email domains
+      var fakeDomains = [
+        'mailinator.com', 'tempmail.com', '10minutemail.com', 'guerrillamail.com',
+        'throwawaymail.com', 'yopmail.com', 'trashmail.com', 'sharklasers.com',
+        'dispostable.com', 'fake.com', 'dummy.com', 'temp.com', 'asdf.com',
+        'fakemail.com', 'nada.ltd', 'getairmail.com', 'inboxkitten.com'
+      ];
+      if (fakeDomains.indexOf(domainPart) !== -1) {
+        return { valid: false, message: 'Temporary or disposable email addresses are prohibited. Please use a genuine active email address.' };
+      }
+
+      // Strict validation for Gmail addresses
+      if (domainPart === 'gmail.com') {
+        if (userPart.length < 6) {
+          return { valid: false, message: 'Invalid Gmail address: Google requires usernames to be at least 6 characters long.' };
+        }
+        if (!/^[a-zA-Z0-9.]+$/.test(userPart)) {
+          return { valid: false, message: 'Gmail username can only contain letters, numbers, and periods.' };
+        }
+        if (userPart.startsWith('.') || userPart.endsWith('.') || userPart.indexOf('..') !== -1) {
+          return { valid: false, message: 'Invalid Gmail format: periods cannot be at the start/end or consecutive.' };
+        }
+      }
+
+      var tld = domainPart.split('.').pop();
+      if (!tld || tld.length < 2) {
+        return { valid: false, message: 'Email domain must have a valid top-level domain (.com, .in, .edu, .org).' };
+      }
+
+      return { valid: true, email: email };
+    },
+
+    validatePhone: function(phone) {
+      if (!phone || typeof phone !== 'string') return { valid: false, message: 'Phone number is required.' };
+
+      var clean = phone.replace(/[\s\-\(\)\+]/g, '');
+      if (clean.startsWith('91') && clean.length === 12) {
+        clean = clean.substring(2);
+      } else if (clean.startsWith('0') && clean.length === 11) {
+        clean = clean.substring(1);
+      }
+
+      // Valid 10-digit Indian mobile starting with 6, 7, 8, or 9
+      if (!/^[6-9]\d{9}$/.test(clean)) {
+        return { valid: false, message: 'Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.' };
+      }
+
+      // Reject repetitive dummy digits
+      if (/^(\d)\1{9}$/.test(clean)) {
+        return { valid: false, message: 'Invalid phone number: repetitive dummy numbers are not permitted.' };
+      }
+
+      // Reject dummy sequential sequences
+      var dummySequences = [
+        '1234567890', '0123456789', '9876543210', '0987654321',
+        '9898989898', '9988776655', '9123456789', '9000000000'
+      ];
+      if (dummySequences.indexOf(clean) !== -1) {
+        return { valid: false, message: 'Please enter your genuine active mobile number. Dummy sequential numbers are rejected.' };
+      }
+
+      return { valid: true, phone: '+91 ' + clean.slice(0, 5) + ' ' + clean.slice(5) };
+    },
+
     // ── Audit Logging & Action Ownership Locking ──
-    logAuditAction: function(adminEmail, actionType, targetId, details) {
+    logAuditAction: function(adminEmail, actionType, targetId, details, targetUserName) {
       var logs = getStorage(STORAGE_KEYS.AUDIT_LOGS, SEED_AUDIT_LOGS);
       var entry = {
         id: 'LOG-' + Date.now().toString().slice(-6),
@@ -375,6 +586,7 @@
         adminEmail: adminEmail || 'System',
         actionType: actionType || 'GENERAL_ACTION',
         targetId: targetId || '—',
+        targetUser: targetUserName || targetId || '—',
         details: details || ''
       };
       logs.unshift(entry);
@@ -423,13 +635,27 @@
       if (!data.email || !data.password) {
         return { success: false, message: 'Email and password are required.' };
       }
+      var emailVal = this.validateEmail(data.email);
+      if (!emailVal.valid) {
+        return { success: false, message: emailVal.message };
+      }
+      if (data.phone) {
+        var phoneVal = this.validatePhone(data.phone);
+        if (!phoneVal.valid) {
+          return { success: false, message: phoneVal.message };
+        }
+        data.phone = phoneVal.phone;
+      }
       if (this.getUserByEmail(data.email)) {
         return { success: false, message: 'An account with this email already exists.' };
       }
 
       var users = this.getUsers();
+      var stuId = 'USR-' + (Date.now().toString().slice(-5));
+      var todayStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+
       var newStudent = {
-        id: 'USR-' + (Date.now().toString().slice(-5)),
+        id: stuId,
         name: data.name || 'Student Candidate',
         email: data.email.trim().toLowerCase(),
         passwordHash: hashPassword(data.password),
@@ -454,7 +680,27 @@
           { name: 'Module 4: Mid-Term Evaluation & Milestone Submission', status: 'pending' },
           { name: 'Module 5: Capstone Project & Certification', status: 'pending' }
         ],
-        certificate: null
+        certificate: null,
+        offerLetter: {
+          refNo: 'YUV/HR/INT-2026/' + stuId,
+          date: todayStr,
+          joiningDate: todayStr,
+          track: data.track || 'Cybersecurity & SOC Operations',
+          duration: '6 Months',
+          college: data.college || 'Affiliated Institution',
+          stream: data.stream || 'Engineering & Technology',
+          status: 'Confirmed & Active'
+        },
+        invoice: {
+          invNumber: 'INV-2026-' + stuId.replace('USR-', ''),
+          date: todayStr,
+          amount: 236,
+          baseAmount: 200,
+          gstAmount: 36,
+          sacCode: '9992',
+          paymentRef: data.paymentRef || 'PAY-CONFIRMED',
+          status: 'PAID'
+        }
       };
 
       users.push(newStudent);
@@ -462,9 +708,10 @@
 
       this.logAuditAction(
         registeringAdminEmail || 'System',
-        'REGISTER_STUDENT',
+        'ENROLL_STUDENT',
         newStudent.email,
-        'Registered student account for ' + newStudent.name + ' (' + newStudent.track + ')'
+        'Enrolled ' + newStudent.name + ' in ' + newStudent.track,
+        newStudent.name + ' (' + newStudent.email + ')'
       );
 
       if (window.YuvantaraCloudDB) {
@@ -552,6 +799,45 @@
       }
 
       if (updatedUser) {
+        // Automatic Certificate Generation upon 100% Curriculum Completion (if explicitly requested)
+        if (updates.autoGenerateCertificate && typeof updatedUser.progress === 'number' && updatedUser.progress >= 100) {
+          if (!updatedUser.certificate || (!updatedUser.certificate.id && updatedUser.certificate.status !== 'revoked')) {
+            var yr = new Date().getFullYear();
+            var trackCode = (updatedUser.track ? updatedUser.track.slice(0, 2).toUpperCase() : 'IN');
+            var autoCertId = 'YUV-' + yr + '-' + trackCode + Math.floor(100 + Math.random() * 900);
+            var todayFormatted = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+            updatedUser.certificate = {
+              certNumber: autoCertId,
+              id: autoCertId,
+              name: updatedUser.name,
+              domain: updatedUser.track,
+              dob: updatedUser.dob || '',
+              email: updatedUser.email,
+              phone: updatedUser.phone || '',
+              date: todayFormatted,
+              issueDate: todayFormatted,
+              title: (updatedUser.track || 'Industrial') + ' Industrial Internship',
+              duration: '6 Months (Jan 2026 – Jun 2026)',
+              grade: 'Grade A+ (Distinction)',
+              authority: 'Yuvantara Academic & Cyber Defense Council',
+              status: 'Valid & Verified',
+              issuedByAdmin: modifyingAdminEmail || 'System Automated Council',
+              issuedAt: new Date().toISOString(),
+              qrCodeUrl: 'https://yuvantaraventure.in/verify-certificate/index.html?id=' + encodeURIComponent(autoCertId),
+              fileUrl: ''
+            };
+
+            this.logAuditAction(
+              modifyingAdminEmail || 'System Automated Council',
+              'AUTO_ISSUE_CERTIFICATE',
+              autoCertId,
+              'Auto-generated certificate upon 100% completion for ' + updatedUser.name,
+              updatedUser.name + ' (' + updatedUser.email + ')'
+            );
+          }
+        }
+
         setStorage(STORAGE_KEYS.USERS, users);
         if (modifyingAdminEmail) {
           this.logAuditAction(
@@ -662,30 +948,114 @@
       var student = this.getUserByEmail(email);
       if (!student) return { success: false, message: 'Student not found.' };
 
+      var defaultNum = 'YUV-' + new Date().getFullYear() + '-' + (student.track ? student.track.slice(0,2).toUpperCase() : 'IN') + Math.floor(100 + Math.random() * 900);
+      var certNumber = certData.certNumber || certData.id || defaultNum;
+      var issueDate = certData.date || certData.issueDate || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
       var certificate = {
-        id: certData.id || ('YUV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000)),
+        certNumber: certNumber,
+        id: certNumber,
+        name: student.name,
+        domain: student.track,
+        dob: student.dob || '',
+        email: student.email,
+        phone: student.phone || '',
+        date: issueDate,
+        issueDate: issueDate,
         title: certData.title || (student.track + ' Industrial Internship'),
-        duration: certData.duration || '6 Months Industrial Training',
+        duration: certData.duration || '6 Months (Jan 2026 – Jun 2026)',
         grade: certData.grade || 'Grade A+ (Distinction)',
-        issueDate: certData.issueDate || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        authority: certData.authority || 'Yuvantara Academic & Skill Council',
+        authority: certData.authority || 'Yuvantara Academic & Cyber Defense Council',
         status: 'Valid & Verified',
         issuedByAdmin: issuingAdminEmail || 'System',
         issuedAt: new Date().toISOString(),
+        qrCodeUrl: 'https://yuvantaraventure.in/verify-certificate/index.html?id=' + encodeURIComponent(certNumber),
         fileUrl: certData.fileUrl || ''
       };
 
       this.logAuditAction(
         issuingAdminEmail || 'System',
         'ISSUE_CERTIFICATE',
-        certificate.id,
-        'Issued certificate ' + certificate.id + ' to ' + student.name + ' (' + student.email + ')'
+        certificate.certNumber,
+        'Issued official certificate ' + certificate.certNumber + ' to ' + student.name,
+        student.name + ' (' + student.email + ')'
       );
 
       return this.updateStudent(email, {
         certificate: certificate,
         progress: 100
       }, issuingAdminEmail);
+    },
+
+    generateCertificateForStudent: function(email, confirmedName, confirmedCollege, issuingAdminEmail) {
+      var users = this.getUsers();
+      email = (email || '').trim().toLowerCase();
+      var student = null;
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].email.toLowerCase() === email) {
+          student = users[i];
+          break;
+        }
+      }
+      if (!student) return { success: false, message: 'Student not found.' };
+
+      var cleanName = (confirmedName || student.name || 'Candidate').trim();
+      var cleanCollege = (confirmedCollege || student.college || 'Engineering Institute').trim();
+
+      var yr = new Date().getFullYear();
+      var trackCode = (student.track ? student.track.slice(0, 2).toUpperCase() : 'IN');
+      var certId = 'YUV-' + yr + '-' + trackCode + Math.floor(100 + Math.random() * 900);
+      var todayFormatted = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+      var cert = {
+        certNumber: certId,
+        id: certId,
+        name: cleanName,
+        college: cleanCollege,
+        domain: student.track,
+        dob: student.dob || '',
+        email: student.email,
+        phone: student.phone || '',
+        date: todayFormatted,
+        issueDate: todayFormatted,
+        title: (student.track || 'Industrial') + ' Industrial Internship',
+        duration: '6 Months (Jan 2026 – Jun 2026)',
+        grade: 'Grade A+ (Distinction)',
+        authority: 'Yuvantara Academic & Cyber Defense Council',
+        status: 'Valid & Verified',
+        issuedByAdmin: issuingAdminEmail || student.enrolledByAdmin || 'adk_01@admin',
+        issuedAt: new Date().toISOString(),
+        qrCodeUrl: 'https://yuvantaraventure.in/verify-certificate/index.html?id=' + encodeURIComponent(certId),
+        fileUrl: ''
+      };
+
+      student.name = cleanName;
+      student.college = cleanCollege;
+      student.progress = 100;
+      student.certificate = cert;
+      student.lastModifiedAt = new Date().toISOString();
+      student.lastModifiedByAdmin = issuingAdminEmail || 'Candidate Pre-Mint Verification';
+
+      setStorage(STORAGE_KEYS.USERS, users);
+
+      var curr = this.getCurrentUser();
+      if (curr && curr.email.toLowerCase() === email) {
+        curr.name = cleanName;
+        curr.college = cleanCollege;
+        curr.progress = 100;
+        curr.certificate = cert;
+        this.setCurrentUser(curr);
+      }
+
+      this.logAuditAction(
+        issuingAdminEmail || 'Candidate Pre-Mint Verification',
+        'ISSUE_CERTIFICATE',
+        certId,
+        'Minted verified certificate ' + certId + ' with verified candidate name: ' + cleanName + ' (' + cleanCollege + ')',
+        cleanName + ' (' + email + ')'
+      );
+
+      return { success: true, user: student, certificate: cert };
     },
 
     revokeCertificate: function(email, revokingAdminEmail) {
@@ -701,8 +1071,9 @@
       this.logAuditAction(
         revokingAdminEmail || 'System',
         'REVOKE_CERTIFICATE',
-        student.email,
-        'Revoked certificate for ' + student.name + ' (' + student.email + ')'
+        cert.certNumber || cert.id || student.email,
+        'Revoked certificate for ' + student.name,
+        student.name + ' (' + student.email + ')'
       );
 
       return this.updateStudent(email, { certificate: cert }, revokingAdminEmail);
@@ -740,6 +1111,17 @@
     },
 
     submitApplication: function(data) {
+      if (data.email) {
+        var emailVal = this.validateEmail(data.email);
+        if (!emailVal.valid) return { success: false, message: emailVal.message };
+        data.email = emailVal.email;
+      }
+      if (data.phone) {
+        var phoneVal = this.validatePhone(data.phone);
+        if (!phoneVal.valid) return { success: false, message: phoneVal.message };
+        data.phone = phoneVal.phone;
+      }
+
       var apps = this.getApplications();
       var newApp = {
         id: 'APP-' + (Date.now().toString().slice(-4)),
@@ -765,6 +1147,19 @@
 
     saveApplication: function(data) {
       return this.submitApplication(data);
+    },
+
+    getCertificateByNumber: function(certNum) {
+      if (!certNum) return null;
+      certNum = certNum.trim().toUpperCase();
+      var students = this.getStudents();
+      for (var i = 0; i < students.length; i++) {
+        var c = students[i].certificate;
+        if (c && (c.certNumber === certNum || c.id === certNum)) {
+          return c;
+        }
+      }
+      return null;
     },
 
     // ── DOB & Captcha Based Identity Verification for Password Reset ──
@@ -834,7 +1229,8 @@
           approvingAdminEmail,
           status === 'approved' ? 'APPROVE_APPLICATION' : 'REJECT_APPLICATION',
           id,
-          'Marked application ' + id + ' as ' + status.toUpperCase() + ' for ' + appItem.name
+          'Marked application ' + id + ' as ' + status.toUpperCase() + ' for ' + appItem.name,
+          appItem.name + ' (' + appItem.email + ')'
         );
       }
 
@@ -847,6 +1243,34 @@
       setStorage(STORAGE_KEYS.AUDIT_LOGS, SEED_AUDIT_LOGS);
       this.logout();
       return { success: true };
+    },
+
+    DATA_ARCHITECTURE: {
+      ADMIN_FILES: [
+        'data/admin_adk_01.json',
+        'data/admin_alk_01.json',
+        'data/admin_dhb_03.json',
+        'data/admin_abk_04.json',
+        'data/admin_anp_05.json',
+        'data/admin_rop_06.json'
+      ],
+      MASTER_STUDENTS_FILE: 'data/master_students.json',
+      AUDIT_TRAIL_FILE: 'data/audit_trail.json',
+      ADMINS_REGISTRY_FILE: 'data/admins_registry.json'
+    },
+
+    getDataArchitectureFiles: function() {
+      return [
+        'data/admin_adk_01.json',
+        'data/admin_alk_01.json',
+        'data/admin_dhb_03.json',
+        'data/admin_abk_04.json',
+        'data/admin_anp_05.json',
+        'data/admin_rop_06.json',
+        'data/master_students.json',
+        'data/audit_trail.json',
+        'data/admins_registry.json'
+      ];
     }
   };
 

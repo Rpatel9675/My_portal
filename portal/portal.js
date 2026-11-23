@@ -58,8 +58,70 @@
     var barFill = document.getElementById('stu-bar-fill');
     if (barFill) barFill.style.width = (isPending ? 0 : pct) + '%';
 
+    // Curriculum action button state
+    var actionBox = document.getElementById('box-curriculum-action');
+    if (actionBox) {
+      if (pct >= 100) {
+        if (currentUser.certificate && currentUser.certificate.id && currentUser.certificate.status !== 'revoked') {
+          actionBox.innerHTML =
+            '<span style="color:#15803D;font-weight:700;font-size:.9rem;display:inline-flex;align-items:center;gap:6px">✅ 100% Milestone Completion Achieved &bull; Official Certificate Minted</span>' +
+            '<button type="button" class="btn p" id="btn-view-my-cert" style="font-size:.85rem">🎓 View Your Verified Certificate</button>' +
+            '<button type="button" class="btn" id="btn-edit-my-cert-trigger" style="font-size:.85rem;margin-left:6px;border-color:#CBD5E1">✏️ Edit Name/College</button>';
+          var btnViewCert = document.getElementById('btn-view-my-cert');
+          if (btnViewCert) {
+            btnViewCert.addEventListener('click', function() {
+              var certTab = document.querySelector('.portal-tab-btn[data-tab="certificate"]');
+              if (certTab) certTab.click();
+            });
+          }
+          var btnEditTrigger = document.getElementById('btn-edit-my-cert-trigger');
+          if (btnEditTrigger) {
+            btnEditTrigger.addEventListener('click', openConfirmCertModal);
+          }
+        } else {
+          actionBox.innerHTML =
+            '<span style="color:#15803D;font-weight:700;font-size:.9rem;display:inline-flex;align-items:center;gap:6px">🎉 100% Course Completed!</span>' +
+            '<button type="button" class="btn p" id="btn-trigger-cert-modal" style="font-size:.88rem">🎓 Generate Certificate</button>';
+          var btnTrigger = document.getElementById('btn-trigger-cert-modal');
+          if (btnTrigger) {
+            btnTrigger.addEventListener('click', openConfirmCertModal);
+          }
+        }
+      } else {
+        actionBox.innerHTML =
+          '<button type="button" class="btn p" id="btn-complete-curriculum" style="font-size:.88rem">' +
+          '🎓 Complete All Milestones (100%)' +
+          '</button>';
+        var btnComplete = document.getElementById('btn-complete-curriculum');
+        if (btnComplete) {
+          btnComplete.addEventListener('click', function() {
+            var allDoneModules = [
+              { name: 'Module 1: Orientation & Core Foundations', status: 'completed' },
+              { name: 'Module 2: Lab Setup & Environment Diagnostics', status: 'completed' },
+              { name: 'Module 3: Hands-on Case Studies & Practical Labs', status: 'completed' },
+              { name: 'Module 4: Mid-Term Evaluation & Milestone Submission', status: 'completed' },
+              { name: 'Module 5: Capstone Project & Certification', status: 'completed' }
+            ];
+            var res = YuvantaraDB.updateStudent(currentUser.email, {
+              progress: 100,
+              modules: allDoneModules
+            }, 'System Automated Council');
+            if (res.success && res.user) {
+              currentUser = res.user;
+            } else {
+              currentUser = YuvantaraDB.getUserByEmail(currentUser.email) || currentUser;
+            }
+            renderStudentData();
+            // Automatically prompt the modal to review and edit name & college!
+            openConfirmCertModal();
+          });
+        }
+      }
+    }
+
     renderModulesList(currentUser.modules || [], isPending);
     renderCertificateSection(currentUser, isPending);
+    renderDocumentsSection(currentUser);
 
     // Profile form prefill — track is now a readonly text input (locked)
     setVal('p-name', currentUser.name || '');
@@ -189,7 +251,7 @@
     }
 
     if (cert && cert.id && cert.status !== 'revoked') {
-      // Official cert issued
+      // Official cert issued / verified
       if (certWrap) certWrap.style.display = 'block';
       if (emptyWrap) emptyWrap.style.display = 'none';
 
@@ -199,9 +261,16 @@
       setText('cert-c-duration', cert.duration || '6 Months (Jan 2026 – Jun 2026)');
       setText('cert-c-grade', cert.grade || 'Grade A+ (Distinction)');
       setText('cert-c-id', cert.id);
-      setText('cert-c-date', cert.issueDate || 'June 20, 2026');
-      setText('cert-c-authority', cert.authority || 'Yuvantara Cyber Defense Council');
+      setText('cert-c-date', cert.issueDate || cert.date || 'June 20, 2026');
+      setText('cert-c-authority', cert.authority || 'Yuvantara Academic & Cyber Defense Council');
       setText('cert-c-status', cert.status || 'Valid & Verified');
+
+      var qrTarget = document.getElementById('cert-qr-box');
+      if (qrTarget && window.YuvantaraQR) {
+        var verifyUrl = cert.qrCodeUrl || ('https://yuvantaraventure.in/verify-certificate/index.html?id=' + encodeURIComponent(cert.id));
+        YuvantaraQR.renderTo('cert-qr-box', verifyUrl, 76);
+      }
+      setText('cert-qr-num', cert.id);
 
       var verifyLink = document.getElementById('btn-verify-cert-link');
       if (verifyLink) verifyLink.href = '../verify-certificate/index.html?id=' + encodeURIComponent(cert.id);
@@ -222,23 +291,29 @@
           '<div style="margin-top:16px"><a href="mailto:xyv@yuvantara.com" style="color:#1D4ED8;font-weight:600;text-decoration:underline">📧 xyv@yuvantara.com</a></div>';
       }
 
-    } else if (typeof user.progress === 'number' && user.progress >= 100) {
-      // 100% complete — awaiting admin issuance
+    } else {
+      // Not yet generated
       if (certWrap) certWrap.style.display = 'none';
       if (emptyWrap) {
         emptyWrap.style.display = 'block';
-        emptyWrap.innerHTML =
-          '<div style="font-size:3.5rem;margin-bottom:12px">🎓</div>' +
-          '<h3 style="color:#15803D;margin:0 0 10px">Congratulations! Curriculum 100% Complete</h3>' +
-          '<p style="color:#374151;max-width:480px;margin:0 auto 16px">You have completed all program milestones. Your certificate is being reviewed and will be issued by your coordinator shortly.</p>' +
-          '<div style="display:inline-flex;align-items:center;gap:8px;background:#DCFCE7;color:#15803D;border:1.5px solid #86EFAC;border-radius:10px;padding:10px 20px;font-weight:600;font-size:.95rem">' +
-          '⏳ Awaiting Admin Issuance</div>';
+        if (typeof user.progress === 'number' && user.progress >= 100) {
+          emptyWrap.innerHTML =
+            '<div style="font-size:3.5rem;margin-bottom:12px">🎉</div>' +
+            '<h3 style="color:#0F172A;margin:0 0 10px">100% Course Completed!</h3>' +
+            '<p style="color:#475569;max-width:520px;margin:0 auto 20px">Congratulations on completing all milestones! Please click below to review and confirm your official Name and College before generating your verified certificate.</p>' +
+            '<button type="button" class="btn p" id="btn-cert-pane-generate" style="font-size:1rem;padding:12px 28px">🎓 Review Details &amp; Generate Certificate</button>';
+          var btnGenNow = document.getElementById('btn-cert-pane-generate');
+          if (btnGenNow) {
+            btnGenNow.addEventListener('click', openConfirmCertModal);
+          }
+        } else {
+          emptyWrap.innerHTML =
+            '<div style="font-size:3.5rem;margin-bottom:12px">📜</div>' +
+            '<h3 style="color:#0F172A;margin:0 0 10px">Curriculum in Progress</h3>' +
+            '<p style="color:#475569;max-width:480px;margin:0 auto 16px">Your official institutional certificate will be available upon 100% curriculum completion.</p>' +
+            '<p style="font-size:.88rem;color:#64748B">Current Progress: <strong>' + (user.progress || 0) + '%</strong></p>';
+        }
       }
-
-    } else {
-      // Not yet completed
-      if (certWrap) certWrap.style.display = 'none';
-      if (emptyWrap) emptyWrap.style.display = 'block';
     }
 
     // Uploaded certificate doc
@@ -258,6 +333,171 @@
     }
   }
 
+  // ── Official Documents Section ──
+  function renderDocumentsSection(user) {
+    if (!user) return;
+    var offRef = (user.offerLetter && user.offerLetter.refNo) || ('YUV/2026/OFF-' + (user.id ? user.id.replace(/\D/g, '') || '101' : '101'));
+    setText('doc-ref-offer', offRef);
+    setText('doc-status-offer', user.paymentStatus === 'paid' ? 'Issued & Digitally Signed' : 'Pending Payment');
+
+    var invNo = (user.invoice && user.invoice.invoiceNo) || ('YUV-INV-2026-00' + (user.id ? user.id.replace(/\D/g, '') || '101' : '101'));
+    setText('doc-ref-invoice', invNo);
+
+    var cert = user.certificate;
+    if ((!cert || !cert.id) && typeof user.progress === 'number' && user.progress >= 100) {
+      var defaultNum = 'YUV-' + new Date().getFullYear() + '-' + (user.track ? user.track.slice(0, 2).toUpperCase() : 'IN') + Math.floor(100 + Math.random() * 900);
+      var todayStr = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      var autoData = {
+        certNumber: defaultNum,
+        id: defaultNum,
+        title: (user.track || 'Industrial') + ' Internship',
+        duration: '6 Months (Jan 2026 – Jun 2026)',
+        grade: 'Grade A+ (Distinction)',
+        date: todayStr,
+        issueDate: todayStr,
+        authority: 'Yuvantara Academic & Cyber Defense Council'
+      };
+      var assignRes = YuvantaraDB.assignCertificate(user.email, autoData, 'System Automated Council');
+      if (assignRes && assignRes.user) {
+        user = assignRes.user;
+        currentUser = assignRes.user;
+        cert = user.certificate;
+      }
+    }
+
+    if (cert && cert.id && cert.status !== 'revoked') {
+      setText('doc-ref-cert', cert.id);
+      setText('doc-status-cert', 'Issued & Verified');
+    } else if (cert && cert.status === 'revoked') {
+      setText('doc-ref-cert', cert.id || '—');
+      setText('doc-status-cert', 'Revoked');
+    } else {
+      setText('doc-ref-cert', 'In Progress');
+      setText('doc-status-cert', (user.progress || 0) + '% Completed');
+    }
+  }
+
+  function openOfferLetterModal(user) {
+    if (!user) return;
+    var offRef = (user.offerLetter && user.offerLetter.refNo) || ('YUV/2026/OFF-' + (user.id ? user.id.replace(/\D/g, '') || '101' : '101'));
+    var issueDate = (user.offerLetter && user.offerLetter.issuedDate) || user.paidAt || 'May 15, 2026';
+
+    setText('ol-ref-num', offRef);
+    setText('ol-issue-date', issueDate);
+    setText('ol-candidate-name', user.name || 'Candidate');
+    setText('ol-salutation-name', user.name ? user.name.split(' ')[0] : 'Candidate');
+    setText('ol-candidate-college', user.college || 'Engineering Institute');
+    setText('ol-candidate-stream', user.stream || 'B.Tech / B.E');
+    setText('ol-candidate-email', user.email || '');
+    setText('ol-candidate-phone', user.phone || '');
+    setText('ol-track-name', user.track || 'Cybersecurity & SOC Operations');
+    setText('ol-reg-ref', user.paymentRef || ('REG-' + (user.id || '101')));
+
+    var olQrTarget = document.getElementById('ol-qr-box');
+    if (olQrTarget && window.YuvantaraQR) {
+      var verifyUrl = 'https://yuvantaraventure.in/verify-certificate/index.html?ref=' + encodeURIComponent(offRef);
+      YuvantaraQR.renderTo('ol-qr-box', verifyUrl, 64);
+    }
+    setText('ol-qr-ref', offRef);
+
+    var modal = document.getElementById('modal-offer-letter');
+    var overlay = document.getElementById('auth-overlay');
+    if (modal) {
+      modal.classList.add('open', 'active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    if (overlay) {
+      overlay.classList.add('open', 'active');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function openInvoiceModal(user) {
+    if (!user) return;
+    var invNo = (user.invoice && user.invoice.invoiceNo) || ('YUV-INV-2026-00' + (user.id ? user.id.replace(/\D/g, '') || '101' : '101'));
+    var invDate = (user.invoice && user.invoice.date) || user.paidAt || 'May 15, 2026';
+
+    setText('inv-modal-no', invNo);
+    setText('inv-modal-date', invDate);
+    setText('inv-modal-mode', user.paymentMethod || 'Online UPI / NetBanking');
+    setText('inv-modal-tx', user.paymentRef || ('PAY-' + (user.id ? user.id.replace(/\D/g, '') : '882194')));
+    setText('inv-modal-name', user.name || 'Student');
+    setText('inv-modal-email', user.email || '');
+    setText('inv-modal-phone', user.phone || '');
+    setText('inv-modal-track', user.track || 'Cybersecurity & SOC Operations');
+
+    var modal = document.getElementById('modal-invoice');
+    var overlay = document.getElementById('auth-overlay');
+    if (modal) {
+      modal.classList.add('open', 'active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    if (overlay) {
+      overlay.classList.add('open', 'active');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function openConfirmCertModal() {
+    if (!currentUser) return;
+    var nameInput = document.getElementById('cert-edit-name');
+    var collegeInput = document.getElementById('cert-edit-college');
+    if (nameInput) nameInput.value = currentUser.name || '';
+    if (collegeInput) collegeInput.value = currentUser.college || 'National Institute of Technology (NIT), Patna';
+
+    var modal = document.getElementById('modal-confirm-cert');
+    var overlay = document.getElementById('auth-overlay');
+    if (modal) {
+      modal.classList.add('open', 'active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    if (overlay) {
+      overlay.classList.add('open', 'active');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+    if (nameInput) nameInput.focus();
+  }
+
+  function closeAllModals() {
+    ['modal-offer-letter', 'modal-invoice', 'modal-confirm-cert'].forEach(function(id) {
+      var m = document.getElementById(id);
+      if (m) {
+        m.classList.remove('open', 'active');
+        m.setAttribute('aria-hidden', 'true');
+      }
+    });
+    var overlay = document.getElementById('auth-overlay');
+    if (overlay) {
+      overlay.classList.remove('open', 'active');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function printElement(elId) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    var printWin = window.open('', '_blank', 'width=880,height=800');
+    if (!printWin) {
+      window.print();
+      return;
+    }
+    printWin.document.open();
+    printWin.document.write('<!doctype html><html><head><title>Print Document | Yuvantara</title>' +
+      '<style>' +
+      '@page { margin: 15mm; size: A4; }' +
+      'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0F172A; margin: 0; padding: 20px; line-height: 1.5; background: #fff; }' +
+      'table { width: 100%; border-collapse: collapse; }' +
+      '.cert-seal { width: 78px; height: 78px; border-radius: 50%; border: 2px dashed #94A3B8; display: flex; align-items: center; justify-content: center; font-size: 8px; text-align: center; color: #475569; font-weight: 700; margin: 0 auto; }' +
+      '</style>' +
+      '</head><body>' + el.innerHTML + '</body></html>');
+    printWin.document.close();
+    printWin.focus();
+    setTimeout(function() {
+      printWin.print();
+      printWin.close();
+    }, 350);
+  }
+
   // ── Portal Tab Events ──
   function bindPortalEvents() {
     var tabs = document.querySelectorAll('.portal-tab-btn[data-tab]');
@@ -271,6 +511,151 @@
         if (activePane) activePane.classList.add('active');
       });
     });
+
+    // ── HR Policy Accordion Events ──
+    var policyHeaders = document.querySelectorAll('.policy-accordion-header');
+    policyHeaders.forEach(function(header) {
+      header.addEventListener('click', function() {
+        var item = header.closest('.policy-accordion-item');
+        if (!item) return;
+        var isOpen = item.classList.contains('open');
+        var plusIcon = item.querySelector('.policy-plus-icon');
+        var toggleText = item.querySelector('.policy-toggle-text');
+
+        if (isOpen) {
+          item.classList.remove('open');
+          header.setAttribute('aria-expanded', 'false');
+          if (plusIcon) plusIcon.textContent = '+';
+          if (toggleText) toggleText.textContent = 'Read Policy';
+        } else {
+          item.classList.add('open');
+          header.setAttribute('aria-expanded', 'true');
+          if (plusIcon) plusIcon.textContent = '−';
+          if (toggleText) toggleText.textContent = 'Collapse';
+        }
+      });
+    });
+
+    var btnExpandAll = document.getElementById('btn-policy-expand-all');
+    if (btnExpandAll) {
+      btnExpandAll.addEventListener('click', function() {
+        document.querySelectorAll('.policy-accordion-item').forEach(function(item) {
+          item.classList.add('open');
+          var h = item.querySelector('.policy-accordion-header');
+          if (h) h.setAttribute('aria-expanded', 'true');
+          var icon = item.querySelector('.policy-plus-icon');
+          if (icon) icon.textContent = '−';
+          var text = item.querySelector('.policy-toggle-text');
+          if (text) text.textContent = 'Collapse';
+        });
+      });
+    }
+
+    var btnCollapseAll = document.getElementById('btn-policy-collapse-all');
+    if (btnCollapseAll) {
+      btnCollapseAll.addEventListener('click', function() {
+        document.querySelectorAll('.policy-accordion-item').forEach(function(item) {
+          item.classList.remove('open');
+          var h = item.querySelector('.policy-accordion-header');
+          if (h) h.setAttribute('aria-expanded', 'false');
+          var icon = item.querySelector('.policy-plus-icon');
+          if (icon) icon.textContent = '+';
+          var text = item.querySelector('.policy-toggle-text');
+          if (text) text.textContent = 'Read Policy';
+        });
+      });
+    }
+
+    // Document & Modal Events
+    var btnViewOffer = document.getElementById('btn-view-offer-letter');
+    if (btnViewOffer) btnViewOffer.addEventListener('click', function() { openOfferLetterModal(currentUser); });
+
+    ['btn-print-offer-letter', 'btn-print-offer-modal'].forEach(function(id) {
+      var btn = document.getElementById(id);
+      if (btn) btn.addEventListener('click', function() { printElement('printable-offer-letter'); });
+    });
+
+    var btnCloseOffer = document.getElementById('close-offer-modal');
+    if (btnCloseOffer) btnCloseOffer.addEventListener('click', closeAllModals);
+
+    var btnViewInvoice = document.getElementById('btn-view-invoice-action');
+    if (btnViewInvoice) btnViewInvoice.addEventListener('click', function() { openInvoiceModal(currentUser); });
+
+    ['btn-print-invoice-action', 'btn-print-invoice-modal'].forEach(function(id) {
+      var btn = document.getElementById(id);
+      if (btn) btn.addEventListener('click', function() { printElement('printable-invoice'); });
+    });
+
+    var btnCloseInvoice = document.getElementById('close-invoice-modal');
+    if (btnCloseInvoice) btnCloseInvoice.addEventListener('click', closeAllModals);
+
+    var overlay = document.getElementById('auth-overlay');
+    if (overlay) overlay.addEventListener('click', closeAllModals);
+
+    var btnNavToCert = document.getElementById('btn-nav-to-cert');
+    if (btnNavToCert) {
+      btnNavToCert.addEventListener('click', function() {
+        var certTab = document.querySelector('.portal-tab-btn[data-tab="certificate"]');
+        if (certTab) certTab.click();
+      });
+    }
+
+    var btnQuickPrintCert = document.getElementById('btn-quick-print-cert');
+    if (btnQuickPrintCert) {
+      btnQuickPrintCert.addEventListener('click', function() {
+        var certTab = document.querySelector('.portal-tab-btn[data-tab="certificate"]');
+        if (certTab) certTab.click();
+        setTimeout(function() { window.print(); }, 200);
+      });
+    }
+
+    // Modal Certificate Edit & Minting Events
+    var btnEditCert = document.getElementById('btn-edit-cert-details');
+    if (btnEditCert) btnEditCert.addEventListener('click', openConfirmCertModal);
+
+    var btnCloseCertModal = document.getElementById('close-confirm-cert-modal');
+    if (btnCloseCertModal) btnCloseCertModal.addEventListener('click', closeAllModals);
+
+    var btnCancelCertModal = document.getElementById('btn-cancel-cert-edit');
+    if (btnCancelCertModal) btnCancelCertModal.addEventListener('click', closeAllModals);
+
+    var formConfirmCert = document.getElementById('form-confirm-cert');
+    if (formConfirmCert) {
+      formConfirmCert.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var newName = (document.getElementById('cert-edit-name').value || '').trim();
+        var newCollege = (document.getElementById('cert-edit-college').value || '').trim();
+        if (!newName) {
+          alert('Please enter your full name for the certificate.');
+          return;
+        }
+        if (!newCollege) {
+          alert('Please enter your college or university name.');
+          return;
+        }
+
+        var res = YuvantaraDB.generateCertificateForStudent(currentUser.email, newName, newCollege);
+        if (res.success && res.user) {
+          currentUser = res.user;
+        } else {
+          currentUser = YuvantaraDB.getUserByEmail(currentUser.email) || currentUser;
+        }
+        closeAllModals();
+        renderStudentData();
+
+        var certTab = document.querySelector('.portal-tab-btn[data-tab="certificate"]');
+        if (certTab) certTab.click();
+        alert('🎉 Official certificate minted successfully with verified candidate details!');
+      });
+    }
+
+    var btnProfileToBlogs = document.getElementById('btn-profile-to-blogs');
+    if (btnProfileToBlogs) {
+      btnProfileToBlogs.addEventListener('click', function() {
+        var blogTab = document.querySelector('.portal-tab-btn[data-tab="blogs"]');
+        if (blogTab) blogTab.click();
+      });
+    }
 
     // Logout
     ['btn-portal-logout', 'btn-quick-logout'].forEach(function(id) {
@@ -404,15 +789,6 @@
   function bindGateEvents() {
     var form = document.getElementById('gate-login-form');
     var alertBox = document.getElementById('gate-alert');
-    var demoBtn = document.getElementById('fill-demo-btn');
-
-    if (demoBtn) {
-      demoBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        setVal('gate-email', 'student@yuvantara.com');
-        setVal('gate-pass', 'student123');
-      });
-    }
 
     if (form) {
       form.addEventListener('submit', function(e) {

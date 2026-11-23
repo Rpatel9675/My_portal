@@ -1,0 +1,107 @@
+{
+  "adminId": "ADM-05",
+  "adminEmail": "anp_05@admin",
+  "adminName": "Admin ANP-05",
+  "role": "admin",
+  "cluster": "Patna Robotics & Embedded Hardware Lab",
+  "assignedTrack": "Robotics & IoT Embedded Systems",
+  "status": "active",
+  "phone": "+91 98765 00005",
+  "lastSynced": "2026-11-23T09:30:00.000Z",
+  "totalStudents": 2,
+  "students": [
+    {
+      "id": "USR-105",
+      "name": "Kunal Ghosh",
+      "email": "kunal.ghosh@example.com",
+      "phone": "+91 98667 88990",
+      "dob": "2002-04-10",
+      "track": "Robotics & IoT Embedded Systems",
+      "stream": "B.Tech (ECE)",
+      "college": "Indian Institute of Engineering Science and Technology (IIEST), Shibpur",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-01-25T11:00:00.000Z",
+      "progress": 100,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "completed" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "completed" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "completed" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-105",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260125-05",
+        "paymentDate": "2026-01-25T11:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "anp_05@admin",
+        "approvedAt": "2026-01-25T11:45:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1005"
+      },
+      "certificate": {
+        "certNumber": "YUV-2026-RO105",
+        "id": "YUV-2026-RO105",
+        "name": "Kunal Ghosh",
+        "college": "IIEST Shibpur",
+        "domain": "Robotics & IoT Embedded Systems",
+        "date": "June 05, 2026",
+        "grade": "Grade A+ (Distinction)",
+        "status": "Valid & Verified",
+        "issuedByAdmin": "anp_05@admin",
+        "qrCodeUrl": "https://yuvantaraventure.in/verify-certificate/index.html?id=YUV-2026-RO105"
+      }
+    },
+    {
+      "id": "USR-111",
+      "name": "Meera Nair",
+      "email": "meera.nair@example.com",
+      "phone": "+91 98778 99001",
+      "dob": "2003-06-30",
+      "track": "Robotics & IoT Embedded Systems",
+      "stream": "B.Tech (Electrical & Electronics)",
+      "college": "College of Engineering Guindy (CEG), Anna University",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-02-22T09:00:00.000Z",
+      "progress": 45,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "in-progress" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "pending" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "pending" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-111",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260222-11",
+        "paymentDate": "2026-02-22T09:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "anp_05@admin",
+        "approvedAt": "2026-02-22T09:45:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1011"
+      },
+      "certificate": null
+    }
+  ]
+}

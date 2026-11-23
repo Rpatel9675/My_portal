@@ -27,7 +27,8 @@
         <div class="fgroup"><label for="s-email">Email address</label><input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email"></div>
         <div class="fgroup"><label for="s-phone">WhatsApp / Phone</label><input id="s-phone" type="tel" placeholder="+91 98765 43210" required></div>
       </div>
-      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create a password" required autocomplete="new-password"></div></div>
+      <div class="frow"><div class="fgroup"><label for="s-dob">Date of Birth</label><input id="s-dob" type="date" required max="2010-01-01"></div><div class="fgroup"><label for="s-pass">Password</label><input id="s-pass" type="password" placeholder="Create password" required autocomplete="new-password"></div></div>
+      <div class="fgroup"><label for="s-pass-confirm">Confirm Password</label><input id="s-pass-confirm" type="password" placeholder="Confirm your password" required autocomplete="new-password"></div>
       <div class="frow">
         <div class="fgroup">
           <label for="s-prog">Internship Track</label>
@@ -55,6 +56,7 @@
         </div>
       </div>
       <div class="fgroup"><label for="s-college">College / University name</label><input id="s-college" type="text" placeholder="e.g. NIT Patna" required></div>
+      <div class="fgroup checkbox-group" style="margin:10px 0 12px"><label style="display:flex;align-items:flex-start;gap:8px;font-size:0.83rem;color:#334155;cursor:pointer;line-height:1.4"><input type="checkbox" id="s-declaration" required style="margin-top:2px;accent-color:#0284C7;width:16px;height:16px;flex-shrink:0"><span><strong>Self-Declaration:</strong> I hereby declare that all details provided are genuine and accurate. I agree to abide by Yuvantara Corporate Policies and IT Act compliance.</span></label></div>
       <div class="fgroup captcha-group"><label>Captcha — <span class="captcha-q" id="cap-signup-q"></span></label><input id="cap-signup-a" type="number" placeholder="Your answer" required min="0"></div>
       <button class="btn p auth-submit" type="submit">Submit Application</button>
       <p class="auth-switch">Already have an account? <button type="button" class="auth-tab-btn link" data-tab="login">Login</button></p>
@@ -72,7 +74,72 @@
     <button class="btn p" style="margin:0 0 0 8px;padding:9px 18px" data-auth="signup">Apply for Internship</button>
     <button class="btn" style="margin:0 0 0 4px;padding:9px 16px" data-auth="login">Login</button>
   </nav>
-</div></header><main id="main"><section class="hero"><div class="w"><div class="crumb"><a href="../index.html">Home</a> / Blog</div><h1>Blog</h1><p class="lead">Guides and technical articles from our engineers.</p></div></section><section><div class="w"><h2>Latest articles</h2><div class="grid"><a class="card" href="../blog/dpdp-act-rules-2025-guide/index.html"><span class="tag">Compliance</span><h3>DPDP Act 2023 and Rules 2025: what Indian businesses should do now</h3><p>20 Oct 2026</p></a><a class="card" href="../blog/edr-vs-antivirus/index.html"><span class="tag">Endpoint Security</span><h3>EDR vs antivirus: why signatures alone no longer protect you</h3><p>8 Oct 2026</p></a><a class="card" href="../blog/ransomware-readiness-checklist/index.html"><span class="tag">Ransomware</span><h3>Ransomware readiness: a 12-point checklist for mid-sized firms</h3><p>24 Sep 2026</p></a></div></div></section><section><div class="w"><div class="cta"><h2>Let’s discuss your technology requirements.</h2><p>Tell us about your environment and what you need. We reply with a clear next step within one business day.</p><a class="btn p" href="../contact/index.html">Talk to an Expert</a><a class="btn" href="../support/index.html">Get Support</a><p><a href="mailto:xyv@yuvantara.com">xyv@yuvantara.com</a> &nbsp; <a href="tel:+91 98765 43210">+91 98765 43210</a></p></div></div></section></main><footer><div class="w">
+</div></header><main id="main"><section class="hero"><div class="w"><div class="crumb"><a href="../index.html">Home</a> / Blog</div><h1>Blog &amp; Technical Insights</h1><p class="lead">In-depth technical guides, industrial internship blueprints, and enterprise architecture insights from our engineering leads.</p></div></section><section><div class="w">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+    <div>
+      <span class="tag">Engineering &amp; Internship Guides</span>
+      <h2 style="margin:6px 0 0">Featured Technical Articles &amp; Internship Insights</h2>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Internship Blog 1 -->
+    <a class="card" href="../blog/industrial-internship-blueprint-2026/index.html">
+      <span class="tag" style="background:#EFF6FF;color:#2563EB;border-color:#BFDBFE">Internship &amp; SOC</span>
+      <h3>The 2026 Industrial Internship Blueprint: How Hands-on SOC Training Fast-Tracks Tech Careers</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">18 Nov 2026 &bull; By Er. Abhishek Sharma, CTO</p>
+    </a>
+
+    <!-- Internship Blog 2 -->
+    <a class="card" href="../blog/why-traditional-internships-fail/index.html">
+      <span class="tag" style="background:#FEF2F2;color:#DC2626;border-color:#FECACA">Career Strategy</span>
+      <h3>Why Traditional College Internships Fail (And How Yuvantara's Project Defense Model Fixes It)</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">12 Nov 2026 &bull; By Dr. R. K. Verma, Director</p>
+    </a>
+
+    <!-- Internship Blog 3 -->
+    <a class="card" href="../blog/campus-to-cloud-devsecops-internship/index.html">
+      <span class="tag" style="background:#F0FDF4;color:#16A34A;border-color:#BBF7D0">Cloud &amp; DevOps</span>
+      <h3>From Campus to Cloud Architect: Navigating AWS, Kubernetes &amp; DevSecOps in 6 Months</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">04 Nov 2026 &bull; Cloud Engineering Series</p>
+    </a>
+
+    <!-- Internship Blog 4 -->
+    <a class="card" href="../blog/production-ai-mlops-internship-guide/index.html">
+      <span class="tag" style="background:#FFFBEB;color:#D97706;border-color:#FDE68A">Applied AI &amp; ML</span>
+      <h3>Deploying Production AI in 2026: Real-World Computer Vision &amp; MLOps Pipelines</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">28 Oct 2026 &bull; Machine Learning Insights</p>
+    </a>
+
+    <!-- Internship Blog 5 -->
+    <a class="card" href="../blog/cryptographic-qr-verification-internships/index.html">
+      <span class="tag" style="background:#EFF6FF;color:#2563EB;border-color:#BFDBFE">Security &amp; Standards</span>
+      <h3>Cryptographic QR Verification: How Yuvantara Eliminates Credential Fraud for Interns</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">15 Oct 2026 &bull; Enterprise Verification</p>
+    </a>
+
+    <!-- Enterprise Blog 1 -->
+    <a class="card" href="../blog/dpdp-act-rules-2025-guide/index.html">
+      <span class="tag">Compliance</span>
+      <h3>DPDP Act 2023 and Rules 2025: what Indian businesses should do now</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">20 Oct 2026 &bull; Statutory Guide</p>
+    </a>
+
+    <!-- Enterprise Blog 2 -->
+    <a class="card" href="../blog/edr-vs-antivirus/index.html">
+      <span class="tag">Endpoint Security</span>
+      <h3>EDR vs antivirus: why signatures alone no longer protect you</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">8 Oct 2026 &bull; Threat Detection</p>
+    </a>
+
+    <!-- Enterprise Blog 3 -->
+    <a class="card" href="../blog/ransomware-readiness-checklist/index.html">
+      <span class="tag">Ransomware</span>
+      <h3>Ransomware readiness: a 12-point checklist for mid-sized firms</h3>
+      <p style="color:#64748B;font-size:.85rem;margin:8px 0 0">24 Sep 2026 &bull; Defense Checklist</p>
+    </a>
+  </div>
+</div></section><section><div class="w"><div class="cta"><h2>Let’s discuss your technology requirements.</h2><p>Tell us about your environment and what you need. We reply with a clear next step within one business day.</p><a class="btn p" href="../contact/index.html">Talk to an Expert</a><a class="btn" href="../support/index.html">Get Support</a><p><a href="mailto:xyv@yuvantara.com">xyv@yuvantara.com</a> &nbsp; <a href="tel:+91 98765 43210">+91 98765 43210</a></p></div></div></section></main><footer><div class="w">
   <div class="footer-top">
     <div class="footer-brand">
       <h3><i></i>Yuvantara</h3>

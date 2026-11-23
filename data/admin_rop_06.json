@@ -1,0 +1,107 @@
+{
+  "adminId": "ADM-06",
+  "adminEmail": "rop_06@admin",
+  "adminName": "Admin ROP-06",
+  "role": "admin",
+  "cluster": "Patna Data Science & Analytics Hub",
+  "assignedTrack": "Data Science & Business Analytics",
+  "status": "active",
+  "phone": "+91 98765 00006",
+  "lastSynced": "2026-11-23T09:30:00.000Z",
+  "totalStudents": 2,
+  "students": [
+    {
+      "id": "USR-106",
+      "name": "Deepa Swaminathan",
+      "email": "deepa.s@example.com",
+      "phone": "+91 98889 00112",
+      "dob": "2002-10-15",
+      "track": "Data Science & Business Analytics",
+      "stream": "B.Sc (Statistics & Computing)",
+      "college": "St. Xavier's College, Kolkata",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-01-28T10:00:00.000Z",
+      "progress": 100,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "completed" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "completed" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "completed" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "completed" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-106",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260128-06",
+        "paymentDate": "2026-01-28T10:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "rop_06@admin",
+        "approvedAt": "2026-01-28T10:45:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1006"
+      },
+      "certificate": {
+        "certNumber": "YUV-2026-DS106",
+        "id": "YUV-2026-DS106",
+        "name": "Deepa Swaminathan",
+        "college": "St. Xavier's College, Kolkata",
+        "domain": "Data Science & Business Analytics",
+        "date": "June 12, 2026",
+        "grade": "Grade A+ (Distinction)",
+        "status": "Valid & Verified",
+        "issuedByAdmin": "rop_06@admin",
+        "qrCodeUrl": "https://yuvantaraventure.in/verify-certificate/index.html?id=YUV-2026-DS106"
+      }
+    },
+    {
+      "id": "USR-112",
+      "name": "Rahul Chawla",
+      "email": "rahul.chawla@example.com",
+      "phone": "+91 98990 11223",
+      "dob": "2003-02-14",
+      "track": "Data Science & Business Analytics",
+      "stream": "B.Tech (Data Analytics)",
+      "college": "Vellore Institute of Technology (VIT), Vellore",
+      "role": "student",
+      "accountStatus": "active",
+      "registeredAt": "2026-02-25T14:00:00.000Z",
+      "progress": 35,
+      "modules": [
+        { "name": "Module 1: Orientation & Core Foundations", "status": "completed" },
+        { "name": "Module 2: Lab Setup & Environment Diagnostics", "status": "in-progress" },
+        { "name": "Module 3: Hands-on Case Studies & Practical Labs", "status": "pending" },
+        { "name": "Module 4: Mid-Term Evaluation & Milestone Submission", "status": "pending" },
+        { "name": "Module 5: Capstone Project & Certification", "status": "pending" }
+      ],
+      "payment": {
+        "status": "PAID",
+        "invNumber": "INV-2026-112",
+        "amount": 236,
+        "baseAmount": 200,
+        "gstAmount": 36,
+        "sacCode": "9992",
+        "paymentRef": "PAY-RZP-20260225-12",
+        "paymentDate": "2026-02-25T14:15:00.000Z",
+        "gateway": "Razorpay Official Integration",
+        "verified": true
+      },
+      "approval": {
+        "status": "approved",
+        "approvedBy": "rop_06@admin",
+        "approvedAt": "2026-02-25T14:45:00.000Z",
+        "locked": true,
+        "lockAuditId": "LOG-1012"
+      },
+      "certificate": null
+    }
+  ]
+}

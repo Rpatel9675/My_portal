@@ -1,0 +1,164 @@
+{
+  "system": "Yuvantara Immutable System Audit Trail",
+  "version": "2.0.0-ENTERPRISE",
+  "compliance": "ISO 9001:2015 & India IT Act 2000 (Sec 43A) & DPDP Act 2023",
+  "managedBy": "a4dr_00@supper",
+  "generatedAt": "2026-11-23T09:30:00.000Z",
+  "totalLoggedEvents": 14,
+  "events": [
+    {
+      "id": "LOG-1001",
+      "timestamp": "2026-01-15T10:30:00.000Z",
+      "adminEmail": "adk_01@admin",
+      "actionType": "ENROLL_STUDENT",
+      "targetId": "student@yuvantara.com",
+      "targetUser": "Rohan Sen (student@yuvantara.com)",
+      "details": "Approved and locked enrollment for Rohan Sen in Cybersecurity & SOC Operations",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.15"
+    },
+    {
+      "id": "LOG-1002",
+      "timestamp": "2026-01-20T14:40:00.000Z",
+      "adminEmail": "alk_01@admin",
+      "actionType": "ENROLL_STUDENT",
+      "targetId": "saurav.m@example.com",
+      "targetUser": "Saurav Mukherjee (saurav.m@example.com)",
+      "details": "Approved and locked enrollment for Saurav Mukherjee in Artificial Intelligence & Machine Learning",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.16"
+    },
+    {
+      "id": "LOG-1003",
+      "timestamp": "2026-01-18T10:00:00.000Z",
+      "adminEmail": "dhb_03@admin",
+      "actionType": "ENROLL_STUDENT",
+      "targetId": "aarav.mehta@example.com",
+      "targetUser": "Aarav Mehta (aarav.mehta@example.com)",
+      "details": "Approved and locked enrollment for Aarav Mehta in Cloud Infrastructure & DevOps",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.17"
+    },
+    {
+      "id": "LOG-1004",
+      "timestamp": "2026-01-22T10:45:00.000Z",
+      "adminEmail": "abk_04@admin",
+      "actionType": "ENROLL_STUDENT",
+      "targetId": "ananya.das@example.com",
+      "targetUser": "Ananya Das (ananya.das@example.com)",
+      "details": "Approved and locked enrollment for Ananya Das in Python Full-Stack & Automation",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.18"
+    },
+    {
+      "id": "LOG-1005",
+      "timestamp": "2026-01-25T11:45:00.000Z",
+      "adminEmail": "anp_05@admin",
+      "actionType": "ENROLL_STUDENT",
+      "targetId": "kunal.ghosh@example.com",
+      "targetUser": "Kunal Ghosh (kunal.ghosh@example.com)",
+      "details": "Approved and locked enrollment for Kunal Ghosh in Robotics & IoT Embedded Systems",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.19"
+    },
+    {
+      "id": "LOG-1006",
+      "timestamp": "2026-01-28T10:45:00.000Z",
+      "adminEmail": "rop_06@admin",
+      "actionType": "ENROLL_STUDENT",
+      "targetId": "deepa.s@example.com",
+      "targetUser": "Deepa Swaminathan (deepa.s@example.com)",
+      "details": "Approved and locked enrollment for Deepa Swaminathan in Data Science & Business Analytics",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.20"
+    },
+    {
+      "id": "LOG-1007",
+      "timestamp": "2026-02-01T10:30:00.000Z",
+      "adminEmail": "alk_01@admin",
+      "actionType": "ENROLL_STUDENT",
+      "targetId": "priya@example.com",
+      "targetUser": "Priya Sharma (priya@example.com)",
+      "details": "Approved and locked enrollment for Priya Sharma in Artificial Intelligence & Machine Learning",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.16"
+    },
+    {
+      "id": "LOG-1008",
+      "timestamp": "2026-04-28T16:00:00.000Z",
+      "adminEmail": "dhb_03@admin",
+      "actionType": "ISSUE_CERTIFICATE",
+      "targetId": "YUV-2026-CL103",
+      "targetUser": "Aarav Mehta (aarav.mehta@example.com)",
+      "details": "Minted official verified certificate YUV-2026-CL103 upon 100% curriculum completion",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.17"
+    },
+    {
+      "id": "LOG-1009",
+      "timestamp": "2026-05-10T15:30:00.000Z",
+      "adminEmail": "alk_01@admin",
+      "actionType": "ISSUE_CERTIFICATE",
+      "targetId": "YUV-2026-AI108",
+      "targetUser": "Saurav Mukherjee (saurav.m@example.com)",
+      "details": "Minted official verified certificate YUV-2026-AI108 upon 100% curriculum completion",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.16"
+    },
+    {
+      "id": "LOG-1010",
+      "timestamp": "2026-05-25T17:15:00.000Z",
+      "adminEmail": "abk_04@admin",
+      "actionType": "ISSUE_CERTIFICATE",
+      "targetId": "YUV-2026-PY104",
+      "targetUser": "Ananya Das (ananya.das@example.com)",
+      "details": "Minted official verified certificate YUV-2026-PY104 upon 100% curriculum completion",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.18"
+    },
+    {
+      "id": "LOG-1011",
+      "timestamp": "2026-06-05T14:20:00.000Z",
+      "adminEmail": "anp_05@admin",
+      "actionType": "ISSUE_CERTIFICATE",
+      "targetId": "YUV-2026-RO105",
+      "targetUser": "Kunal Ghosh (kunal.ghosh@example.com)",
+      "details": "Minted official verified certificate YUV-2026-RO105 upon 100% curriculum completion",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.19"
+    },
+    {
+      "id": "LOG-1012",
+      "timestamp": "2026-06-12T16:45:00.000Z",
+      "adminEmail": "rop_06@admin",
+      "actionType": "ISSUE_CERTIFICATE",
+      "targetId": "YUV-2026-DS106",
+      "targetUser": "Deepa Swaminathan (deepa.s@example.com)",
+      "details": "Minted official verified certificate YUV-2026-DS106 upon 100% curriculum completion",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.20"
+    },
+    {
+      "id": "LOG-1013",
+      "timestamp": "2026-06-20T16:45:00.000Z",
+      "adminEmail": "adk_01@admin",
+      "actionType": "ISSUE_CERTIFICATE",
+      "targetId": "YUV-2026-CS101",
+      "targetUser": "Rohan Sen (student@yuvantara.com)",
+      "details": "Minted official verified certificate YUV-2026-CS101 upon candidate pre-mint confirmation",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.15"
+    },
+    {
+      "id": "LOG-1014",
+      "timestamp": "2026-11-22T19:00:00.000Z",
+      "adminEmail": "a4dr_00@supper",
+      "actionType": "SECURITY_POLICY_AUDIT",
+      "targetId": "SYSTEM_SECURITY_CORE",
+      "targetUser": "All Administrative Nodes",
+      "details": "Super Admin verified 6-admin partition integrity and locked action attribution",
+      "lockedActionOwnership": true,
+      "ipAddress": "103.21.244.01"
+    }
+  ]
+}
