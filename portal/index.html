@@ -1088,6 +1088,56 @@
 
 
 
+<!-- ═══ MODAL: TAX INVOICE / RECEIPT ═══ -->
+<div id="modal-invoice" class="auth-modal" style="max-width:820px;width:95%;padding:0;overflow:hidden" role="dialog" aria-modal="true" aria-hidden="true">
+  <div style="background:#0F172A;color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.4rem">🧾</span>
+      <div>
+        <h3 style="margin:0;font-size:1.05rem;color:#fff">Official Tax Invoice / Payment Receipt</h3>
+        <small style="color:#94A3B8">Yuvantara Solutions Private Limited &bull; GST Registered</small>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="btn p" id="btn-print-invoice-modal" style="padding:6px 14px;font-size:.85rem">🖨️ Print / Save PDF</button>
+      <button class="auth-close" id="close-invoice-modal" aria-label="Close" style="position:static;color:#fff;background:transparent;border:none;font-size:1.3rem;cursor:pointer">✕</button>
+    </div>
+  </div>
+  <div style="max-height:78vh;overflow-y:auto;padding:32px 36px;background:#fff;color:#0F172A" id="printable-invoice">
+    <!-- Corporate Letterhead -->
+    <div style="border-bottom:2px solid #1E3A8A;padding-bottom:18px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <h2 style="font-size:1.8rem;font-weight:800;color:#1E3A8A;margin:0 0 4px;letter-spacing:1px">YUVANTARA SOLUTIONS PVT. LTD.</h2>
+        <p style="margin:0;font-size:.82rem;color:#475569;line-height:1.4">
+          <strong>CIN:</strong> U72900BR2024PTC068942 &nbsp;|&nbsp; <strong>GSTIN:</strong> 10AABCY1234F1Z5<br>
+          <strong>Registered Office:</strong> 4A, Prantika Building, Kankarbagh Main Road, Patna, Bihar - 800006<br>
+          <strong>Official Web:</strong> <a href="https://yuvantaraventure.in" style="color:#2563EB">yuvantaraventure.in</a> &nbsp;|&nbsp; <strong>Email:</strong> billing@yuvantara.com
+        </p>
+      </div>
+      <div style="text-align:right">
+        <div style="display:inline-block;padding:6px 12px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:6px;font-size:.8rem;font-weight:700;color:#065F46">
+          ORIGINAL FOR RECIPIENT
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice Reference & Meta -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;font-size:.88rem;flex-wrap:wrap;gap:14px;background:#F8FAFC;border:1px solid #CBD5E1;border-radius:10px;padding:14px 18px">
+      <div>
+        <div><strong>Invoice No:</strong> <span id="inv-modal-no" style="font-family:monospace;color:#1D4ED8;font-weight:700">YUV-INV-2026-00101</span></div>
+        <div style="margin-top:4px"><strong>Invoice Date:</strong> <span id="inv-modal-date">May 15, 2026</span></div>
+        <div style="margin-top:4px"><strong>Payment Mode:</strong> <span id="inv-modal-mode">Online UPI / NetBanking</span></div>
+        <div style="margin-top:4px"><strong>Transaction Ref / UTR:</strong> <span id="inv-modal-tx" style="font-family:monospace;color:#059669;font-weight:600">PAY-RZP-2026-882194</span></div>
+      </div>
+      <div style="text-align:left">
+        <div><strong>Billed To:</strong></div>
+        <div style="font-weight:700;color:#0F172A;font-size:1rem" id="inv-modal-name">Rohan Sen</div>
+        <div>Email: <span id="inv-modal-email">student@yuvantara.com</span></div>
+        <div>Mobile: <span id="inv-modal-phone">+91 98765 43210</span></div>
+        <div>Internship Track: <span id="inv-modal-track" style="font-weight:600;color:#1E3A8A">Cybersecurity &amp; SOC Operations</span></div>
+      </div>
+    </div>
+
     <!-- Itemized Table -->
     <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-size:.88rem">
       <thead>
@@ -1192,7 +1242,7 @@
       </div>
     </form>
   </div>
-</div></footer>
+</div>
 
 <script src="../assets/config.js"></script>
 <script src="../assets/db.js"></script>
