@@ -29,8 +29,8 @@ document.addEventListener('click', e => {
 
   var assetsDir = siteRoot + 'assets/';
 
-  // Ensure config.js, db.js, cloud-db.js, qr-generator.js are loaded
-  var requiredScripts = ['config.js', 'db.js', 'cloud-db.js', 'qr-generator.js'];
+  // Ensure config.js, db.js, cloud-db.js, qr-generator.js, header.js, footer.js are loaded
+  var requiredScripts = ['config.js', 'db.js', 'cloud-db.js', 'qr-generator.js', 'header.js', 'footer.js'];
   requiredScripts.forEach(function(s) {
     var hasScript = document.querySelector('script[src*="' + s + '"]');
     if (!hasScript) {
@@ -44,21 +44,21 @@ document.addEventListener('click', e => {
 
   var IM = {
     'technologies':    baseImgDir + 'innovation.jpg',
-    'cybersecurity':   baseImgDir + 'cyber.png',
+    'cybersecurity':   baseImgDir + 'cyber.jpg',
     'infrastructure':  baseImgDir + 'automation.jpg',
     'managed-services':baseImgDir + 'management.jpg',
     'machine-learning':baseImgDir + 'machine.jpg',
-    'healthcare':      baseImgDir + 'mediacal.jpg',
-    'logistics':       baseImgDir + 'r1_1.jpg',
+    'healthcare':      baseImgDir + 'medical.jpg',
+    'logistics':       baseImgDir + 'robotics-lab.jpg',
     'education':       baseImgDir + 'python.jpg',
     'ai':              baseImgDir + 'ai.jpg',
-    'robotics':        baseImgDir + 'Robatics.jpg',
+    'robotics':        baseImgDir + 'robotics.jpg',
     'innovation':      baseImgDir + 'innovation.jpg',
     'agriculture':     baseImgDir + 'agriculture.jpg',
     'python':          baseImgDir + 'python.jpg',
     'management':      baseImgDir + 'management.jpg',
     'financial':       baseImgDir + 'financial.jpg',
-    'bio-research':    baseImgDir + 'bio reserch.jpg',
+    'bio-research':    baseImgDir + 'bio-research.jpg',
     'connect':         baseImgDir + 'connect.jpg'
   };
 
@@ -68,10 +68,6 @@ document.addEventListener('click', e => {
       if (IM[b]) {
         i.src = IM[b];
         i.onerror = function() {
-          if (b === 'cybersecurity' && i.src.indexOf('.png') !== -1) {
-            i.src = baseImgDir + 'cyber.jpg';
-            return;
-          }
           i.parentNode.classList.add('noimg');
           i.remove();
         };
@@ -96,6 +92,12 @@ function updateNavUserState() {
   if (!user) return;
 
   var basePath = window.__yuvantaraBasePath || '';
+
+  // Once logged in, hide option to apply for internship program
+  document.querySelectorAll('[data-auth="signup"]').forEach(function(btn) {
+    btn.style.display = 'none';
+  });
+
   var loginBtns = document.querySelectorAll('[data-auth="login"]');
   loginBtns.forEach(function(btn) {
     btn.removeAttribute('data-auth');
@@ -155,16 +157,29 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.classList.remove('open');
     if (overlay) overlay.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
+    var successView = document.getElementById('signup-success-view');
+    var signupForm = document.getElementById('form-signup');
+    if (successView) successView.style.display = 'none';
+    if (signupForm) signupForm.style.display = 'block';
   }
 
-  // Open triggers
-  document.querySelectorAll('[data-auth]').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
+  // Delegated click handler for modal open triggers across the entire page (header, hero, cards, footer)
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-auth]');
+    if (btn) {
       e.preventDefault();
       var tab = btn.dataset.auth || 'login';
       var course = btn.dataset.course || '';
       openModal(tab, course);
-    });
+      return;
+    }
+
+    var tabBtn = e.target.closest('.auth-tab-btn');
+    if (tabBtn && modal && modal.contains(tabBtn) && !tabBtn.classList.contains('link')) {
+      e.preventDefault();
+      switchTab(tabBtn.dataset.tab);
+      return;
+    }
   });
 
   // Close triggers
@@ -173,14 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (overlay) overlay.addEventListener('click', closeModal);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-  });
-
-  // Tab switching
-  modal.querySelectorAll('.auth-tab-btn').forEach(function(b) {
-    b.addEventListener('click', function(e) {
-      e.preventDefault();
-      switchTab(b.dataset.tab);
-    });
   });
 
   // Simple Captchas
@@ -259,14 +266,17 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       var inp = document.getElementById('cap-signup-a');
       var q = document.getElementById('cap-signup-q');
-      if (inp && q && parseInt(inp.value) !== parseInt(q.dataset.ans)) {
-        inp.setCustomValidity('Incorrect captcha solution. Please calculate again.');
-        inp.reportValidity();
-        newCaptcha('cap-signup-q');
-        inp.value = '';
-        return;
+      if (inp && q) {
+        var userAns = parseInt(inp.value, 10);
+        var expectedAns = parseInt(q.dataset.ans, 10);
+        if (isNaN(userAns) || userAns !== expectedAns) {
+          alert('Incorrect captcha solution. Please solve: ' + (q.textContent || 'the question'));
+          newCaptcha('cap-signup-q');
+          inp.value = '';
+          inp.focus();
+          return;
+        }
       }
-      if (inp) inp.setCustomValidity('');
 
       var name = document.getElementById('s-name').value.trim();
       var email = document.getElementById('s-email').value.trim();
@@ -334,34 +344,116 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
         }
 
-        // Check if application already submitted
+        // Check if application already submitted (prevent duplicate submissions)
         var existingApps = YuvantaraDB.getApplications();
         var alreadyApplied = existingApps.some(function(a) {
-          return a.email.toLowerCase() === email.toLowerCase();
+          return a.email && a.email.toLowerCase() === email.toLowerCase() && a.status !== 'rejected';
         });
         if (alreadyApplied) {
-          alert('You have already submitted an application with this email. Please log in or contact us at xyv@yuvantara.com.');
+          alert('You have already submitted an application with this email (' + email + '). Please log in or contact admissions at xyv@yuvantara.com.');
           return;
         }
 
-        // Store application data with DOB for checkout & enrollment
+        // 1. Submit application to database (sets status to 'pending')
+        var appResult = YuvantaraDB.submitApplication({
+          name: name,
+          email: email,
+          phone: phone,
+          dob: dob,
+          track: prog,
+          stream: stream,
+          college: college
+        });
+
+        if (!appResult || !appResult.success) {
+          alert('Submission Error: ' + (appResult ? appResult.message : 'Could not submit application. Please try again.'));
+          return;
+        }
+
+        // 2. Pre-register student account with 'pending' status
+        YuvantaraDB.registerStudent({
+          name: name,
+          email: email,
+          password: pass,
+          phone: phone,
+          dob: dob,
+          track: prog,
+          stream: stream,
+          college: college,
+          accountStatus: 'pending'
+        });
+
+        // 3. Post to backend server endpoint if online
+        try {
+          fetch('/api/applications', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(appResult.app)
+          }).catch(function() {});
+        } catch(e) {}
+
+        // 4. Store pending registration data for payment checkout
         var pendingData = {
+          appId: appResult.app.id,
           name: name, email: email, phone: phone, dob: dob,
           password: pass, track: prog, stream: stream, college: college,
           createdAt: Date.now()
         };
-        try {
-          localStorage.setItem('yuvantara_pending_app', JSON.stringify(pendingData));
-        } catch(e) {
-          alert('Storage error. Please allow cookies/local storage.');
-          return;
-        }
+        try { localStorage.setItem('yuvantara_pending_app', JSON.stringify(pendingData)); } catch(e) {}
 
-        // Proceed directly to cart & documentation payment (No OTP required)
+        // User requested flow: Immediately redirect new applicant to Payment Page!
         closeModal();
         var basePath = window.__yuvantaraBasePath || '';
         window.location.href = basePath + 'payment/index.html';
         return;
+
+        // 5. Show applicant a clear success message inside the modal WITHOUT destroying the form
+        var paneSignup = modal.querySelector('.auth-pane[data-pane="signup"]');
+        if (paneSignup && signupForm) {
+          signupForm.style.display = 'none';
+          var successView = document.getElementById('signup-success-view');
+          if (!successView) {
+            successView = document.createElement('div');
+            successView.id = 'signup-success-view';
+            paneSignup.appendChild(successView);
+          }
+          successView.style.display = 'block';
+          successView.innerHTML =
+            '<div style="text-align:center;padding:24px 10px">' +
+              '<div style="font-size:3rem;margin-bottom:12px">🎉</div>' +
+              '<h2 style="color:#16A34A;font-size:1.4rem;margin:0 0 10px">Application Submitted Successfully!</h2>' +
+              '<p style="color:#334155;font-size:.95rem;line-height:1.6;margin:0 0 16px">' +
+                'Thank you, <strong>' + (name ? name.replace(/</g, '&lt;') : '') + '</strong>! Your enrollment application for <strong>' + (prog ? prog.replace(/</g, '&lt;') : '') + '</strong> has been received.' +
+              '</p>' +
+              '<div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px;margin-bottom:20px;text-align:left;font-size:.88rem">' +
+                '<div style="margin-bottom:6px"><strong>Application ID:</strong> <code>' + appResult.app.id + '</code></div>' +
+                '<div style="margin-bottom:6px"><strong>Status:</strong> <span style="background:#FEF3C7;color:#D97706;padding:2px 8px;border-radius:4px;font-weight:600">⏳ Pending Admin Approval</span></div>' +
+                '<div><strong>Registered Email:</strong> ' + (email ? email.replace(/</g, '&lt;') : '') + '</div>' +
+              '</div>' +
+              '<p style="color:#64748B;font-size:.85rem;margin-bottom:20px">' +
+                'An administrator will review your application. Once approved, your student portal access will be unlocked.' +
+              '</p>' +
+              '<button type="button" class="btn p" id="btn-app-success-close" style="width:100%;padding:12px">Close &amp; Go to Login</button>' +
+            '</div>';
+
+          signupForm.reset();
+          newCaptcha('cap-signup-q');
+
+          var closeSuccessBtn = document.getElementById('btn-app-success-close');
+          if (closeSuccessBtn) {
+            closeSuccessBtn.onclick = function() {
+              successView.style.display = 'none';
+              signupForm.style.display = 'block';
+              closeModal();
+              openModal('login');
+            };
+          }
+        } else {
+          alert('✅ Application Submitted Successfully!\n\nApplication ID: ' + appResult.app.id + '\nProgram: ' + prog + '\n\nYour application is now pending review by our administration.');
+          if (signupForm) signupForm.reset();
+          newCaptcha('cap-signup-q');
+          closeModal();
+        }
 
       } else {
         alert('Congratulations ' + name + '! Your application for ' + prog + ' has been received.');
@@ -435,21 +527,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // First check YuvantaraDB users for dynamically issued/revoked certificates
     if (window.YuvantaraDB) {
-      var students = YuvantaraDB.getStudents();
-      for (var i = 0; i < students.length; i++) {
-        var s = students[i];
-        if (s.certificate && s.certificate.id && s.certificate.id.toUpperCase() === id) {
+      var allRecords = typeof YuvantaraDB.getAllEmployees === 'function' ? YuvantaraDB.getAllEmployees() : YuvantaraDB.getStudents();
+      for (var i = 0; i < allRecords.length; i++) {
+        var s = allRecords[i];
+        var sCertId = (s.certificate && s.certificate.id) ? s.certificate.id : s.certificateNumber;
+        if (sCertId && sCertId.toUpperCase() === id) {
           cert = {
             name: s.name,
             dob: s.dob || (s.certificate && s.certificate.dob) || '2002-05-15',
-            course: s.certificate.title || s.track,
-            duration: s.certificate.duration || '6 Months Industrial Internship',
-            grade: s.certificate.grade || 'Grade A+ (Distinction)',
-            date: s.certificate.issueDate || s.certificate.date || '2026',
-            status: s.certificate.status || 'valid',
-            revokedAt: s.certificate.revokedAt,
+            course: (s.certificate && s.certificate.title) || s.track || 'Industrial Internship Program',
+            duration: (s.certificate && s.certificate.duration) || s.duration || '6 Months Industrial Internship',
+            grade: (s.certificate && s.certificate.grade) || s.grade || 'Grade A+ (Distinction)',
+            date: (s.certificate && (s.certificate.issueDate || s.certificate.date)) || s.issueDate || '2026',
+            status: (s.certificate && s.certificate.status) || s.status || 'valid',
+            revokedAt: s.certificate ? s.certificate.revokedAt : null,
             college: s.college || 'Affiliated University',
-            council: s.certificate.authority || 'Yuvantara Academic & Skill Council'
+            council: (s.certificate && s.certificate.authority) || s.authority || 'Yuvantara Academic & Skill Council'
           };
           break;
         }

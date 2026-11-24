@@ -1,164 +1,1802 @@
-{
-  "system": "Yuvantara Immutable System Audit Trail",
-  "version": "2.0.0-ENTERPRISE",
-  "compliance": "ISO 9001:2015 & India IT Act 2000 (Sec 43A) & DPDP Act 2023",
-  "managedBy": "a4dr_00@supper",
-  "generatedAt": "2026-11-23T09:30:00.000Z",
-  "totalLoggedEvents": 14,
-  "events": [
-    {
-      "id": "LOG-1001",
-      "timestamp": "2026-01-15T10:30:00.000Z",
-      "adminEmail": "adk_01@admin",
-      "actionType": "ENROLL_STUDENT",
-      "targetId": "student@yuvantara.com",
-      "targetUser": "Rohan Sen (student@yuvantara.com)",
-      "details": "Approved and locked enrollment for Rohan Sen in Cybersecurity & SOC Operations",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.15"
-    },
-    {
-      "id": "LOG-1002",
-      "timestamp": "2026-01-20T14:40:00.000Z",
-      "adminEmail": "alk_01@admin",
-      "actionType": "ENROLL_STUDENT",
-      "targetId": "saurav.m@example.com",
-      "targetUser": "Saurav Mukherjee (saurav.m@example.com)",
-      "details": "Approved and locked enrollment for Saurav Mukherjee in Artificial Intelligence & Machine Learning",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.16"
-    },
-    {
-      "id": "LOG-1003",
-      "timestamp": "2026-01-18T10:00:00.000Z",
-      "adminEmail": "dhb_03@admin",
-      "actionType": "ENROLL_STUDENT",
-      "targetId": "aarav.mehta@example.com",
-      "targetUser": "Aarav Mehta (aarav.mehta@example.com)",
-      "details": "Approved and locked enrollment for Aarav Mehta in Cloud Infrastructure & DevOps",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.17"
-    },
-    {
-      "id": "LOG-1004",
-      "timestamp": "2026-01-22T10:45:00.000Z",
-      "adminEmail": "abk_04@admin",
-      "actionType": "ENROLL_STUDENT",
-      "targetId": "ananya.das@example.com",
-      "targetUser": "Ananya Das (ananya.das@example.com)",
-      "details": "Approved and locked enrollment for Ananya Das in Python Full-Stack & Automation",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.18"
-    },
-    {
-      "id": "LOG-1005",
-      "timestamp": "2026-01-25T11:45:00.000Z",
-      "adminEmail": "anp_05@admin",
-      "actionType": "ENROLL_STUDENT",
-      "targetId": "kunal.ghosh@example.com",
-      "targetUser": "Kunal Ghosh (kunal.ghosh@example.com)",
-      "details": "Approved and locked enrollment for Kunal Ghosh in Robotics & IoT Embedded Systems",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.19"
-    },
-    {
-      "id": "LOG-1006",
-      "timestamp": "2026-01-28T10:45:00.000Z",
-      "adminEmail": "rop_06@admin",
-      "actionType": "ENROLL_STUDENT",
-      "targetId": "deepa.s@example.com",
-      "targetUser": "Deepa Swaminathan (deepa.s@example.com)",
-      "details": "Approved and locked enrollment for Deepa Swaminathan in Data Science & Business Analytics",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.20"
-    },
-    {
-      "id": "LOG-1007",
-      "timestamp": "2026-02-01T10:30:00.000Z",
-      "adminEmail": "alk_01@admin",
-      "actionType": "ENROLL_STUDENT",
-      "targetId": "priya@example.com",
-      "targetUser": "Priya Sharma (priya@example.com)",
-      "details": "Approved and locked enrollment for Priya Sharma in Artificial Intelligence & Machine Learning",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.16"
-    },
-    {
-      "id": "LOG-1008",
-      "timestamp": "2026-04-28T16:00:00.000Z",
-      "adminEmail": "dhb_03@admin",
-      "actionType": "ISSUE_CERTIFICATE",
-      "targetId": "YUV-2026-CL103",
-      "targetUser": "Aarav Mehta (aarav.mehta@example.com)",
-      "details": "Minted official verified certificate YUV-2026-CL103 upon 100% curriculum completion",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.17"
-    },
-    {
-      "id": "LOG-1009",
-      "timestamp": "2026-05-10T15:30:00.000Z",
-      "adminEmail": "alk_01@admin",
-      "actionType": "ISSUE_CERTIFICATE",
-      "targetId": "YUV-2026-AI108",
-      "targetUser": "Saurav Mukherjee (saurav.m@example.com)",
-      "details": "Minted official verified certificate YUV-2026-AI108 upon 100% curriculum completion",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.16"
-    },
-    {
-      "id": "LOG-1010",
-      "timestamp": "2026-05-25T17:15:00.000Z",
-      "adminEmail": "abk_04@admin",
-      "actionType": "ISSUE_CERTIFICATE",
-      "targetId": "YUV-2026-PY104",
-      "targetUser": "Ananya Das (ananya.das@example.com)",
-      "details": "Minted official verified certificate YUV-2026-PY104 upon 100% curriculum completion",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.18"
-    },
-    {
-      "id": "LOG-1011",
-      "timestamp": "2026-06-05T14:20:00.000Z",
-      "adminEmail": "anp_05@admin",
-      "actionType": "ISSUE_CERTIFICATE",
-      "targetId": "YUV-2026-RO105",
-      "targetUser": "Kunal Ghosh (kunal.ghosh@example.com)",
-      "details": "Minted official verified certificate YUV-2026-RO105 upon 100% curriculum completion",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.19"
-    },
-    {
-      "id": "LOG-1012",
-      "timestamp": "2026-06-12T16:45:00.000Z",
-      "adminEmail": "rop_06@admin",
-      "actionType": "ISSUE_CERTIFICATE",
-      "targetId": "YUV-2026-DS106",
-      "targetUser": "Deepa Swaminathan (deepa.s@example.com)",
-      "details": "Minted official verified certificate YUV-2026-DS106 upon 100% curriculum completion",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.20"
-    },
-    {
-      "id": "LOG-1013",
-      "timestamp": "2026-06-20T16:45:00.000Z",
-      "adminEmail": "adk_01@admin",
-      "actionType": "ISSUE_CERTIFICATE",
-      "targetId": "YUV-2026-CS101",
-      "targetUser": "Rohan Sen (student@yuvantara.com)",
-      "details": "Minted official verified certificate YUV-2026-CS101 upon candidate pre-mint confirmation",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.15"
-    },
-    {
-      "id": "LOG-1014",
-      "timestamp": "2026-11-22T19:00:00.000Z",
-      "adminEmail": "a4dr_00@supper",
-      "actionType": "SECURITY_POLICY_AUDIT",
-      "targetId": "SYSTEM_SECURITY_CORE",
-      "targetUser": "All Administrative Nodes",
-      "details": "Super Admin verified 6-admin partition integrity and locked action attribution",
-      "lockedActionOwnership": true,
-      "ipAddress": "103.21.244.01"
-    }
-  ]
-}
+[
+  {
+    "id": "LOG-00001",
+    "timestamp": "2026-02-02 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0001",
+    "targetUser": "Pallavi Jha (pallavi.jha.1001@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00002",
+    "timestamp": "2026-03-03 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0002",
+    "targetUser": "Aditya Biswas (aditya.biswas.1002@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00003",
+    "timestamp": "2026-04-04 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0003",
+    "targetUser": "Rahul Shah (rahul.shah.1003@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00004",
+    "timestamp": "2026-05-05 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0004",
+    "targetUser": "Swati Mukherjee (swati.mukherjee.1004@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00005",
+    "timestamp": "2026-01-06 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0005",
+    "targetUser": "Rakesh Joshi (rakesh.joshi.1005@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00006",
+    "timestamp": "2026-02-07 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0006",
+    "targetUser": "Sneha Choudhary (sneha.choudhary.1006@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00007",
+    "timestamp": "2026-03-08 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0007",
+    "targetUser": "Amit Biswas (amit.biswas.1007@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00008",
+    "timestamp": "2026-04-09 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0008",
+    "targetUser": "Ishaan Sinha (ishaan.sinha.1008@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00009",
+    "timestamp": "2026-05-10 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0009",
+    "targetUser": "Vikram Bose (vikram.bose.1009@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00010",
+    "timestamp": "2026-01-11 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0010",
+    "targetUser": "Ananya Das (ananya.das.1010@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00011",
+    "timestamp": "2026-02-12 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0011",
+    "targetUser": "Tanvi Biswas (tanvi.biswas.1011@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00012",
+    "timestamp": "2026-03-13 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0012",
+    "targetUser": "Aman Choudhary (aman.choudhary.1012@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00013",
+    "timestamp": "2026-04-14 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0013",
+    "targetUser": "Priya Verma (priya.verma.1013@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00014",
+    "timestamp": "2026-05-15 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0014",
+    "targetUser": "Swati Menon (swati.menon.1014@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00015",
+    "timestamp": "2026-01-16 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0015",
+    "targetUser": "Divya Paul (divya.paul.1015@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00016",
+    "timestamp": "2026-02-17 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0016",
+    "targetUser": "Kunal Nair (kunal.nair.1016@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00017",
+    "timestamp": "2026-03-18 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0017",
+    "targetUser": "Ananya Singh (ananya.singh.1017@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00018",
+    "timestamp": "2026-04-19 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0018",
+    "targetUser": "Tarun Jha (tarun.jha.1018@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00019",
+    "timestamp": "2026-05-20 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0019",
+    "targetUser": "Nisha Menon (nisha.menon.1019@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00020",
+    "timestamp": "2026-01-21 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0020",
+    "targetUser": "Kriti Mishra (kriti.mishra.1020@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00021",
+    "timestamp": "2026-02-22 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0021",
+    "targetUser": "Gaurav Patel (gaurav.patel.1021@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00022",
+    "timestamp": "2026-03-23 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0022",
+    "targetUser": "Deepak Bhatt (deepak.bhatt.1022@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00023",
+    "timestamp": "2026-04-24 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0023",
+    "targetUser": "Sneha Sen (sneha.sen.1023@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00024",
+    "timestamp": "2026-05-25 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0024",
+    "targetUser": "Kunal Tiwari (kunal.tiwari.1024@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00025",
+    "timestamp": "2026-01-01 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0025",
+    "targetUser": "Rakesh Mishra (rakesh.mishra.1025@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00026",
+    "timestamp": "2026-02-02 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0026",
+    "targetUser": "Deepa Bose (deepa.bose.1026@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00027",
+    "timestamp": "2026-03-03 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0027",
+    "targetUser": "Aman Verma (aman.verma.1027@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00028",
+    "timestamp": "2026-04-04 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0028",
+    "targetUser": "Kriti Paul (kriti.paul.1028@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00029",
+    "timestamp": "2026-05-05 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0029",
+    "targetUser": "Priya Patel (priya.patel.1029@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00030",
+    "timestamp": "2026-01-06 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0030",
+    "targetUser": "Ananya Das (ananya.das.1030@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00031",
+    "timestamp": "2026-02-07 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0031",
+    "targetUser": "Pooja Prasad (pooja.prasad.1031@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00032",
+    "timestamp": "2026-03-08 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0032",
+    "targetUser": "Kunal Paul (kunal.paul.1032@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00033",
+    "timestamp": "2026-04-09 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0033",
+    "targetUser": "Rupal Menon (rupal.menon.1033@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00034",
+    "timestamp": "2026-05-10 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0034",
+    "targetUser": "Shreya Paul (shreya.paul.1034@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00035",
+    "timestamp": "2026-01-11 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0035",
+    "targetUser": "Ananya Reddy (ananya.reddy.1035@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00036",
+    "timestamp": "2026-02-12 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0036",
+    "targetUser": "Amit Chatterjee (amit.chatterjee.1036@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00037",
+    "timestamp": "2026-03-13 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0037",
+    "targetUser": "Nisha Chatterjee (nisha.chatterjee.1037@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00038",
+    "timestamp": "2026-04-14 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0038",
+    "targetUser": "Rajesh Patel (rajesh.patel.1038@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00039",
+    "timestamp": "2026-05-15 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0039",
+    "targetUser": "Gaurav Kumar (gaurav.kumar.1039@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00040",
+    "timestamp": "2026-01-16 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0040",
+    "targetUser": "Monika Pandey (monika.pandey.1040@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00041",
+    "timestamp": "2026-02-17 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0041",
+    "targetUser": "Divya Reddy (divya.reddy.1041@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00042",
+    "timestamp": "2026-03-18 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0042",
+    "targetUser": "Tanvi Jha (tanvi.jha.1042@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00043",
+    "timestamp": "2026-04-19 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0043",
+    "targetUser": "Sachin Prasad (sachin.prasad.1043@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00044",
+    "timestamp": "2026-05-20 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0044",
+    "targetUser": "Vikram Patel (vikram.patel.1044@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00045",
+    "timestamp": "2026-01-21 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0045",
+    "targetUser": "Shalini Tiwari (shalini.tiwari.1045@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00046",
+    "timestamp": "2026-02-22 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0046",
+    "targetUser": "Manish Yadav (manish.yadav.1046@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00047",
+    "timestamp": "2026-03-23 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0047",
+    "targetUser": "Manish Chatterjee (manish.chatterjee.1047@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00048",
+    "timestamp": "2026-04-24 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0048",
+    "targetUser": "Deepa Das (deepa.das.1048@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00049",
+    "timestamp": "2026-05-25 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0049",
+    "targetUser": "Divya Prasad (divya.prasad.1049@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00050",
+    "timestamp": "2026-01-01 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0050",
+    "targetUser": "Aditya Das (aditya.das.1050@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00051",
+    "timestamp": "2026-02-02 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0051",
+    "targetUser": "Sunita Sharma (sunita.sharma.1051@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00052",
+    "timestamp": "2026-03-03 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0052",
+    "targetUser": "Aarav Bhatt (aarav.bhatt.1052@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00053",
+    "timestamp": "2026-04-04 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0053",
+    "targetUser": "Rajesh Prasad (rajesh.prasad.1053@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00054",
+    "timestamp": "2026-05-05 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0054",
+    "targetUser": "Neha Sen (neha.sen.1054@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00055",
+    "timestamp": "2026-01-06 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0055",
+    "targetUser": "Rohit Reddy (rohit.reddy.1055@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00056",
+    "timestamp": "2026-02-07 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0056",
+    "targetUser": "Monika Banerjee (monika.banerjee.1056@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00057",
+    "timestamp": "2026-03-08 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0057",
+    "targetUser": "Ananya Reddy (ananya.reddy.1057@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00058",
+    "timestamp": "2026-04-09 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0058",
+    "targetUser": "Pallavi Pandey (pallavi.pandey.1058@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00059",
+    "timestamp": "2026-05-10 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0059",
+    "targetUser": "Rupal Bose (rupal.bose.1059@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00060",
+    "timestamp": "2026-01-11 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0060",
+    "targetUser": "Deepak Das (deepak.das.1060@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00061",
+    "timestamp": "2026-02-12 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0061",
+    "targetUser": "Vikram Paul (vikram.paul.1061@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00062",
+    "timestamp": "2026-03-13 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0062",
+    "targetUser": "Sunita Reddy (sunita.reddy.1062@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00063",
+    "timestamp": "2026-04-14 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0063",
+    "targetUser": "Mayank Kumar (mayank.kumar.1063@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00064",
+    "timestamp": "2026-05-15 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0064",
+    "targetUser": "Nikhil Prasad (nikhil.prasad.1064@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00065",
+    "timestamp": "2026-01-16 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0065",
+    "targetUser": "Manish Paul (manish.paul.1065@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00066",
+    "timestamp": "2026-02-17 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0066",
+    "targetUser": "Pallavi Jha (pallavi.jha.1066@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00067",
+    "timestamp": "2026-03-18 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0067",
+    "targetUser": "Arjun Roy (arjun.roy.1067@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00068",
+    "timestamp": "2026-04-19 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0068",
+    "targetUser": "Vikram Mishra (vikram.mishra.1068@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00069",
+    "timestamp": "2026-05-20 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0069",
+    "targetUser": "Aman Patel (aman.patel.1069@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00070",
+    "timestamp": "2026-01-21 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0070",
+    "targetUser": "Rohan Yadav (rohan.yadav.1070@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00071",
+    "timestamp": "2026-02-22 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0071",
+    "targetUser": "Rakesh Verma (rakesh.verma.1071@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00072",
+    "timestamp": "2026-03-23 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0072",
+    "targetUser": "Monika Mishra (monika.mishra.1072@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00073",
+    "timestamp": "2026-04-24 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0073",
+    "targetUser": "Rohan Verma (rohan.verma.1073@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00074",
+    "timestamp": "2026-05-25 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0074",
+    "targetUser": "Shreya Mukherjee (shreya.mukherjee.1074@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00075",
+    "timestamp": "2026-01-01 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0075",
+    "targetUser": "Tarun Mishra (tarun.mishra.1075@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00076",
+    "timestamp": "2026-02-02 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0076",
+    "targetUser": "Kavita Yadav (kavita.yadav.1076@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00077",
+    "timestamp": "2026-03-03 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0077",
+    "targetUser": "Harsh Verma (harsh.verma.1077@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00078",
+    "timestamp": "2026-04-04 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0078",
+    "targetUser": "Rohan Tiwari (rohan.tiwari.1078@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00079",
+    "timestamp": "2026-05-05 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0079",
+    "targetUser": "Kunal Joshi (kunal.joshi.1079@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00080",
+    "timestamp": "2026-01-06 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0080",
+    "targetUser": "Deepak Paul (deepak.paul.1080@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00081",
+    "timestamp": "2026-02-07 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0081",
+    "targetUser": "Aarav Yadav (aarav.yadav.1081@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00082",
+    "timestamp": "2026-03-08 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0082",
+    "targetUser": "Alok Verma (alok.verma.1082@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00083",
+    "timestamp": "2026-04-09 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0083",
+    "targetUser": "Tarun Bose (tarun.bose.1083@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00084",
+    "timestamp": "2026-05-10 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0084",
+    "targetUser": "Sachin Mukherjee (sachin.mukherjee.1084@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00085",
+    "timestamp": "2026-01-11 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0085",
+    "targetUser": "Swati Gupta (swati.gupta.1085@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00086",
+    "timestamp": "2026-02-12 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0086",
+    "targetUser": "Preeti Singh (preeti.singh.1086@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00087",
+    "timestamp": "2026-03-13 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0087",
+    "targetUser": "Mayank Prasad (mayank.prasad.1087@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00088",
+    "timestamp": "2026-04-14 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0088",
+    "targetUser": "Vikram Chatterjee (vikram.chatterjee.1088@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00089",
+    "timestamp": "2026-05-15 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0089",
+    "targetUser": "Rohan Gupta (rohan.gupta.1089@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00090",
+    "timestamp": "2026-01-16 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0090",
+    "targetUser": "Shreya Bhatt (shreya.bhatt.1090@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00091",
+    "timestamp": "2026-02-17 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0091",
+    "targetUser": "Amit Mishra (amit.mishra.1091@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00092",
+    "timestamp": "2026-03-18 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0092",
+    "targetUser": "Rohit Banerjee (rohit.banerjee.1092@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00093",
+    "timestamp": "2026-04-19 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0093",
+    "targetUser": "Simran Thakur (simran.thakur.1093@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00094",
+    "timestamp": "2026-05-20 10:15:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0094",
+    "targetUser": "Ritu Chatterjee (ritu.chatterjee.1094@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00095",
+    "timestamp": "2026-01-21 10:15:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0095",
+    "targetUser": "Rohit Joshi (rohit.joshi.1095@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Data Science & Business Analytics"
+  },
+  {
+    "id": "LOG-00096",
+    "timestamp": "2026-02-22 10:15:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0096",
+    "targetUser": "Sneha Yadav (sneha.yadav.1096@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cybersecurity & SOC Operations"
+  },
+  {
+    "id": "LOG-00097",
+    "timestamp": "2026-03-23 10:15:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0097",
+    "targetUser": "Amit Patel (amit.patel.1097@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Artificial Intelligence & Machine Learning"
+  },
+  {
+    "id": "LOG-00098",
+    "timestamp": "2026-04-24 10:15:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0098",
+    "targetUser": "Tanvi Thakur (tanvi.thakur.1098@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Cloud Infrastructure & DevOps"
+  },
+  {
+    "id": "LOG-00099",
+    "timestamp": "2026-05-25 10:15:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0099",
+    "targetUser": "Arjun Mishra (arjun.mishra.1099@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Python Full-Stack & Automation"
+  },
+  {
+    "id": "LOG-00100",
+    "timestamp": "2026-01-01 10:15:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "VERIFY_AND_AUTHORIZE_INTERN",
+    "targetId": "INT-0100",
+    "targetUser": "Ishaan Jha (ishaan.jha.1100@iitp.ac.in)",
+    "details": "Authorized applicant and moved to Current Interns database for track Robotics & IoT Embedded Systems"
+  },
+  {
+    "id": "LOG-00101",
+    "timestamp": "2026-06-02 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI101",
+    "targetUser": "Kriti Banerjee (kriti.banerjee.2001@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI101 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00102",
+    "timestamp": "2026-06-03 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL102",
+    "targetUser": "Simran Roy (simran.roy.2002@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL102 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00103",
+    "timestamp": "2026-06-04 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY103",
+    "targetUser": "Ananya Banerjee (ananya.banerjee.2003@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY103 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00104",
+    "timestamp": "2026-06-05 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB104",
+    "targetUser": "Tarun Kumar (tarun.kumar.2004@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB104 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00105",
+    "timestamp": "2026-06-06 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS105",
+    "targetUser": "Kavita Menon (kavita.menon.2005@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS105 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00106",
+    "timestamp": "2026-06-07 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS106",
+    "targetUser": "Rajesh Kumar (rajesh.kumar.2006@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS106 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00107",
+    "timestamp": "2026-06-08 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI107",
+    "targetUser": "Shalini Gupta (shalini.gupta.2007@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI107 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00108",
+    "timestamp": "2026-06-09 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL108",
+    "targetUser": "Rahul Verma (rahul.verma.2008@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL108 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00109",
+    "timestamp": "2026-06-10 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY109",
+    "targetUser": "Preeti Kumar (preeti.kumar.2009@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY109 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00110",
+    "timestamp": "2026-06-11 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB110",
+    "targetUser": "Ishaan Sharma (ishaan.sharma.2010@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB110 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00111",
+    "timestamp": "2026-06-12 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS111",
+    "targetUser": "Meera Yadav (meera.yadav.2011@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS111 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00112",
+    "timestamp": "2026-06-13 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS112",
+    "targetUser": "Aarav Sharma (aarav.sharma.2012@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS112 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00113",
+    "timestamp": "2026-06-14 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI113",
+    "targetUser": "Rahul Tiwari (rahul.tiwari.2013@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI113 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00114",
+    "timestamp": "2026-06-15 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL114",
+    "targetUser": "Arjun Thakur (arjun.thakur.2014@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL114 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00115",
+    "timestamp": "2026-06-16 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY115",
+    "targetUser": "Pallavi Choudhary (pallavi.choudhary.2015@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY115 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00116",
+    "timestamp": "2026-06-17 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB116",
+    "targetUser": "Pooja Choudhary (pooja.choudhary.2016@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB116 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00117",
+    "timestamp": "2026-06-18 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS117",
+    "targetUser": "Ritu Prasad (ritu.prasad.2017@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS117 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00118",
+    "timestamp": "2026-06-19 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS118",
+    "targetUser": "Harsh Patel (harsh.patel.2018@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS118 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00119",
+    "timestamp": "2026-06-20 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI119",
+    "targetUser": "Aarav Banerjee (aarav.banerjee.2019@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI119 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00120",
+    "timestamp": "2026-06-21 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL120",
+    "targetUser": "Simran Banerjee (simran.banerjee.2020@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL120 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00121",
+    "timestamp": "2026-06-22 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY121",
+    "targetUser": "Ritu Choudhary (ritu.choudhary.2021@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY121 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00122",
+    "timestamp": "2026-06-23 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB122",
+    "targetUser": "Bhavna Patel (bhavna.patel.2022@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB122 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00123",
+    "timestamp": "2026-06-24 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS123",
+    "targetUser": "Vikram Joshi (vikram.joshi.2023@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS123 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00124",
+    "timestamp": "2026-06-25 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS124",
+    "targetUser": "Nikhil Nair (nikhil.nair.2024@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS124 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00125",
+    "timestamp": "2026-06-01 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI125",
+    "targetUser": "Swati Pandey (swati.pandey.2025@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI125 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00126",
+    "timestamp": "2026-06-02 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL126",
+    "targetUser": "Ananya Yadav (ananya.yadav.2026@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL126 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00127",
+    "timestamp": "2026-06-03 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY127",
+    "targetUser": "Deepak Bhatt (deepak.bhatt.2027@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY127 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00128",
+    "timestamp": "2026-06-04 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB128",
+    "targetUser": "Pooja Shah (pooja.shah.2028@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB128 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00129",
+    "timestamp": "2026-06-05 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS129",
+    "targetUser": "Ananya Sen (ananya.sen.2029@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS129 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00130",
+    "timestamp": "2026-06-06 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS130",
+    "targetUser": "Bhavna Das (bhavna.das.2030@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS130 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00131",
+    "timestamp": "2026-06-07 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI131",
+    "targetUser": "Tarun Patel (tarun.patel.2031@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI131 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00132",
+    "timestamp": "2026-06-08 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL132",
+    "targetUser": "Tarun Patel (tarun.patel.2032@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL132 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00133",
+    "timestamp": "2026-06-09 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY133",
+    "targetUser": "Rakesh Patel (rakesh.patel.2033@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY133 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00134",
+    "timestamp": "2026-06-10 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB134",
+    "targetUser": "Manish Pandey (manish.pandey.2034@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB134 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00135",
+    "timestamp": "2026-06-11 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS135",
+    "targetUser": "Shreya Kumar (shreya.kumar.2035@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS135 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00136",
+    "timestamp": "2026-06-12 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS136",
+    "targetUser": "Aman Sharma (aman.sharma.2036@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS136 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00137",
+    "timestamp": "2026-06-13 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI137",
+    "targetUser": "Harsh Paul (harsh.paul.2037@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI137 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00138",
+    "timestamp": "2026-06-14 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL138",
+    "targetUser": "Rahul Pandey (rahul.pandey.2038@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL138 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00139",
+    "timestamp": "2026-06-15 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY139",
+    "targetUser": "Vivek Das (vivek.das.2039@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY139 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00140",
+    "timestamp": "2026-06-16 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB140",
+    "targetUser": "Sunita Mukherjee (sunita.mukherjee.2040@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB140 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00141",
+    "timestamp": "2026-06-17 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS141",
+    "targetUser": "Vivek Das (vivek.das.2041@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS141 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00142",
+    "timestamp": "2026-06-18 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS142",
+    "targetUser": "Sneha Menon (sneha.menon.2042@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS142 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00143",
+    "timestamp": "2026-06-19 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI143",
+    "targetUser": "Shreya Shah (shreya.shah.2043@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI143 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00144",
+    "timestamp": "2026-06-20 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL144",
+    "targetUser": "Pallavi Yadav (pallavi.yadav.2044@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL144 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00145",
+    "timestamp": "2026-06-21 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY145",
+    "targetUser": "Rupal Prasad (rupal.prasad.2045@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY145 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00146",
+    "timestamp": "2026-06-22 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB146",
+    "targetUser": "Aman Jha (aman.jha.2046@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB146 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00147",
+    "timestamp": "2026-06-23 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS147",
+    "targetUser": "Sachin Thakur (sachin.thakur.2047@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS147 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00148",
+    "timestamp": "2026-06-24 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS148",
+    "targetUser": "Arjun Thakur (arjun.thakur.2048@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS148 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00149",
+    "timestamp": "2026-06-25 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI149",
+    "targetUser": "Aditya Kumar (aditya.kumar.2049@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI149 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00150",
+    "timestamp": "2026-06-01 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL150",
+    "targetUser": "Sunita Bose (sunita.bose.2050@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL150 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00151",
+    "timestamp": "2026-06-02 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY151",
+    "targetUser": "Rakesh Choudhary (rakesh.choudhary.2051@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY151 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00152",
+    "timestamp": "2026-06-03 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB152",
+    "targetUser": "Rupal Reddy (rupal.reddy.2052@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB152 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00153",
+    "timestamp": "2026-06-04 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS153",
+    "targetUser": "Preeti Yadav (preeti.yadav.2053@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS153 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00154",
+    "timestamp": "2026-06-05 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS154",
+    "targetUser": "Shalini Prasad (shalini.prasad.2054@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS154 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00155",
+    "timestamp": "2026-06-06 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI155",
+    "targetUser": "Ananya Singh (ananya.singh.2055@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI155 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00156",
+    "timestamp": "2026-06-07 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL156",
+    "targetUser": "Vikram Menon (vikram.menon.2056@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL156 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00157",
+    "timestamp": "2026-06-08 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY157",
+    "targetUser": "Nisha Menon (nisha.menon.2057@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY157 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00158",
+    "timestamp": "2026-06-09 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB158",
+    "targetUser": "Rohan Gupta (rohan.gupta.2058@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB158 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00159",
+    "timestamp": "2026-06-10 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS159",
+    "targetUser": "Priya Jha (priya.jha.2059@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS159 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00160",
+    "timestamp": "2026-06-11 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS160",
+    "targetUser": "Kavita Paul (kavita.paul.2060@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS160 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00161",
+    "timestamp": "2026-06-12 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI161",
+    "targetUser": "Harsh Joshi (harsh.joshi.2061@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI161 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00162",
+    "timestamp": "2026-06-13 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL162",
+    "targetUser": "Pallavi Nair (pallavi.nair.2062@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL162 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00163",
+    "timestamp": "2026-06-14 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY163",
+    "targetUser": "Monika Roy (monika.roy.2063@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY163 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00164",
+    "timestamp": "2026-06-15 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB164",
+    "targetUser": "Monika Jha (monika.jha.2064@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB164 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00165",
+    "timestamp": "2026-06-16 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS165",
+    "targetUser": "Gaurav Gupta (gaurav.gupta.2065@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS165 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00166",
+    "timestamp": "2026-06-17 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS166",
+    "targetUser": "Abhishek Sharma (abhishek.sharma.2066@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS166 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00167",
+    "timestamp": "2026-06-18 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI167",
+    "targetUser": "Manish Mukherjee (manish.mukherjee.2067@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI167 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00168",
+    "timestamp": "2026-06-19 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL168",
+    "targetUser": "Preeti Banerjee (preeti.banerjee.2068@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL168 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00169",
+    "timestamp": "2026-06-20 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY169",
+    "targetUser": "Arjun Reddy (arjun.reddy.2069@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY169 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00170",
+    "timestamp": "2026-06-21 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB170",
+    "targetUser": "Bhavna Das (bhavna.das.2070@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB170 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00171",
+    "timestamp": "2026-06-22 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS171",
+    "targetUser": "Preeti Sharma (preeti.sharma.2071@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS171 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00172",
+    "timestamp": "2026-06-23 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS172",
+    "targetUser": "Manish Tiwari (manish.tiwari.2072@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS172 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00173",
+    "timestamp": "2026-06-24 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI173",
+    "targetUser": "Varun Nair (varun.nair.2073@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI173 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00174",
+    "timestamp": "2026-06-25 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL174",
+    "targetUser": "Vikram Joshi (vikram.joshi.2074@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL174 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00175",
+    "timestamp": "2026-06-01 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY175",
+    "targetUser": "Tanvi Das (tanvi.das.2075@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY175 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00176",
+    "timestamp": "2026-06-02 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB176",
+    "targetUser": "Mayank Pandey (mayank.pandey.2076@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB176 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00177",
+    "timestamp": "2026-06-03 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS177",
+    "targetUser": "Kunal Pandey (kunal.pandey.2077@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS177 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00178",
+    "timestamp": "2026-06-04 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS178",
+    "targetUser": "Deepa Yadav (deepa.yadav.2078@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS178 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00179",
+    "timestamp": "2026-06-05 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI179",
+    "targetUser": "Kavita Bose (kavita.bose.2079@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI179 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00180",
+    "timestamp": "2026-06-06 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL180",
+    "targetUser": "Kriti Menon (kriti.menon.2080@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL180 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00181",
+    "timestamp": "2026-06-07 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY181",
+    "targetUser": "Pooja Pandey (pooja.pandey.2081@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY181 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00182",
+    "timestamp": "2026-06-08 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB182",
+    "targetUser": "Pallavi Patel (pallavi.patel.2082@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB182 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00183",
+    "timestamp": "2026-06-09 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS183",
+    "targetUser": "Varun Chatterjee (varun.chatterjee.2083@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS183 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00184",
+    "timestamp": "2026-06-10 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS184",
+    "targetUser": "Manish Pandey (manish.pandey.2084@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS184 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00185",
+    "timestamp": "2026-06-11 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI185",
+    "targetUser": "Kriti Mukherjee (kriti.mukherjee.2085@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI185 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00186",
+    "timestamp": "2026-06-12 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL186",
+    "targetUser": "Aditya Mishra (aditya.mishra.2086@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL186 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00187",
+    "timestamp": "2026-06-13 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY187",
+    "targetUser": "Priya Nair (priya.nair.2087@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY187 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00188",
+    "timestamp": "2026-06-14 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB188",
+    "targetUser": "Arjun Pandey (arjun.pandey.2088@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB188 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00189",
+    "timestamp": "2026-06-15 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS189",
+    "targetUser": "Abhishek Das (abhishek.das.2089@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS189 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00190",
+    "timestamp": "2026-06-16 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS190",
+    "targetUser": "Harsh Verma (harsh.verma.2090@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS190 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00191",
+    "timestamp": "2026-06-17 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI191",
+    "targetUser": "Rohit Roy (rohit.roy.2091@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI191 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00192",
+    "timestamp": "2026-06-18 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL192",
+    "targetUser": "Amit Biswas (amit.biswas.2092@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL192 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00193",
+    "timestamp": "2026-06-19 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY193",
+    "targetUser": "Simran Sharma (simran.sharma.2093@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY193 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00194",
+    "timestamp": "2026-06-20 16:30:00",
+    "adminEmail": "dhb_03@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB194",
+    "targetUser": "Neha Banerjee (neha.banerjee.2094@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB194 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00195",
+    "timestamp": "2026-06-21 16:30:00",
+    "adminEmail": "abk_04@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-DS195",
+    "targetUser": "Nisha Reddy (nisha.reddy.2095@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-DS195 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00196",
+    "timestamp": "2026-06-22 16:30:00",
+    "adminEmail": "anp_05@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CS196",
+    "targetUser": "Sunita Bose (sunita.bose.2096@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CS196 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00197",
+    "timestamp": "2026-06-23 16:30:00",
+    "adminEmail": "rop_06@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-AI197",
+    "targetUser": "Sachin Bhatt (sachin.bhatt.2097@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-AI197 (Grade A+ (Outstanding))"
+  },
+  {
+    "id": "LOG-00198",
+    "timestamp": "2026-06-24 16:30:00",
+    "adminEmail": "a4dr_00@supper",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-CL198",
+    "targetUser": "Rahul Banerjee (rahul.banerjee.2098@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-CL198 (Grade A (Excellent))"
+  },
+  {
+    "id": "LOG-00199",
+    "timestamp": "2026-06-25 16:30:00",
+    "adminEmail": "adk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-PY199",
+    "targetUser": "Aman Sen (aman.sen.2099@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-PY199 (Grade A+ (Distinction))"
+  },
+  {
+    "id": "LOG-00200",
+    "timestamp": "2026-06-01 16:30:00",
+    "adminEmail": "alk_01@admin",
+    "actionType": "GRADUATE_TO_ALL_EMPLOYEES",
+    "targetId": "YUV-2026-RB200",
+    "targetUser": "Vivek Choudhary (vivek.choudhary.2100@yuvantara.com)",
+    "details": "Graduated intern to All Employees with Certificate YUV-2026-RB200 (Grade A+ (Outstanding))"
+  }
+]

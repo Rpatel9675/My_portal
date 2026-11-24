@@ -144,19 +144,21 @@
 
     var banner = document.createElement('div');
     banner.id = 'pending-activation-banner';
-    banner.style.cssText = 'background:linear-gradient(135deg,#FFFBEB,#FFF7ED);border:1.5px solid #FCD34D;border-radius:14px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px;box-shadow:0 4px 16px rgba(245,158,11,.1)';
+    banner.style.cssText = 'background:linear-gradient(135deg,#FFFBEB,#FFF7ED);border:2px solid #F59E0B;border-radius:14px;padding:22px 24px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px;box-shadow:0 6px 20px rgba(245,158,11,.15)';
     banner.innerHTML =
-      '<div style="font-size:2.2rem;flex-shrink:0;line-height:1">⏳</div>' +
-      '<div>' +
-        '<h3 style="margin:0 0 6px;color:#92400E;font-size:1rem">Content Activation In Progress</h3>' +
-        '<p style="margin:0 0 10px;color:#78350F;font-size:.9rem">Your enrollment is confirmed and payment received. ' +
-        'Your internship content, curriculum, and study materials will be live within <strong>2–6 hours</strong>.</p>' +
+      '<div style="font-size:2.5rem;flex-shrink:0;line-height:1">⏳</div>' +
+      '<div style="flex:1">' +
+        '<div style="display:inline-block;background:#FEF3C7;color:#B45309;font-weight:700;font-size:.78rem;padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Verification In Progress</div>' +
+        '<h3 style="margin:0 0 8px;color:#92400E;font-size:1.2rem">Please wait for 2 hours — Course content will be visible after access grant</h3>' +
+        '<p style="margin:0 0 12px;color:#78350F;font-size:.92rem;line-height:1.5">' +
+          'Your enrollment and payment (₹236) have been securely logged. An admission authority administrator is currently reviewing your registration to grant official internship access. Please wait up to <strong>2 hours</strong>. Once approved, your complete curriculum, video lectures, and live lab environment will unlock automatically.' +
+        '</p>' +
         '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">' +
-          '<span style="font-size:.8rem;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;border-radius:99px;padding:3px 10px;font-weight:600">📋 Enrollment Confirmed</span>' +
-          '<span style="font-size:.8rem;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;border-radius:99px;padding:3px 10px;font-weight:600">⚙️ Content Being Prepared</span>' +
-          '<span style="font-size:.8rem;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;border-radius:99px;padding:3px 10px;font-weight:600">📧 Confirmation Sent</span>' +
+          '<span style="font-size:.8rem;background:#DCFCE7;color:#15803D;border:1px solid #86EFAC;border-radius:99px;padding:3px 10px;font-weight:600">✅ Payment Received (₹236)</span>' +
+          '<span style="font-size:.8rem;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;border-radius:99px;padding:3px 10px;font-weight:600">⏳ Admission Authority: Reviewing (Wait ~2 Hours)</span>' +
+          '<span style="font-size:.8rem;background:#F1F5F9;color:#475569;border:1px solid #CBD5E1;border-radius:99px;padding:3px 10px;font-weight:600">🔒 Content: Unlocks on Admin Approval</span>' +
         '</div>' +
-        '<p style="margin:0;font-size:.82rem;color:#92400E">Need help? <a href="mailto:xyv@yuvantara.com" style="color:#1D4ED8;font-weight:600">xyv@yuvantara.com</a> · <a href="tel:+919876543210" style="color:#1D4ED8;font-weight:600">+91 98765 43210</a></p>' +
+        '<p style="margin:0;font-size:.82rem;color:#92400E">Admissions Helpdesk: <a href="mailto:xyv@yuvantara.com" style="color:#1D4ED8;font-weight:600">xyv@yuvantara.com</a> · <a href="tel:+919876543210" style="color:#1D4ED8;font-weight:600">+91 98765 43210</a></p>' +
       '</div>';
 
     var portalNav = document.querySelector('.portal-nav-bar');
@@ -189,10 +191,11 @@
 
     if (isPending) {
       container.innerHTML =
-        '<div style="text-align:center;padding:36px 20px;color:#92400E;background:#FFFBEB;border-radius:12px;border:1.5px dashed #FCD34D">' +
-        '<div style="font-size:2rem;margin-bottom:10px">⏳</div>' +
-        '<strong style="display:block;font-size:1rem;margin-bottom:6px">Your modules are being prepared</strong>' +
-        '<span style="font-size:.88rem;color:#78350F">Content will be available within 2–6 hours of enrollment. You\'ll receive access automatically.</span>' +
+        '<div style="text-align:center;padding:40px 24px;color:#92400E;background:#FFFBEB;border-radius:14px;border:2px dashed #FCD34D">' +
+        '<div style="font-size:2.5rem;margin-bottom:12px">🔒</div>' +
+        '<strong style="display:block;font-size:1.15rem;margin-bottom:8px;color:#92400E">Course Content Locked — Waiting for Admin Access Grant</strong>' +
+        '<p style="font-size:.92rem;color:#78350F;max-width:540px;margin:0 auto 16px;line-height:1.6">Please wait for 2 hours. Once the administrator grants your internship access, all course modules, hands-on labs, and learning resources will unlock automatically here.</p>' +
+        '<span style="display:inline-block;background:#FEF3C7;color:#B45309;padding:6px 14px;border-radius:8px;font-size:.84rem;font-weight:600;border:1px solid #FDE68A">⏱️ Estimated Unlock Window: Within 2 Hours</span>' +
         '</div>';
       return;
     }
@@ -498,19 +501,41 @@
     }, 350);
   }
 
+  // ── Portal Tab Switching Engine ──
+  function switchPortalTab(target) {
+    if (!target) return;
+    var tabs = document.querySelectorAll('.portal-tab-btn[data-tab]');
+    tabs.forEach(function(b) {
+      if (b.dataset.tab === target) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+    document.querySelectorAll('.portal-pane').forEach(function(pane) {
+      if (pane.id === 'pane-' + target) pane.classList.add('active');
+      else pane.classList.remove('active');
+    });
+    // Sync student header links
+    document.querySelectorAll('[data-student-tab]').forEach(function(l) {
+      if (l.getAttribute('data-student-tab') === target) l.classList.add('active');
+      else l.classList.remove('active');
+    });
+  }
+  window.switchPortalTab = switchPortalTab;
+
   // ── Portal Tab Events ──
   function bindPortalEvents() {
     var tabs = document.querySelectorAll('.portal-tab-btn[data-tab]');
     tabs.forEach(function(tabBtn) {
       tabBtn.addEventListener('click', function() {
-        var target = tabBtn.dataset.tab;
-        tabs.forEach(function(b) { b.classList.remove('active'); });
-        tabBtn.classList.add('active');
-        document.querySelectorAll('.portal-pane').forEach(function(pane) { pane.classList.remove('active'); });
-        var activePane = document.getElementById('pane-' + target);
-        if (activePane) activePane.classList.add('active');
+        switchPortalTab(tabBtn.dataset.tab);
       });
     });
+
+    // Auto-activate tab from URL parameter (?tab=...) or hash (#...)
+    var urlParams = new URLSearchParams(window.location.search);
+    var initTab = urlParams.get('tab') || (window.location.hash ? window.location.hash.replace('#', '') : '');
+    if (initTab) {
+      setTimeout(function() { switchPortalTab(initTab); }, 60);
+    }
 
     // ── HR Policy Accordion Events ──
     var policyHeaders = document.querySelectorAll('.policy-accordion-header');

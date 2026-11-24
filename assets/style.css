@@ -24,6 +24,35 @@ header{position:sticky;top:0;z-index:50;background:rgba(10,14,23,.94);backdrop-f
 .dd summary,.nav>a:not(.btn){list-style:none;cursor:pointer;display:block;padding:8px 12px;border-radius:8px;color:var(--mu);font-weight:500;font-size:.92rem;transition:background .18s,color .18s}
 .dd summary::-webkit-details-marker{display:none}.dd summary:after{content:" \25BE";font-size:.75em}
 .dd summary:hover,.nav>a:not(.btn):hover,.dd[open] summary{color:var(--tx);background:var(--s2)}
+
+/* ── Student Header Navigation ── */
+.nav-student{gap:2px}
+.student-nav-item{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:8px;color:var(--mu);font-weight:600;font-size:.82rem;text-decoration:none;white-space:nowrap;transition:background .18s,color .18s}
+.student-nav-item:hover{color:var(--tx);background:var(--s2)}
+.student-nav-item.active{color:#38BDF8!important;background:rgba(56,189,248,.12);font-weight:700}
+.student-nav-item span{font-size:.95rem;line-height:1}
+
+/* Hide student-mobile-menu on desktop so top bar stays completely clean */
+.student-mobile-menu {
+  display: none !important;
+}
+
+@media(max-width:960px){
+  .student-mobile-menu {
+    display: flex !important;
+    flex-direction: column;
+    gap: 4px;
+    border-top: 1px solid rgba(255,255,255,.12);
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+  .student-mobile-menu .student-nav-item {
+    display: flex !important;
+    padding: 10px 14px;
+    font-size: .9rem;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+}
 .menu{position:absolute;top:100%;left:0;min-width:270px;background:var(--s1);border:1px solid var(--ln);border-radius:var(--r);padding:14px;display:grid;gap:2px;box-shadow:0 20px 50px #0009}
 .menu.mega{left:0;right:0;grid-template-columns:repeat(3,1fr);gap:18px}
 .menu h4{margin:0 0 6px;font-size:.95rem;color:var(--ac2)}
@@ -95,10 +124,11 @@ main .cta,main .cta h2{color:#fff}
 .sbox .sub{font-size:.88rem;line-height:1.45;margin:0}
 
 /* ── Internship Tracks Section (9-Grid) ───────────────────── */
-.intern-grid{display:grid;gap:22px;grid-template-columns:repeat(3,1fr);margin-top:28px}
-.intern-card{background:#fff;border:1px solid #E2E8F0;border-radius:var(--r);padding:24px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 1px 3px rgba(15,23,42,.06);transition:all .2s ease;position:relative}
+.intern-grid{display:grid;gap:22px;grid-template-columns:repeat(3,1fr);margin-top:28px;align-items:stretch}
+.intern-card{background:#fff;border:1px solid #E2E8F0;border-radius:var(--r);padding:24px;display:flex;flex-direction:column;justify-content:space-between;height:100%;box-shadow:0 1px 3px rgba(15,23,42,.06);transition:all .2s ease;position:relative}
 .intern-card:hover{border-color:var(--ac);transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,.1)}
-.intern-tag{display:inline-block;padding:4px 10px;border-radius:99px;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.intern-card > div:first-child{display:flex;flex-direction:column;flex:1}
+.intern-tag{display:inline-block;padding:4px 10px;border-radius:99px;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;width:fit-content}
 .tag-cyber{background:#EFF6FF;color:#1D4ED8}
 .tag-ai{background:#F3E8FF;color:#7E22CE}
 .tag-cloud{background:#ECFEFF;color:#0E7490}
@@ -107,20 +137,20 @@ main .cta,main .cta h2{color:#fff}
 .tag-data{background:#FDF2F8;color:#BE185D}
 .tag-web{background:#F0FDF4;color:#15803D}
 .tag-vlsi{background:#FFF7ED;color:#C2410C}
-.intern-card h3{margin:0 0 8px;font-size:1.15rem;color:#0F172A}
-.intern-card p{font-size:.88rem;color:#52607A;margin-bottom:14px;line-height:1.5}
+.intern-card h3{margin:0 0 8px;font-size:1.15rem;color:#0F172A;line-height:1.3}
+.intern-card p{font-size:.88rem;color:#52607A;margin-bottom:14px;line-height:1.5;flex:1}
 .intern-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #F1F5FA;font-size:.8rem;color:#64748B}
 .intern-meta span{display:inline-flex;align-items:center;gap:4px}
-.intern-card .acts-row{display:flex;gap:8px;align-items:center}
-.intern-card .btn{margin:0;width:100%}
+.intern-card .acts-row{display:flex;gap:8px;align-items:center;width:100%;margin-top:auto}
+.intern-card .btn{margin:0;width:100%;min-height:44px}
 
-/* 9th "Explore More" Special Card (White Background) */
+/* 9th "Explore More" Special Card (White Background, Perfectly Symmetrical) */
 .intern-card.explore-card{background:#fff;border:2px solid var(--ac);color:#0F172A;box-shadow:0 4px 16px rgba(59,130,246,.08)}
 .intern-card.explore-card:hover{border-color:#2563EB;transform:translateY(-3px);box-shadow:0 16px 32px rgba(37,99,235,.15)}
-.intern-card.explore-card h3{color:#0F172A;font-size:1.25rem}
+.intern-card.explore-card h3{color:#0F172A;font-size:1.15rem}
 .intern-card.explore-card p{color:#52607A;font-size:.88rem;line-height:1.5}
-.intern-card.explore-card .explore-badge{display:inline-block;padding:4px 12px;border-radius:99px;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
-.btn-explore{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:#fff;font-weight:700;padding:13px 20px;border-radius:10px;text-align:center;width:100%;transition:all .2s ease;border:none;cursor:pointer;font-size:.95rem}
+.intern-card.explore-card .explore-badge{display:inline-block;padding:4px 12px;border-radius:99px;background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;width:fit-content}
+.btn-explore{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:#fff;font-weight:700;padding:11px 20px;border-radius:10px;text-align:center;width:100%;min-height:44px;transition:all .2s ease;border:none;cursor:pointer;font-size:.95rem;box-sizing:border-box}
 .btn-explore:hover{background:linear-gradient(135deg,#2563EB,#1E40AF);transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.45);color:#fff}
 
 /* ── Filter tabs for internships catalog ─────────────────── */
@@ -211,6 +241,15 @@ footer{border-top:1px solid var(--ln);padding:60px 0 32px;background:#090D15;fon
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gt,.hero *{animation:none!important}main a.card:hover{transform:none}}
 
 /* ── Responsive breakpoints ──────────────────────────────── */
+/* Active state styling */
+.nav>a.active:not(.btn), .dd.active>summary { color: var(--ac2)!important; font-weight: 700; background: var(--s2); }
+
+/* Responsive Global Guarantees (320px - 1440px) */
+html, body { overflow-x: hidden; max-width: 100vw; }
+img, video, canvas, svg { max-width: 100%; height: auto; }
+table { max-width: 100%; border-collapse: collapse; }
+.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
 @media(max-width:1040px){
   .intern-grid{grid-template-columns:repeat(2,1fr)}
   .ind-grid{grid-template-columns:repeat(3,1fr)}
@@ -238,11 +277,28 @@ footer{border-top:1px solid var(--ln);padding:60px 0 32px;background:#090D15;fon
   .verify-form{flex-direction:column}
   .verify-form .btn{width:100%}
   .footer-top{grid-template-columns:1fr;gap:24px}
+  .grid{grid-template-columns:1fr}
 }
 @media(max-width:480px){
+  .w{padding:0 14px}
   .ind-grid{grid-template-columns:1fr}
-  .auth-modal{padding:26px 18px 22px}
+  .auth-modal{padding:24px 16px;width:95%;max-width:420px;max-height:92vh;overflow-y:auto}
   .acts{flex-direction:column;align-items:stretch}
-  .acts .btn{width:100%;margin:0 0 8px}
+  .acts .btn{width:100%;margin:0 0 8px;min-height:44px}
   .cert-header{flex-direction:column;align-items:flex-start}
+  .hero{padding:54px 0 36px}
+  h1{font-size:1.85rem}
+  h2{font-size:1.45rem}
+  .btn{min-height:44px;padding:10px 16px;font-size:.9rem}
+  .crumb{font-size:.8rem;word-break:break-word}
+}
+@media(max-width:360px){
+  .w{padding:0 10px}
+  h1{font-size:1.6rem}
+  h2{font-size:1.25rem}
+  .btn{padding:8px 12px;font-size:.85rem}
+  .logo{font-size:1rem}
+  .burger{padding:6px 10px;font-size:.82rem}
+  .bar{height:60px}
+  .nav{top:60px;padding:10px 12px 18px}
 }

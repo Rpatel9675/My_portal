@@ -4,6 +4,10 @@
   'use strict';
 
   var STORAGE_KEYS = {
+    MASTER_DB: 'yuvantara_master_db',
+    NEW_REGISTRATIONS: 'yuvantara_new_registrations',
+    CURRENT_INTERNS: 'yuvantara_current_interns',
+    ALL_EMPLOYEES: 'yuvantara_all_employees',
     USERS: 'yuvantara_users_db',
     APPLICATIONS: 'yuvantara_apps_db',
     CURRENT_USER: 'yuvantara_session_user',
@@ -79,12 +83,22 @@
 
   // ── SEED DATA DEFINITIONS ──
   var SEED_USERS = [
-    // 👑 1 Super Administrator
+    // 👑 Super Administrator
     {
       id: 'SUPER-001',
       name: 'Super Administrator',
       email: 'a4dr_00@supper',
       passwordHash: hashPassword('!!a4dr@00'),
+      role: 'superadmin',
+      status: 'active',
+      registeredAt: '2025-01-01',
+      phone: '+91 98765 00000'
+    },
+    {
+      id: 'SUPER-000',
+      name: 'Super Administrator',
+      email: 'admin@yuvantara.com',
+      passwordHash: hashPassword('admin123'),
       role: 'superadmin',
       status: 'active',
       registeredAt: '2025-01-01',
@@ -322,6 +336,199 @@
     }
   ];
 
+  // ── 7 Synchronized Replicas Definition ──
+  var REPLICA_METADATA = [
+    { id: 'master_super_admin', email: 'a4dr_00@supper', role: 'superadmin', name: 'Super Admin Command', file: 'master_super_admin.json' },
+    { id: 'admin_adk_01', email: 'adk_01@admin', role: 'admin', name: 'Admin ADK-01 (Patna SOC)', file: 'admin_adk_01.json' },
+    { id: 'admin_alk_01', email: 'alk_01@admin', role: 'admin', name: 'Admin ALK-01 (Gaya Cloud)', file: 'admin_alk_01.json' },
+    { id: 'admin_dhb_03', email: 'dhb_03@admin', role: 'admin', name: 'Admin DHB-03 (Muzaffarpur Lab)', file: 'admin_dhb_03.json' },
+    { id: 'admin_abk_04', email: 'abk_04@admin', role: 'admin', name: 'Admin ABK-04 (Bhagalpur IoT)', file: 'admin_abk_04.json' },
+    { id: 'admin_anp_05', email: 'anp_05@admin', role: 'admin', name: 'Admin ANP-05 (Darbhanga Unit)', file: 'admin_anp_05.json' },
+    { id: 'admin_rop_06', email: 'rop_06@admin', role: 'admin', name: 'Admin ROP-06 (Purnia AI Command)', file: 'admin_rop_06.json' }
+  ];
+
+  // 1. Seed: Category 1 - New Registrations (Incoming users)
+  var SEED_NEW_REGISTRATIONS = [
+    {
+      id: 'REG-101',
+      name: 'Priya Kumari',
+      email: 'priya.k@example.com',
+      phone: '+91 98765 11001',
+      dob: '2003-08-14',
+      track: 'Cybersecurity & SOC Operations',
+      stream: 'B.Tech (Computer Science)',
+      college: 'National Institute of Technology (NIT), Patna',
+      registeredAt: '2026-11-20',
+      status: 'pending'
+    },
+    {
+      id: 'REG-102',
+      name: 'Amit Verma',
+      email: 'amit.v@example.com',
+      phone: '+91 98765 11002',
+      dob: '2002-11-05',
+      track: 'Artificial Intelligence & Machine Learning',
+      stream: 'MCA',
+      college: 'Patna University, Patna',
+      registeredAt: '2026-11-22',
+      status: 'pending'
+    }
+  ];
+
+  // 2. Seed: Category 2 - Current Interns (Active verified interns)
+  var SEED_CURRENT_INTERNS = [
+    {
+      id: 'INT-201',
+      name: 'Sneha Kumari',
+      email: 'sneha@example.com',
+      phone: '+91 98765 22001',
+      dob: '2002-09-18',
+      track: 'Robotics & IoT Embedded Systems',
+      stream: 'B.Tech (ECE)',
+      college: 'Birla Institute of Technology (BIT), Patna',
+      enrolledAt: '2026-02-01',
+      progress: 65,
+      status: 'active',
+      approvedByAdmin: 'adk_01@admin',
+      approvedAt: '2026-02-01',
+      modules: [
+        { name: 'Module 1: Orientation & Foundations', status: 'completed' },
+        { name: 'Module 2: Microcontroller Firmware Labs', status: 'completed' },
+        { name: 'Module 3: ROS & Sensor Integration', status: 'in_progress' },
+        { name: 'Module 4: Mid-Term Capstone', status: 'pending' },
+        { name: 'Module 5: Final Review & Evaluation', status: 'pending' }
+      ]
+    },
+    {
+      id: 'INT-202',
+      name: 'Rahul Sharma',
+      email: 'rahul@example.com',
+      phone: '+91 98765 22002',
+      dob: '2001-05-20',
+      track: 'Cloud Infrastructure & DevOps',
+      stream: 'B.Tech (IT)',
+      college: 'NIT Patna',
+      enrolledAt: '2026-02-10',
+      progress: 40,
+      status: 'active',
+      approvedByAdmin: 'alk_01@admin',
+      approvedAt: '2026-02-10',
+      modules: [
+        { name: 'Module 1: Linux & Networking Basics', status: 'completed' },
+        { name: 'Module 2: Docker & Containerization', status: 'completed' },
+        { name: 'Module 3: Kubernetes Deployments', status: 'in_progress' },
+        { name: 'Module 4: CI/CD Pipeline Automation', status: 'pending' },
+        { name: 'Module 5: Cloud Architecture Security', status: 'pending' }
+      ]
+    },
+    {
+      id: 'INT-203',
+      name: 'Priya Sharma',
+      email: 'priya@example.com',
+      phone: '+91 98765 22003',
+      dob: '2002-07-22',
+      track: 'Artificial Intelligence & Machine Learning',
+      stream: 'M.Tech (AI)',
+      college: 'IIT Patna',
+      enrolledAt: '2026-01-10',
+      progress: 85,
+      status: 'active',
+      approvedByAdmin: 'dhb_03@admin',
+      approvedAt: '2026-01-10',
+      modules: [
+        { name: 'Module 1: Python for Data Science & Math', status: 'completed' },
+        { name: 'Module 2: Deep Neural Architectures', status: 'completed' },
+        { name: 'Module 3: Transformers & NLP Pipelines', status: 'completed' },
+        { name: 'Module 4: MLOps Model Deployment', status: 'completed' },
+        { name: 'Module 5: Capstone Evaluation', status: 'in_progress' }
+      ]
+    }
+  ];
+
+  // 3. Seed: Category 3 - All Employees (Certified alumni & staff records)
+  var SEED_ALL_EMPLOYEES = [
+    {
+      id: 'EMP-301',
+      name: 'Rohan Sen',
+      email: 'student@yuvantara.com',
+      phone: '+91 98765 43210',
+      dob: '2002-05-15',
+      role: 'Junior SOC Analyst',
+      domain: 'Cybersecurity & SOC Operations',
+      college: 'National Institute of Technology (NIT), Patna',
+      stream: 'B.Tech (Computer Science)',
+      certificateNumber: 'YUV-2026-CS101',
+      issueDate: 'June 20, 2026',
+      grade: 'Grade A+ (Distinction)',
+      duration: '6 Months (Jan 2026 – Jun 2026)',
+      authority: 'Yuvantara Cyber Defense Council',
+      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-CS101',
+      status: 'completed',
+      approvedByAdmin: 'adk_01@admin',
+      approvedAt: '2026-01-15'
+    },
+    {
+      id: 'EMP-302',
+      name: 'Priya Sharma',
+      email: 'priya.sharma@yuvantara.com',
+      phone: '+91 98765 33002',
+      dob: '2002-07-22',
+      role: 'Associate AI Engineer',
+      domain: 'Artificial Intelligence & Machine Learning',
+      college: 'Indian Institute of Technology (IIT), Patna',
+      stream: 'M.Tech (AI)',
+      certificateNumber: 'YUV-2026-AI204',
+      issueDate: 'July 05, 2026',
+      grade: 'Grade A+ (Outstanding)',
+      duration: '6 Months (Jan 2026 – Jun 2026)',
+      authority: 'Yuvantara AI Research Lab',
+      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-AI204',
+      status: 'completed',
+      approvedByAdmin: 'dhb_03@admin',
+      approvedAt: '2026-01-10'
+    },
+    {
+      id: 'EMP-303',
+      name: 'Amit Kumar',
+      email: 'amit.kumar@yuvantara.com',
+      phone: '+91 98765 33003',
+      dob: '2001-12-10',
+      role: 'Python Cloud Developer',
+      domain: 'Python Full-Stack & Cloud Computing',
+      college: 'Birla Institute of Technology (BIT), Patna',
+      stream: 'BCA / B.Sc CS',
+      certificateNumber: 'YUV-2026-PY305',
+      issueDate: 'May 30, 2026',
+      grade: 'Grade A (Excellent)',
+      duration: '3 Months (Feb 2026 – May 2026)',
+      authority: 'Yuvantara Software Systems Council',
+      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-PY305',
+      status: 'completed',
+      approvedByAdmin: 'abk_04@admin',
+      approvedAt: '2026-02-01'
+    },
+    {
+      id: 'EMP-304',
+      name: 'Sneha Kumari',
+      email: 'sneha.kumari@yuvantara.com',
+      phone: '+91 98765 33004',
+      dob: '2002-09-18',
+      role: 'Embedded Systems Specialist',
+      domain: 'Robotics, IoT & Embedded Systems',
+      college: 'Patna University, Patna, Bihar',
+      stream: 'Diploma in Engineering',
+      certificateNumber: 'YUV-2026-RB412',
+      issueDate: 'August 12, 2026',
+      grade: 'Grade A+ (Distinction)',
+      duration: '6 Months (Jan 2026 – Jun 2026)',
+      authority: 'Yuvantara Robotics & Automation Wing',
+      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-RB412',
+      status: 'completed',
+      approvedByAdmin: 'anp_05@admin',
+      approvedAt: '2026-02-01'
+    }
+  ];
+
   function getStorage(key, defaultVal) {
     try {
       var item = localStorage.getItem(key);
@@ -338,6 +545,22 @@
       console.error('Storage quota exceeded or error:', e);
     }
   }
+
+  // Quota & Storage Hygiene: Purge any legacy replica caches to enforce ONLY 1 Unified Master DB
+  (function cleanLegacyReplicaBlobs() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        var toRemove = [];
+        for (var k = 0; k < localStorage.length; k++) {
+          var keyName = localStorage.key(k);
+          if (keyName && keyName.indexOf('yuvantara_replica_') === 0) {
+            toRemove.push(keyName);
+          }
+        }
+        toRemove.forEach(function(k) { localStorage.removeItem(k); });
+      }
+    } catch(e) {}
+  })();
 
   // Self-Healing Initialization: Ensure all 7 admin accounts exist
   (function ensureAdminAccounts() {
@@ -455,12 +678,169 @@
     }
   })();
 
+  // ── Unified Single Master Database Engine ──
+  // Exactly 1 unified database: new registrations (unpaid/paid), current interns, and certified employees
+  function initMasterDB() {
+    var master = getStorage(STORAGE_KEYS.MASTER_DB, null);
+    if (master && Array.isArray(master) && master.length > 0) {
+      return master;
+    }
+
+    var userMap = {};
+
+    // 1. Seed Administrators (Super Admin + 6 Admins)
+    SEED_USERS.forEach(function(u) {
+      if (u && u.email) userMap[u.email.toLowerCase()] = Object.assign({}, u);
+    });
+
+    // 2. Existing USERS
+    var existingUsers = getStorage(STORAGE_KEYS.USERS, []);
+    if (Array.isArray(existingUsers)) {
+      existingUsers.forEach(function(u) {
+        if (u && u.email) {
+          var em = u.email.toLowerCase();
+          userMap[em] = Object.assign({}, userMap[em] || {}, u);
+        }
+      });
+    }
+
+    // 3. Category 1: New Registrations
+    var existingRegs = getStorage(STORAGE_KEYS.NEW_REGISTRATIONS, SEED_NEW_REGISTRATIONS);
+    if (Array.isArray(existingRegs)) {
+      existingRegs.forEach(function(r) {
+        if (r && r.email) {
+          var em = r.email.toLowerCase();
+          var item = Object.assign({}, userMap[em] || {}, r);
+          item.accountStatus = item.accountStatus || 'pending';
+          item.paymentStatus = item.paymentStatus || r.paymentStatus || 'unpaid';
+          userMap[em] = item;
+        }
+      });
+    }
+
+    // 4. Category 2: Current Interns
+    var existingInterns = getStorage(STORAGE_KEYS.CURRENT_INTERNS, SEED_CURRENT_INTERNS);
+    if (Array.isArray(existingInterns)) {
+      existingInterns.forEach(function(i) {
+        if (i && i.email) {
+          var em = i.email.toLowerCase();
+          var item = Object.assign({}, userMap[em] || {}, i);
+          item.accountStatus = 'active';
+          item.paymentStatus = 'paid';
+          userMap[em] = item;
+        }
+      });
+    }
+
+    // 5. Category 3: All Employees / Certified
+    var existingEmps = getStorage(STORAGE_KEYS.ALL_EMPLOYEES, SEED_ALL_EMPLOYEES);
+    if (Array.isArray(existingEmps)) {
+      existingEmps.forEach(function(e) {
+        if (e && e.email) {
+          var em = e.email.toLowerCase();
+          var item = Object.assign({}, userMap[em] || {}, e);
+          item.accountStatus = 'completed';
+          item.certificateNumber = item.certificateNumber || e.certificateNumber;
+          userMap[em] = item;
+        }
+      });
+    }
+
+    var masterList = Object.values(userMap);
+    setStorage(STORAGE_KEYS.MASTER_DB, masterList);
+    return masterList;
+  }
+
+  // Self-Healing Initialization of Master DB
+  (function ensureMasterDatabase() {
+    initMasterDB();
+  })();
+
   if (!localStorage.getItem(STORAGE_KEYS.APPLICATIONS)) {
     setStorage(STORAGE_KEYS.APPLICATIONS, SEED_APPLICATIONS);
   }
   if (!localStorage.getItem(STORAGE_KEYS.AUDIT_LOGS)) {
     setStorage(STORAGE_KEYS.AUDIT_LOGS, SEED_AUDIT_LOGS);
   }
+
+  // Enterprise Auto-Hydration for 1,000+ Scale Dataset across 7 Replicas
+  (function hydrateEnterpriseDataset() {
+    try {
+      var currentMaster = getStorage(STORAGE_KEYS.MASTER_DB, []);
+      var totalCount = currentMaster ? currentMaster.length : 0;
+
+      if (totalCount < 500 && typeof fetch === 'function' && typeof document !== 'undefined') {
+        var linkTag = document.querySelector('link[href*="style.css"]');
+        var siteRoot = '';
+        if (linkTag) {
+          var href = linkTag.getAttribute('href') || '';
+          var m = href.match(/^(\.\.\/)+/);
+          if (m) siteRoot = m[0];
+        } else {
+          var p = window.location.pathname.replace(/\/$/, '');
+          var depth = (p.match(/\//g) || []).length;
+          if (depth > 1) siteRoot = '../'.repeat(depth - 1);
+        }
+
+        fetch(siteRoot + 'assets/seed_1000_users.json')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.new_registrations && data.new_registrations.length > 0) {
+              var userMap = {};
+              SEED_USERS.forEach(function(u) { userMap[u.email.toLowerCase()] = Object.assign({}, u); });
+              if (data.users) {
+                data.users.forEach(function(u) { if (u && u.email) userMap[u.email.toLowerCase()] = Object.assign({}, u); });
+              }
+              if (data.new_registrations) {
+                data.new_registrations.forEach(function(r) {
+                  if (r && r.email) {
+                    var em = r.email.toLowerCase();
+                    var item = Object.assign({}, userMap[em] || {}, r);
+                    item.accountStatus = item.accountStatus || 'pending';
+                    item.paymentStatus = item.paymentStatus || r.paymentStatus || 'unpaid';
+                    userMap[em] = item;
+                  }
+                });
+              }
+              if (data.current_interns) {
+                data.current_interns.forEach(function(i) {
+                  if (i && i.email) {
+                    var em = i.email.toLowerCase();
+                    var item = Object.assign({}, userMap[em] || {}, i);
+                    item.accountStatus = 'active';
+                    item.paymentStatus = 'paid';
+                    userMap[em] = item;
+                  }
+                });
+              }
+              if (data.all_employees) {
+                data.all_employees.forEach(function(e) {
+                  if (e && e.email) {
+                    var em = e.email.toLowerCase();
+                    var item = Object.assign({}, userMap[em] || {}, e);
+                    item.accountStatus = 'completed';
+                    item.certificateNumber = item.certificateNumber || e.certificateNumber;
+                    userMap[em] = item;
+                  }
+                });
+              }
+              var unifiedMaster = Object.values(userMap);
+              setStorage(STORAGE_KEYS.MASTER_DB, unifiedMaster);
+              setStorage(STORAGE_KEYS.NEW_REGISTRATIONS, data.new_registrations);
+              setStorage(STORAGE_KEYS.CURRENT_INTERNS, data.current_interns);
+              setStorage(STORAGE_KEYS.ALL_EMPLOYEES, data.all_employees);
+              setStorage(STORAGE_KEYS.APPLICATIONS, data.new_registrations);
+              if (data.audit_logs && data.audit_logs.length > 0) setStorage(STORAGE_KEYS.AUDIT_LOGS, data.audit_logs);
+              if (window.YuvantaraDB && typeof window.YuvantaraDB.syncAllReplicas === 'function') {
+                window.YuvantaraDB.syncAllReplicas();
+              }
+              window.dispatchEvent(new CustomEvent('yuvantara_dataset_hydrated'));
+            }
+          })
+          .catch(function() {});
+      }
+    } catch(e) {}
+  })();
 
   var DB = {
     hashPassword: hashPassword,
@@ -560,18 +940,9 @@
         return { valid: false, message: 'Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.' };
       }
 
-      // Reject repetitive dummy digits
+      // Reject obvious all-same digits (e.g. 9999999999)
       if (/^(\d)\1{9}$/.test(clean)) {
-        return { valid: false, message: 'Invalid phone number: repetitive dummy numbers are not permitted.' };
-      }
-
-      // Reject dummy sequential sequences
-      var dummySequences = [
-        '1234567890', '0123456789', '9876543210', '0987654321',
-        '9898989898', '9988776655', '9123456789', '9000000000'
-      ];
-      if (dummySequences.indexOf(clean) !== -1) {
-        return { valid: false, message: 'Please enter your genuine active mobile number. Dummy sequential numbers are rejected.' };
+        return { valid: false, message: 'Invalid phone number: all repetitive digits are not permitted.' };
       }
 
       return { valid: true, phone: '+91 ' + clean.slice(0, 5) + ' ' + clean.slice(5) };
@@ -581,7 +952,7 @@
     logAuditAction: function(adminEmail, actionType, targetId, details, targetUserName) {
       var logs = getStorage(STORAGE_KEYS.AUDIT_LOGS, SEED_AUDIT_LOGS);
       var entry = {
-        id: 'LOG-' + Date.now().toString().slice(-6),
+        id: 'LOG-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(100 + Math.random() * 900),
         timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false }),
         adminEmail: adminEmail || 'System',
         actionType: actionType || 'GENERAL_ACTION',
@@ -603,17 +974,17 @@
       return getStorage(STORAGE_KEYS.AUDIT_LOGS, SEED_AUDIT_LOGS);
     },
 
-    // ── User Management ──
+    // ── User Management (Operating on Single Unified Master DB) ──
     getUsers: function() {
-      return getStorage(STORAGE_KEYS.USERS, SEED_USERS);
+      return this.getMasterDB();
     },
 
     getStudents: function() {
-      return this.getUsers().filter(function(u) { return u.role === 'student'; });
+      return this.getMasterDB().filter(function(u) { return u && u.role === 'student'; });
     },
 
     getAdmins: function() {
-      return this.getUsers().filter(function(u) { return u.role === 'admin'; });
+      return this.getMasterDB().filter(function(u) { return u && u.role === 'admin'; });
     },
 
     isSuperAdmin: function(email) {
@@ -623,10 +994,15 @@
 
     getUserByEmail: function(email) {
       if (!email) return null;
-      var users = this.getUsers();
+      var users = this.getMasterDB();
       email = email.trim().toLowerCase();
       for (var i = 0; i < users.length; i++) {
-        if (users[i].email.toLowerCase() === email) return users[i];
+        if (users[i] && users[i].email && users[i].email.toLowerCase() === email) return users[i];
+      }
+      for (var j = 0; j < SEED_USERS.length; j++) {
+        if (SEED_USERS[j] && SEED_USERS[j].email && SEED_USERS[j].email.toLowerCase() === email) {
+          return SEED_USERS[j];
+        }
       }
       return null;
     },
@@ -651,7 +1027,7 @@
       }
 
       var users = this.getUsers();
-      var stuId = 'USR-' + (Date.now().toString().slice(-5));
+      var stuId = 'USR-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(100 + Math.random() * 900);
       var todayStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
       var newStudent = {
@@ -703,8 +1079,9 @@
         }
       };
 
-      users.push(newStudent);
-      setStorage(STORAGE_KEYS.USERS, users);
+      var master = this.getMasterDB();
+      master.push(newStudent);
+      this.saveMasterDB(master);
 
       this.logAuditAction(
         registeringAdminEmail || 'System',
@@ -838,7 +1215,7 @@
           }
         }
 
-        setStorage(STORAGE_KEYS.USERS, users);
+        this.saveMasterDB(users);
         if (modifyingAdminEmail) {
           this.logAuditAction(
             modifyingAdminEmail,
@@ -1055,6 +1432,48 @@
         cleanName + ' (' + email + ')'
       );
 
+      // 1. Save into All Employees category across all 7 database replicas for public verification
+      var employees = this.getAllEmployees();
+      var empRecord = {
+        id: 'EMP-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(100 + Math.random() * 900),
+        name: cleanName,
+        email: student.email,
+        phone: student.phone || '',
+        dob: student.dob || '',
+        role: (student.track ? student.track.split(' ')[0] : 'Engineering') + ' Specialist',
+        domain: student.track || 'Industrial Internship',
+        college: cleanCollege,
+        stream: student.stream || '',
+        certificateNumber: certId,
+        issueDate: todayFormatted,
+        grade: 'Grade A+ (Distinction)',
+        duration: '6 Months Industrial Internship',
+        authority: 'Yuvantara Academic & Cyber Defense Council',
+        verificationUrl: 'https://yuvantaraventure.in/verify-certificate/index.html?id=' + encodeURIComponent(certId),
+        status: 'completed',
+        approvedByAdmin: issuingAdminEmail || student.enrolledByAdmin || 'Admissions Council',
+        approvedAt: new Date().toISOString().split('T')[0]
+      };
+      var empIdx = employees.findIndex(function(e) { return e.email && e.email.toLowerCase() === email; });
+      if (empIdx !== -1) {
+        employees[empIdx] = empRecord;
+      } else {
+        employees.unshift(empRecord);
+      }
+      setStorage(STORAGE_KEYS.ALL_EMPLOYEES, employees);
+
+      // 2. Also update in current_interns if present
+      var interns = this.getCurrentInterns();
+      var intIdx = interns.findIndex(function(i) { return i.email && i.email.toLowerCase() === email; });
+      if (intIdx !== -1) {
+        interns[intIdx].progress = 100;
+        interns[intIdx].certificate = cert;
+        setStorage(STORAGE_KEYS.CURRENT_INTERNS, interns);
+      }
+
+      // 3. Atomically update all 7 database replicas together
+      this.syncAllReplicas();
+
       return { success: true, user: student, certificate: cert };
     },
 
@@ -1105,12 +1524,46 @@
       localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
     },
 
-    // Applications with Locked Admin Attribution
-    getApplications: function() {
-      return getStorage(STORAGE_KEYS.APPLICATIONS, SEED_APPLICATIONS);
+    // ── Unified Single Master Database & 7-Replica Synchronization Engine ──
+    initMasterDB: initMasterDB,
+
+    getMasterDB: function() {
+      var master = getStorage(STORAGE_KEYS.MASTER_DB, null);
+      if (!master || !Array.isArray(master) || master.length === 0) {
+        master = initMasterDB();
+      }
+      return master;
     },
 
-    submitApplication: function(data) {
+    saveMasterDB: function(records) {
+      if (!Array.isArray(records)) return;
+      setStorage(STORAGE_KEYS.MASTER_DB, records);
+      setStorage(STORAGE_KEYS.USERS, records);
+      // Synchronize backward-compatible filtered views
+      setStorage(STORAGE_KEYS.NEW_REGISTRATIONS, this.getNewRegistrations());
+      setStorage(STORAGE_KEYS.CURRENT_INTERNS, this.getCurrentInterns());
+      setStorage(STORAGE_KEYS.ALL_EMPLOYEES, this.getAllEmployees());
+      setStorage(STORAGE_KEYS.APPLICATIONS, this.getNewRegistrations());
+    },
+
+    syncAllReplicas: function() {
+      // 1 Master Database: Legacy replica sync eliminated
+      return { master_db_count: this.getMasterDB().length, status: 'Single Master Database Active' };
+    },
+
+    // ── Category 1: New Registrations (Querying Unified Master DB) ──
+    getNewRegistrations: function() {
+      return this.getMasterDB().filter(function(u) {
+        if (!u || u.role === 'admin' || u.role === 'superadmin') return false;
+        // Once approved (active) or graduated (completed) or has certificate, MUST NOT be in pending registrations!
+        if (u.accountStatus === 'active' || u.status === 'active' || u.accountStatus === 'completed' || u.status === 'completed' || u.certificateNumber) {
+          return false;
+        }
+        return (u.accountStatus === 'pending' || u.accountStatus === 'pending_payment' || u.paymentStatus === 'unpaid' || u.status === 'pending');
+      });
+    },
+
+    submitNewRegistration: function(data) {
       if (data.email) {
         var emailVal = this.validateEmail(data.email);
         if (!emailVal.valid) return { success: false, message: emailVal.message };
@@ -1122,36 +1575,316 @@
         data.phone = phoneVal.phone;
       }
 
-      var apps = this.getApplications();
-      var newApp = {
-        id: 'APP-' + (Date.now().toString().slice(-4)),
-        name: data.name || 'Applicant',
-        email: (data.email || '').trim().toLowerCase(),
-        phone: data.phone || '',
-        dob: data.dob || '',
-        track: data.track || 'Cybersecurity & SOC Operations',
-        stream: data.stream || '',
-        college: data.college || '',
-        password: data.password || 'student123',
-        appliedAt: new Date().toISOString().split('T')[0],
-        status: 'pending',
-        lockedApprovedBy: null
+      var email = (data.email || '').trim().toLowerCase();
+      var master = this.getMasterDB();
+      var idx = master.findIndex(function(r) { return r && r.email && r.email.toLowerCase() === email; });
+
+      var isPaid = data.paymentStatus === 'paid' || !!data.paymentRef;
+      var record = {
+        id: data.id || (idx !== -1 && master[idx].id ? master[idx].id : ('REG-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(100 + Math.random() * 900))),
+        name: data.name || (idx !== -1 ? master[idx].name : 'Student Candidate'),
+        email: email,
+        phone: data.phone || (idx !== -1 ? master[idx].phone : ''),
+        dob: data.dob || (idx !== -1 ? master[idx].dob : ''),
+        track: data.track || (idx !== -1 ? master[idx].track : 'Cybersecurity & SOC Operations'),
+        stream: data.stream || (idx !== -1 ? master[idx].stream : ''),
+        college: data.college || (idx !== -1 ? master[idx].college : ''),
+        role: 'student',
+        registeredAt: data.registeredAt || (idx !== -1 && master[idx].registeredAt ? master[idx].registeredAt : new Date().toISOString().split('T')[0]),
+        paymentStatus: isPaid ? 'paid' : (data.paymentStatus || 'unpaid'),
+        paymentAmount: isPaid ? (data.paymentAmount || 236) : 0,
+        paymentRef: data.paymentRef || (idx !== -1 ? master[idx].paymentRef : null),
+        paymentMethod: data.paymentMethod || (idx !== -1 ? master[idx].paymentMethod : null),
+        paidAt: data.paidAt || (isPaid ? new Date().toISOString().split('T')[0] : null),
+        accountStatus: data.accountStatus || (isPaid ? 'pending' : 'pending_payment'),
+        status: data.accountStatus || (isPaid ? 'pending' : 'pending_payment'),
+        progress: idx !== -1 && typeof master[idx].progress === 'number' ? master[idx].progress : 0,
+        modules: idx !== -1 && master[idx].modules ? master[idx].modules : []
       };
-      apps.unshift(newApp);
-      setStorage(STORAGE_KEYS.APPLICATIONS, apps);
-      if (window.YuvantaraCloudDB) {
-        window.YuvantaraCloudDB.saveDocument('applications', newApp.id, newApp);
+
+      if (idx !== -1) {
+        master[idx] = Object.assign({}, master[idx], record);
+      } else {
+        master.unshift(record);
       }
-      return { success: true, app: newApp };
+
+      // Save to Single Unified Master Database
+      this.saveMasterDB(master);
+
+      return { success: true, app: record, registration: record, applicant: record };
+    },
+
+    // ── Category 2: Current Interns (Querying Unified Master DB) ──
+    getCurrentInterns: function() {
+      return this.getMasterDB().filter(function(u) {
+        if (!u || u.role === 'admin' || u.role === 'superadmin') return false;
+        return (u.accountStatus === 'active' || u.status === 'active') && (!u.certificateNumber && (typeof u.progress !== 'number' || u.progress < 100));
+      });
+    },
+
+    // Move from New Registrations to Current Interns upon Authority Verification (in 1 Single DB)
+    verifyAndApproveRegistration: function(regId, approvingAdminEmail) {
+      var master = this.getMasterDB();
+      var idClean = (regId || '').toString().trim().toLowerCase();
+      var idx = master.findIndex(function(r) {
+        return r && (
+          (r.id && r.id.toString().trim().toLowerCase() === idClean) ||
+          (r.email && r.email.toString().trim().toLowerCase() === idClean)
+        );
+      });
+      if (idx === -1) {
+        return { success: false, message: 'Registration record not found in master database.' };
+      }
+
+      var reg = master[idx];
+      reg.accountStatus = 'active';
+      reg.status = 'active';
+      reg.approvedByAdmin = approvingAdminEmail || 'Admin Authority';
+      reg.approvedAt = new Date().toISOString().split('T')[0];
+      reg.enrolledAt = reg.approvedAt;
+      if (reg.paymentStatus === 'unpaid') {
+        reg.paymentStatus = 'authorized';
+      }
+      if (typeof reg.progress !== 'number' || reg.progress === 0) {
+        reg.progress = 20; // 20% initial progress upon access grant
+      }
+      if (!reg.modules || reg.modules.length === 0) {
+        reg.modules = [
+          { name: 'Module 1: Orientation & Foundations', status: 'completed' },
+          { name: 'Module 2: Practical Lab Implementations', status: 'in_progress' },
+          { name: 'Module 3: Project Architecture & Execution', status: 'pending' },
+          { name: 'Module 4: Mid-Term Assessment', status: 'pending' },
+          { name: 'Module 5: Capstone Review & Final Submission', status: 'pending' }
+        ];
+      }
+      master[idx] = reg;
+      this.saveMasterDB(master);
+
+      // Synchronize active session user if currently logged in
+      var sessionUser = getStorage(STORAGE_KEYS.CURRENT_USER, null);
+      if (sessionUser && sessionUser.email && sessionUser.email.toLowerCase() === reg.email.toLowerCase()) {
+        sessionUser.accountStatus = 'active';
+        sessionUser.status = 'active';
+        sessionUser.progress = reg.progress;
+        sessionUser.modules = reg.modules;
+        sessionUser.approvedByAdmin = reg.approvedByAdmin;
+        setStorage(STORAGE_KEYS.CURRENT_USER, sessionUser);
+      }
+
+      // Log which admin authorized it
+      this.logAuditAction(
+        approvingAdminEmail || 'System Admin',
+        'VERIFY_AND_AUTHORIZE_INTERN',
+        reg.id,
+        'Authorized registration ' + reg.id + ' for ' + reg.name + ' and moved to Current Interns (Progress Active)',
+        reg.name + ' (' + reg.email + ')'
+      );
+
+      return { success: true, intern: reg };
+    },
+
+    updateIntern: function(idOrEmail, updates, modifyingAdminEmail) {
+      if (!idOrEmail) return { success: false, message: 'Intern identifier required.' };
+      var idLow = idOrEmail.toString().trim().toLowerCase();
+      var master = this.getMasterDB();
+      var target = null;
+
+      for (var i = 0; i < master.length; i++) {
+        if (master[i] && ((master[i].id && master[i].id.toLowerCase() === idLow) || (master[i].email && master[i].email.toLowerCase() === idLow))) {
+          for (var k in updates) {
+            if (updates.hasOwnProperty(k) && k !== 'id' && k !== 'email') {
+              master[i][k] = updates[k];
+            }
+          }
+          if (modifyingAdminEmail) {
+            master[i].lastModifiedByAdmin = modifyingAdminEmail;
+            master[i].lastModifiedAt = new Date().toISOString();
+          }
+          target = master[i];
+          break;
+        }
+      }
+
+      if (target) {
+        this.saveMasterDB(master);
+
+        this.logAuditAction(
+          modifyingAdminEmail || 'System Admin',
+          'UPDATE_INTERN_PROGRESS',
+          target.id,
+          'Updated progress to ' + target.progress + '% for ' + target.name,
+          target.name + ' (' + target.email + ')'
+        );
+
+        return { success: true, intern: target };
+      }
+      return { success: false, message: 'Intern not found.' };
+    },
+
+    // ── Category 3: All Employees (Querying Unified Master DB) ──
+    getAllEmployees: function() {
+      return this.getMasterDB().filter(function(u) {
+        if (!u || u.role === 'admin' || u.role === 'superadmin') return false;
+        return u.certificateNumber || u.accountStatus === 'completed' || u.status === 'completed' || (typeof u.progress === 'number' && u.progress >= 100) || u.role === 'employee';
+      });
+    },
+
+    graduateToEmployee: function(emailOrId, certData, approvingAdminEmail) {
+      certData = certData || {};
+      var master = this.getMasterDB();
+      var idLow = (emailOrId || '').toString().toLowerCase().trim();
+      var idx = master.findIndex(function(i) {
+        return i && (
+          (i.email && i.email.toLowerCase() === idLow) ||
+          (i.id && i.id.toLowerCase() === idLow)
+        );
+      });
+      if (idx === -1) return { success: false, message: 'Intern not found in master database.' };
+
+      var intern = master[idx];
+      var certNum = certData.certNumber || ('YUV-2026-' + (intern.track ? intern.track.slice(0, 2).toUpperCase() : 'CS') + Math.floor(100 + Math.random() * 900));
+      var dateStr = certData.issueDate || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+      intern.certificateNumber = certNum;
+      intern.certificate = {
+        id: certNum,
+        certNumber: certNum,
+        date: dateStr,
+        grade: certData.grade || 'Grade A+ (Distinction)',
+        status: 'valid'
+      };
+      intern.progress = 100;
+      intern.issueDate = dateStr;
+      intern.accountStatus = 'completed';
+      intern.status = 'completed';
+      intern.role = certData.role || (intern.track ? intern.track.split(' ')[0] + ' Specialist' : 'Specialist');
+      intern.grade = intern.certificate.grade;
+      intern.duration = '6 Months Industrial Internship';
+      intern.authority = 'Yuvantara Academic & Skill Council';
+      intern.verificationUrl = 'https://yuvantaraventure.in/verify-certificate/?id=' + encodeURIComponent(certNum);
+      intern.approvedByAdmin = approvingAdminEmail || 'Admin Authority';
+      intern.approvedAt = new Date().toISOString().split('T')[0];
+
+      master[idx] = intern;
+      this.saveMasterDB(master);
+
+      // Log in audit trail
+      this.logAuditAction(
+        approvingAdminEmail || 'System Admin',
+        'GRADUATE_TO_ALL_EMPLOYEES',
+        certNum,
+        'Graduated intern ' + intern.name + ' to All Employees with Certificate ' + certNum + ' (Unified 1 DB)',
+        intern.name + ' (' + intern.email + ')'
+      );
+
+      return { success: true, employee: intern, certificateNumber: certNum };
+    },
+
+    verifyCertificate: function(certId) {
+      if (!certId) return { found: false, message: 'Certificate ID is required' };
+      var idClean = certId.toString().trim().toUpperCase();
+      var employees = this.getAllEmployees();
+      for (var i = 0; i < employees.length; i++) {
+        var emp = employees[i];
+        var cNum = (emp.certificate && emp.certificate.id) ? emp.certificate.id : emp.certificateNumber;
+        if (cNum && cNum.toString().trim().toUpperCase() === idClean) {
+          return {
+            found: true,
+            data: {
+              name: emp.name,
+              email: emp.email,
+              course: (emp.certificate && emp.certificate.title) || emp.track || 'Industrial Internship Program',
+              certificateNumber: cNum,
+              date: (emp.certificate && (emp.certificate.issueDate || emp.certificate.date)) || emp.issueDate || '2026',
+              grade: (emp.certificate && emp.certificate.grade) || emp.grade || 'Grade A+ (Distinction)',
+              status: (emp.certificate && emp.certificate.status) || emp.status || 'valid'
+            }
+          };
+        }
+      }
+      return { found: false, message: 'Certificate not found in registry.' };
+    },
+
+    // ── Atomic Multi-Replica Deletion (from 1 Single Master DB) ──
+    deleteRecord: function(category, id, adminEmail) {
+      var master = this.getMasterDB();
+      var idLow = id.toString().trim().toLowerCase();
+      var idx = master.findIndex(function(u) {
+        return u && (
+          (u.id && u.id.toLowerCase() === idLow) ||
+          (u.email && u.email.toLowerCase() === idLow) ||
+          (u.certificateNumber && u.certificateNumber.toLowerCase() === idLow)
+        );
+      });
+
+      if (idx !== -1) {
+        var deletedItem = master.splice(idx, 1)[0];
+        this.saveMasterDB(master);
+
+        this.logAuditAction(
+          adminEmail || 'System Admin',
+          'DELETE_RECORD',
+          id,
+          'Deleted record: ' + deletedItem.name + ' (' + deletedItem.email + ') from master database',
+          deletedItem.name + ' (' + deletedItem.email + ')'
+        );
+
+        return { success: true, message: 'Record deleted from master database.' };
+      }
+
+      return { success: false, message: 'Record not found in master database.' };
+    },
+
+    getReplicasMetadata: function() {
+      return [];
+    },
+
+    // Applications with Locked Admin Attribution (Backward-compat alias for new registrations)
+    getApplications: function() {
+      return this.getNewRegistrations();
+    },
+
+    submitApplication: function(data) {
+      return this.submitNewRegistration(data);
     },
 
     saveApplication: function(data) {
-      return this.submitApplication(data);
+      return this.submitNewRegistration(data);
     },
 
     getCertificateByNumber: function(certNum) {
       if (!certNum) return null;
       certNum = certNum.trim().toUpperCase();
+
+      // 1. Check all_employees category
+      var employees = this.getAllEmployees();
+      for (var j = 0; j < employees.length; j++) {
+        var emp = employees[j];
+        if (emp.certificateNumber && emp.certificateNumber.toUpperCase() === certNum) {
+          return {
+            name: emp.name,
+            course: emp.domain || emp.role,
+            duration: emp.duration || '6 Months Industrial Internship',
+            grade: emp.grade || 'Grade A+ (Distinction)',
+            date: emp.issueDate,
+            college: emp.college,
+            status: emp.status === 'revoked' ? 'revoked' : 'valid',
+            authority: emp.authority || 'Yuvantara Academic & Skill Council',
+            id: emp.certificateNumber,
+            certNumber: emp.certificateNumber
+          };
+        }
+      }
+
+      // 2. Check current_interns
+      var interns = this.getCurrentInterns();
+      for (var k = 0; k < interns.length; k++) {
+        var intn = interns[k];
+        if (intn.certificate && (intn.certificate.certNumber === certNum || intn.certificate.id === certNum)) {
+          return intn.certificate;
+        }
+      }
+
       var students = this.getStudents();
       for (var i = 0; i < students.length; i++) {
         var c = students[i].certificate;

@@ -1,17 +1,18 @@
 // Yuvantara Admin Command Center Controller
-// Production Role-Based Access: Super Admin (a4dr_00@supper) & 6 Administrators
-// Implements Immutable Action Ownership Locking & System Audit Logging
+// 3 Synchronized Databases: 1. New Registrations, 2. Current Interns, 3. All Employees
+// 7 Synchronized Replicas: 1 Master Super Admin + 6 System Administrators (Atomic Multi-Replica Updates & Deletions)
 (function() {
   'use strict';
 
   var currentAdmin = null;
 
-  var studentFilterState = {
+  var internFilterState = {
     timeframe: 'all',
-    from: '',
-    to: '',
     track: 'all',
-    status: 'all',
+    search: ''
+  };
+
+  var employeeFilterState = {
     search: ''
   };
 
@@ -21,65 +22,48 @@
     search: ''
   };
 
-  function applyStudentFilters(students) {
-    if (!students) return [];
+  function applyInternFilters(interns) {
+    if (!interns) return [];
     var now = new Date();
     var todayStr = now.toISOString().substring(0, 10);
 
-    return students.filter(function(s) {
+    return interns.filter(function(i) {
       // 1. Timeframe
-      if (studentFilterState.timeframe !== 'all') {
-        var stuDateStr = s.registeredAt || s.paidAt || (s.certificate && s.certificate.date) || '';
-        var stuDate = stuDateStr ? new Date(stuDateStr) : null;
+      if (internFilterState.timeframe !== 'all') {
+        var dateStr = i.enrolledAt || i.approvedAt || '';
+        var date = dateStr ? new Date(dateStr) : null;
 
-        if (studentFilterState.timeframe === 'today') {
-          if (!stuDateStr || stuDateStr.substring(0, 10) !== todayStr) return false;
-        } else if (studentFilterState.timeframe === '7days') {
-          if (!stuDate) return false;
-          var diff7 = (now - stuDate) / (1000 * 60 * 60 * 24);
+        if (internFilterState.timeframe === 'today') {
+          if (!dateStr || dateStr.substring(0, 10) !== todayStr) return false;
+        } else if (internFilterState.timeframe === '7days') {
+          if (!date) return false;
+          var diff7 = (now - date) / (1000 * 60 * 60 * 24);
           if (diff7 < 0 || diff7 > 7) return false;
-        } else if (studentFilterState.timeframe === '30days') {
-          if (!stuDate) return false;
-          var diff30 = (now - stuDate) / (1000 * 60 * 60 * 24);
+        } else if (internFilterState.timeframe === '30days') {
+          if (!date) return false;
+          var diff30 = (now - date) / (1000 * 60 * 60 * 24);
           if (diff30 < 0 || diff30 > 30) return false;
-        } else if (studentFilterState.timeframe === 'this_month') {
-          if (!stuDate) return false;
-          if (stuDate.getMonth() !== now.getMonth() || stuDate.getFullYear() !== now.getFullYear()) return false;
-        } else if (studentFilterState.timeframe === 'custom') {
-          if (studentFilterState.from) {
-            var fDate = new Date(studentFilterState.from);
-            if (!stuDate || stuDate < fDate) return false;
-          }
-          if (studentFilterState.to) {
-            var tDate = new Date(studentFilterState.to + 'T23:59:59');
-            if (!stuDate || stuDate > tDate) return false;
-          }
+        } else if (internFilterState.timeframe === 'this_month') {
+          if (!date) return false;
+          if (date.getMonth() !== now.getMonth() || date.getFullYear() !== now.getFullYear()) return false;
         }
       }
 
       // 2. Track
-      if (studentFilterState.track !== 'all') {
-        if ((s.track || '') !== studentFilterState.track) return false;
+      if (internFilterState.track !== 'all') {
+        if ((i.track || '') !== internFilterState.track) return false;
       }
 
-      // 3. Status
-      if (studentFilterState.status !== 'all') {
-        if (studentFilterState.status === 'active' && s.accountStatus === 'pending') return false;
-        if (studentFilterState.status === 'pending' && s.accountStatus !== 'pending') return false;
-        if (studentFilterState.status === 'certified' && (!s.certificate || !s.certificate.id || s.certificate.status === 'revoked')) return false;
-        if (studentFilterState.status === 'revoked' && (!s.certificate || s.certificate.status !== 'revoked')) return false;
-      }
-
-      // 4. Search
-      if (studentFilterState.search) {
-        var q = studentFilterState.search.toLowerCase().trim();
-        var match = (s.name && s.name.toLowerCase().indexOf(q) !== -1) ||
-                    (s.email && s.email.toLowerCase().indexOf(q) !== -1) ||
-                    (s.phone && s.phone.toLowerCase().indexOf(q) !== -1) ||
-                    (s.college && s.college.toLowerCase().indexOf(q) !== -1) ||
-                    (s.id && s.id.toLowerCase().indexOf(q) !== -1) ||
-                    (s.track && s.track.toLowerCase().indexOf(q) !== -1) ||
-                    (s.enrolledByAdmin && s.enrolledByAdmin.toLowerCase().indexOf(q) !== -1);
+      // 3. Search
+      if (internFilterState.search) {
+        var q = internFilterState.search.toLowerCase().trim();
+        var match = (i.name && i.name.toLowerCase().indexOf(q) !== -1) ||
+                    (i.email && i.email.toLowerCase().indexOf(q) !== -1) ||
+                    (i.phone && i.phone.toLowerCase().indexOf(q) !== -1) ||
+                    (i.college && i.college.toLowerCase().indexOf(q) !== -1) ||
+                    (i.id && i.id.toLowerCase().indexOf(q) !== -1) ||
+                    (i.track && i.track.toLowerCase().indexOf(q) !== -1) ||
+                    (i.approvedByAdmin && i.approvedByAdmin.toLowerCase().indexOf(q) !== -1);
         if (!match) return false;
       }
 
@@ -87,20 +71,30 @@
     });
   }
 
+  function applyEmployeeFilters(employees) {
+    if (!employees) return [];
+    if (!employeeFilterState.search) return employees;
+    var q = employeeFilterState.search.toLowerCase().trim();
+    return employees.filter(function(e) {
+      return (e.name && e.name.toLowerCase().indexOf(q) !== -1) ||
+             (e.email && e.email.toLowerCase().indexOf(q) !== -1) ||
+             (e.phone && e.phone.toLowerCase().indexOf(q) !== -1) ||
+             (e.role && e.role.toLowerCase().indexOf(q) !== -1) ||
+             (e.domain && e.domain.toLowerCase().indexOf(q) !== -1) ||
+             (e.certificateNumber && e.certificateNumber.toLowerCase().indexOf(q) !== -1) ||
+             (e.id && e.id.toLowerCase().indexOf(q) !== -1);
+    });
+  }
+
   function applyAuditFilters(logs) {
     if (!logs) return [];
     return logs.filter(function(l) {
-      // 1. Admin
       if (auditFilterState.admin !== 'all') {
         if (l.adminEmail !== auditFilterState.admin) return false;
       }
-
-      // 2. Action
       if (auditFilterState.action !== 'all') {
         if (l.actionType.indexOf(auditFilterState.action) === -1) return false;
       }
-
-      // 3. Search
       if (auditFilterState.search) {
         var q = auditFilterState.search.toLowerCase().trim();
         var targetInfo = '';
@@ -114,7 +108,6 @@
                     (targetInfo.toLowerCase().indexOf(q) !== -1);
         if (!match) return false;
       }
-
       return true;
     });
   }
@@ -142,26 +135,24 @@
 
   // ── Render All Sections ──
   function renderAdminDashboard() {
-    var students = YuvantaraDB.getStudents();
-    var apps = YuvantaraDB.getApplications();
+    var newRegs = YuvantaraDB.getNewRegistrations();
+    var currentInterns = YuvantaraDB.getCurrentInterns();
+    var allEmployees = YuvantaraDB.getAllEmployees();
     var auditLogs = YuvantaraDB.getAuditLogs();
     var admins = YuvantaraDB.getAdmins();
 
-    var isSuper = (currentAdmin && (currentAdmin.role === 'superadmin' || currentAdmin.email === 'a4dr_00@supper'));
+    var isSuper = (currentAdmin && (currentAdmin.role === 'superadmin' || currentAdmin.email === 'a4dr_00@supper' || currentAdmin.email === 'admin@yuvantara.com'));
 
-    var pendingApps = apps.filter(function(a) { return a.status === 'pending'; });
-    var issuedCerts = students.filter(function(s) {
-      return s.certificate && (s.certificate.id || s.certificate.status === 'revoked');
-    });
-    var pendingStudents = students.filter(function(s) { return s.accountStatus === 'pending'; });
+    // Update KPIs (3 Categories + Single Master DB)
+    setText('kpi-new-regs', newRegs.length);
+    setText('kpi-current-interns', currentInterns.length);
+    setText('kpi-all-employees', allEmployees.length);
+    setText('kpi-master-records', YuvantaraDB.getMasterDB().length);
 
-    // Update KPIs
-    setText('kpi-students', students.length);
-    setText('kpi-apps', pendingApps.length);
-    setText('kpi-certs', issuedCerts.length);
-    setText('tab-cnt-students', students.length);
-    setText('tab-cnt-apps', apps.length);
-    setText('tab-cnt-certs', issuedCerts.length);
+    // Update Tab Counters
+    setText('tab-cnt-new-regs', newRegs.length);
+    setText('tab-cnt-current-interns', currentInterns.length);
+    setText('tab-cnt-all-employees', allEmployees.length);
     setText('tab-cnt-audit', auditLogs.length);
     setText('tab-cnt-admins', admins.length);
 
@@ -180,7 +171,7 @@
           '<p>' +
             '<span class="admin-badge" style="background:#DC2626;color:#fff">👑 Super Admin Clearance</span>' +
             '<span>🔑 Logged In: ' + escapeHtml(currentAdmin.email) + '</span>' +
-            '<span>📍 Master Control (All 6 Admins Manageable)</span>' +
+            '<span>📍 Single Master Database (yuvantara_master_db)</span>' +
           '</p>';
       } else {
         headerMeta.innerHTML =
@@ -188,88 +179,148 @@
           '<p>' +
             '<span class="admin-badge">Admin Clearance</span>' +
             '<span>👤 Logged In: ' + escapeHtml(currentAdmin.email) + '</span>' +
-            '<span>🔒 Actions Attributed &amp; Locked</span>' +
+            '<span>🔒 Actions Stored in Single Master DB</span>' +
           '</p>';
       }
     }
 
-    // Pending student counter badge
-    var stuTabCnt = document.getElementById('tab-cnt-students');
-    if (stuTabCnt && pendingStudents.length > 0) {
-      stuTabCnt.textContent = students.length + ' (' + pendingStudents.length + ' pending)';
-    }
-
     // Render Tables
-    renderStudentsTable(students);
-    renderApplicationsTable(apps);
-    renderCertificatesTable(issuedCerts);
+    renderPendingEnrollmentsSection(newRegs);
+    renderNewRegistrationsTable(newRegs);
+    renderCurrentInternsTable(currentInterns);
+    renderAllEmployeesTable(allEmployees);
     renderAuditTable(auditLogs);
     if (isSuper) renderSuperAdminRosterTable(admins, auditLogs);
     renderJsonViewer();
   }
 
-  // ── Render Students Table ──
-  function renderStudentsTable(students) {
-    var tbody = document.getElementById('admin-students-tbody');
+  // ── Render Quickview Notification Section ──
+  function renderPendingEnrollmentsSection(newRegs) {
+    var container = document.getElementById('pending-enrollments-quickview');
+    var listEl = document.getElementById('pending-enrollments-list');
+    var badgeEl = document.getElementById('pending-enrollments-badge');
+    if (!container || !listEl) return;
+
+    if (!newRegs || newRegs.length === 0) {
+      if (badgeEl) badgeEl.textContent = '0 New';
+      listEl.innerHTML = '<div style="text-align:center;padding:16px;color:#64748B;font-size:.9rem">✅ No pending registration requests at this time. All applicants have been verified.</div>';
+      return;
+    }
+
+    if (badgeEl) badgeEl.textContent = newRegs.length + ' New';
+
+    var html = '<div style="display:flex;flex-direction:column;gap:12px">';
+    newRegs.forEach(function(r) {
+      var isPaid = r.paymentStatus === 'paid' || !!r.paymentRef;
+      var statusBadge = isPaid
+        ? '<span style="background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:4px;font-weight:600">✅ Paid (₹236) · Pending Access</span>'
+        : '<span style="background:#FEF3C7;color:#B45309;padding:2px 8px;border-radius:4px;font-weight:600">⚠️ Unpaid · Registration Logged</span>';
+
+      var descText = isPaid
+        ? '📢 Person <span style="color:#1E40AF">' + escapeHtml(r.name) + '</span> has registered &amp; completed payment (₹236) for <span style="color:#0F172A;text-decoration:underline">' + escapeHtml(r.track || 'Internship Program') + '</span>. Grant internship access.'
+        : '📢 Person <span style="color:#1E40AF">' + escapeHtml(r.name) + '</span> has registered for <span style="color:#0F172A;text-decoration:underline">' + escapeHtml(r.track || 'Internship Program') + '</span> (Pending Payment).';
+
+      html +=
+        '<div style="background:#fff;border:1px solid #E2E8F0;border-left:4px solid ' + (isPaid ? '#10B981' : '#F59E0B') + ';border-radius:8px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">' +
+          '<div style="flex:1;min-width:280px">' +
+            '<div style="font-size:1rem;color:#0F172A;font-weight:700;margin-bottom:4px">' +
+              descText +
+            '</div>' +
+            '<div style="display:flex;gap:14px;flex-wrap:wrap;font-size:.84rem;color:#475569;margin-top:4px">' +
+              '<span><strong>Email:</strong> ' + escapeHtml(r.email) + '</span>' +
+              '<span><strong>Phone:</strong> ' + escapeHtml(r.phone || '—') + '</span>' +
+              '<span><strong>College:</strong> ' + escapeHtml(r.college || '—') + '</span>' +
+              '<span><strong>Date:</strong> ' + escapeHtml(r.registeredAt || 'Recent') + '</span>' +
+              '<span><strong>Status:</strong> ' + statusBadge + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;align-items:center">' +
+            '<button class="btn-sm-action primary" data-act="verify-reg" data-regid="' + escapeHtml(r.id) + '" style="padding:8px 16px;font-size:.85rem;background:#15803D;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">✅ Grant Access</button>' +
+            '<button class="btn-sm-action danger" data-act="reject-reg" data-regid="' + escapeHtml(r.id) + '" style="padding:8px 16px;font-size:.85rem;background:#DC2626;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:600">❌ Reject</button>' +
+          '</div>' +
+        '</div>';
+    });
+    html += '</div>';
+    listEl.innerHTML = html;
+  }
+
+  // ── Render Category 1: New Registrations Table (Querying Unified Master DB) ──
+  function renderNewRegistrationsTable(newRegs) {
+    var tbody = document.getElementById('admin-new-regs-tbody');
     if (!tbody) return;
 
-    var filtered = applyStudentFilters(students);
+    if (!newRegs || newRegs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#64748B">No new registration requests in queue.</td></tr>';
+      return;
+    }
+
+    var html = '';
+    newRegs.forEach(function(r) {
+      var isPaid = r.paymentStatus === 'paid' || !!r.paymentRef;
+      var statusBadge = isPaid
+        ? '<span class="module-status-badge" style="background:#DCFCE7;color:#15803D;border:1px solid #86EFAC;font-size:.78rem">✅ Paid (₹236) · Pending Access</span>'
+        : '<span class="module-status-badge" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A;font-size:.78rem">⚠️ Unpaid · Registration Logged</span>';
+
+      html += '<tr>' +
+        '<td><code style="color:#0F172A;font-weight:700">' + escapeHtml(r.id) + '</code></td>' +
+        '<td><strong style="color:#0F172A">' + escapeHtml(r.name) + '</strong></td>' +
+        '<td><div>' + escapeHtml(r.email) + '</div><div style="font-size:.82rem;color:#64748B">' + escapeHtml(r.phone || '') + '</div></td>' +
+        '<td><span class="badge-track" style="font-size:.78rem">' + escapeHtml(r.track || 'Track') + '</span></td>' +
+        '<td><div>' + escapeHtml(r.college || '—') + '</div><small style="color:#64748B">' + escapeHtml(r.stream || '') + '</small></td>' +
+        '<td><span style="font-size:.85rem;color:#64748B">' + escapeHtml(r.registeredAt || 'Recent') + '</span></td>' +
+        '<td>' + statusBadge + '</td>' +
+        '<td style="text-align:right">' +
+          '<button class="btn-sm-action primary" data-act="verify-reg" data-regid="' + escapeHtml(r.id) + '" title="Grant internship access and move to Current Interns">✅ Grant Access</button> ' +
+          '<button class="btn-sm-action danger" data-act="reject-reg" data-regid="' + escapeHtml(r.id) + '" title="Reject registration">❌ Reject</button>' +
+        '</td>' +
+      '</tr>';
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  // ── Render Category 2: Current Interns Table ──
+  function renderCurrentInternsTable(interns) {
+    var tbody = document.getElementById('admin-current-interns-tbody');
+    if (!tbody) return;
+
+    var filtered = applyInternFilters(interns);
 
     if (!filtered || filtered.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#64748B">No enrolled students match current filter criteria.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#64748B">No current interns match filter criteria.</td></tr>';
       return;
     }
 
     var html = '';
-    filtered.forEach(function(s) {
-      var pct = typeof s.progress === 'number' ? s.progress : 0;
-      var hasCert = s.certificate && s.certificate.id && s.certificate.status !== 'revoked';
-      var certRevoked = s.certificate && s.certificate.status === 'revoked';
-      var certBadge = hasCert
-        ? '<span class="module-status-badge badge-done" style="font-size:.75rem">✅ Issued: ' + escapeHtml(s.certificate.id) + '</span>'
-        : certRevoked
-          ? '<span class="module-status-badge" style="font-size:.75rem;background:#FEF2F2;color:#DC2626;border:1px solid #FECACA">❌ Revoked</span>'
-          : '<span class="module-status-badge badge-wait" style="font-size:.75rem">Not Issued</span>';
+    filtered.forEach(function(i) {
+      var pct = typeof i.progress === 'number' ? i.progress : 0;
+      var authBadge = i.approvedByAdmin
+        ? '<span class="badge-track" style="font-size:.75rem;background:#DCFCE7;color:#15803D;border-color:#86EFAC">🛡️ ' + escapeHtml(i.approvedByAdmin) + (i.approvedAt ? ' (' + escapeHtml(i.approvedAt) + ')' : '') + '</span>'
+        : '<span style="color:#94A3B8;font-size:.8rem">Authority Pending</span>';
 
-      var isPending = s.accountStatus === 'pending';
-      var statusBadge = isPending
-        ? '<span class="module-status-badge" style="font-size:.72rem;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;margin-left:6px">⏳ Pending</span>'
-        : '<span class="module-status-badge badge-done" style="font-size:.72rem;margin-left:6px">✅ Active</span>';
-
-      var activateBtn = isPending
-        ? '<button class="btn-sm-action" style="background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7" data-act="activate-stu" data-email="' + escapeHtml(s.email) + '" title="Activate content access for student">▶ Activate</button>'
-        : '';
-
-      var enrolledByHtml = s.enrolledByAdmin
-        ? '<span class="badge-track" style="font-size:.75rem;background:#F1F5F9;color:#334155;border-color:#CBD5E1">👤 ' + escapeHtml(s.enrolledByAdmin) + '</span>'
-        : '<span style="color:#94A3B8;font-size:.8rem">—</span>';
-
-      html += '<tr' + (isPending ? ' style="background:#FFFBEB"' : '') + '>' +
-        '<td><strong style="font-family:monospace;color:#1E293B">' + escapeHtml(s.id || 'USR') + '</strong>' + statusBadge + '</td>' +
+      html += '<tr>' +
+        '<td><strong style="font-family:monospace;color:#1E293B">' + escapeHtml(i.id || 'INT') + '</strong></td>' +
         '<td>' +
-          '<div style="font-weight:700;color:#0F172A">' + escapeHtml(s.name) + '</div>' +
-          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(s.email) + ' • ' + escapeHtml(s.phone || '') + '</div>' +
-          (s.paymentRef ? '<div style="font-size:.75rem;color:#3B82F6;margin-top:2px">💳 ' + escapeHtml(s.paymentRef) + '</div>' : '') +
+          '<div style="font-weight:700;color:#0F172A">' + escapeHtml(i.name) + '</div>' +
+          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(i.email) + ' • ' + escapeHtml(i.phone || '') + '</div>' +
         '</td>' +
         '<td>' +
-          '<div style="color:#0F172A;font-weight:600">' + escapeHtml(s.college || '—') + '</div>' +
-          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(s.stream || '—') + '</div>' +
+          '<div style="color:#0F172A;font-weight:600">' + escapeHtml(i.college || '—') + '</div>' +
+          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(i.stream || '—') + '</div>' +
         '</td>' +
-        '<td><span class="badge-track" style="font-size:.78rem">' + escapeHtml(s.track || 'General Track') + '</span></td>' +
+        '<td><span class="badge-track" style="font-size:.78rem">' + escapeHtml(i.track || 'Track') + '</span></td>' +
         '<td style="min-width:140px">' +
           '<div style="display:flex;justify-content:space-between;font-size:.8rem;font-weight:700;margin-bottom:3px">' +
-            '<span>' + (isPending ? '—' : pct + '%') + '</span>' +
+            '<span>' + pct + '%</span>' +
           '</div>' +
-          '<div class="progress-bar-bg" style="height:6px"><div class="progress-bar-fill" style="width:' + (isPending ? 0 : pct) + '%"></div></div>' +
+          '<div class="progress-bar-bg" style="height:6px"><div class="progress-bar-fill" style="width:' + pct + '%"></div></div>' +
         '</td>' +
-        '<td>' + certBadge + '</td>' +
-        '<td>' + enrolledByHtml + '</td>' +
+        '<td>' + authBadge + '</td>' +
         '<td style="text-align:right">' +
           '<div class="action-btns" style="justify-content:flex-end">' +
-            activateBtn +
-            '<button class="btn-sm-action primary" data-act="prog" data-email="' + escapeHtml(s.email) + '" title="Edit Progress & Modules">⚡ Progress</button>' +
-            '<button class="btn-sm-action" data-act="cert" data-email="' + escapeHtml(s.email) + '" title="Issue / Manage Certificate">🎓 Certificate</button>' +
-            '<button class="btn-sm-action danger" data-act="del-stu" data-email="' + escapeHtml(s.email) + '" title="Delete Student Record">🗑️</button>' +
+            '<button class="btn-sm-action primary" data-act="prog" data-email="' + escapeHtml(i.email) + '" title="Edit Progress & Modules">⚡ Progress</button>' +
+            '<button class="btn-sm-action" data-act="open-graduate" data-email="' + escapeHtml(i.email) + '" style="background:#0284C7;color:#fff;border-color:#0284C7" title="Graduate to All Employees & Issue Certificate">🎓 Graduate</button>' +
+            '<button class="btn-sm-action danger" data-act="del-intern" data-id="' + escapeHtml(i.id) + '" title="Delete from master database">🗑️</button>' +
           '</div>' +
         '</td>' +
       '</tr>';
@@ -278,105 +329,49 @@
     tbody.innerHTML = html;
   }
 
-  // ── Render Applications Table with Locked Admin Attribution ──
-  function renderApplicationsTable(apps) {
-    var tbody = document.getElementById('admin-apps-tbody');
+  // ── Render Category 3: All Employees Table ──
+  function renderAllEmployeesTable(employees) {
+    var tbody = document.getElementById('admin-all-employees-tbody');
     if (!tbody) return;
 
-    if (!apps || apps.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:#64748B">No submitted applications in queue.</td></tr>';
+    var filtered = applyEmployeeFilters(employees);
+
+    if (!filtered || filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#64748B">No employees found. Candidates graduate here upon receiving their official certificate.</td></tr>';
       return;
     }
 
     var html = '';
-    apps.forEach(function(a) {
-      var statusBadge = '';
-      var rowStyle = '';
+    filtered.forEach(function(e) {
+      var certNum = e.certificateNumber || '—';
+      var verifyLink = certNum !== '—'
+        ? '<a class="btn-sm-action primary" href="../verify-certificate/index.html?id=' + encodeURIComponent(certNum) + '" target="_blank">🔍 Verify</a>'
+        : '';
 
-      if (a.status === 'approved') {
-        statusBadge = '<span class="module-status-badge badge-done" style="font-size:.8rem">✅ Approved</span>';
-        rowStyle = 'background:linear-gradient(90deg,#F0FDF4 0%,#fff 100%);border-left:4px solid #22C55E';
-      } else if (a.status === 'rejected') {
-        statusBadge = '<span class="module-status-badge" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;font-size:.8rem">❌ Rejected</span>';
-        rowStyle = 'background:linear-gradient(90deg,#FFF5F5 0%,#fff 100%);border-left:4px solid #EF4444;opacity:.85';
-      } else {
-        statusBadge = '<span class="module-status-badge" style="background:#FEF3C7;color:#D97706;border:1px solid #FDE68A;font-size:.8rem">⏳ Pending</span>';
-        rowStyle = '';
-      }
-
-      var actionHtml = '';
-      if (a.status === 'approved') {
-        actionHtml = '<span style="font-size:.82rem;color:#15803D;font-weight:600;padding:6px 12px;background:#DCFCE7;border-radius:6px;display:inline-block">✅ Enrolled</span>';
-      } else if (a.status === 'rejected') {
-        actionHtml = '<span style="font-size:.82rem;color:#DC2626;font-weight:600;padding:6px 12px;background:#FEE2E2;border-radius:6px;display:inline-block">❌ Rejected</span>';
-      } else {
-        actionHtml =
-          '<button class="btn-sm-action primary" data-act="approve-app" data-appid="' + escapeHtml(a.id) + '" title="Approve and enroll this student">✅ Approve</button> ' +
-          '<button class="btn-sm-action danger" data-act="reject-app" data-appid="' + escapeHtml(a.id) + '" title="Reject this application">❌ Reject</button>';
-      }
-
-      var lockedAdminHtml = a.lockedApprovedBy
-        ? '<span class="badge-track" style="font-size:.75rem;background:#DCFCE7;color:#15803D;border-color:#86EFAC">🔒 ' + escapeHtml(a.lockedApprovedBy) + '</span>'
-        : '<span style="color:#94A3B8;font-size:.8rem">Pending Review</span>';
-
-      html += '<tr style="' + rowStyle + '">' +
-        '<td><code style="color:#0F172A;font-weight:700">' + escapeHtml(a.id) + '</code></td>' +
-        '<td><strong style="color:#0F172A">' + escapeHtml(a.name) + '</strong></td>' +
-        '<td><div>' + escapeHtml(a.email) + '</div><div style="font-size:.82rem;color:#64748B">' + escapeHtml(a.phone || '') + '</div></td>' +
-        '<td><span class="badge-track" style="font-size:.78rem">' + escapeHtml(a.track || 'Track') + '</span></td>' +
-        '<td><div>' + escapeHtml(a.college || '—') + '</div><small style="color:#64748B">' + escapeHtml(a.stream || '') + '</small></td>' +
-        '<td><span style="font-size:.85rem;color:#64748B">' + escapeHtml(a.appliedAt || 'Recent') + '</span></td>' +
-        '<td>' + statusBadge + '</td>' +
-        '<td>' + lockedAdminHtml + '</td>' +
-        '<td style="text-align:right">' + actionHtml + '</td>' +
-      '</tr>';
-    });
-
-    tbody.innerHTML = html;
-  }
-
-  // ── Render Certificates Table with Locked Admin Attribution ──
-  function renderCertificatesTable(issuedCerts) {
-    var tbody = document.getElementById('admin-certs-tbody');
-    if (!tbody) return;
-
-    if (!issuedCerts || issuedCerts.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#64748B">No certificates issued yet. Open "Registered Students" and click "Certificate" on any candidate.</td></tr>';
-      return;
-    }
-
-    var html = '';
-    issuedCerts.forEach(function(s) {
-      var cert = s.certificate;
-      var isRevoked = cert.status === 'revoked';
-
-      var statusBadge = isRevoked
-        ? '<span class="module-status-badge" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA">❌ Revoked</span>'
-        : '<span class="module-status-badge badge-done">✅ ' + escapeHtml(cert.status || 'Verified') + '</span>';
-
-      var actionHtml = isRevoked
-        ? '<span style="font-size:.82rem;color:#DC2626;font-weight:600;padding:6px 12px;background:#FEE2E2;border-radius:6px;display:inline-block">❌ Revoked</span>'
-        : '<div class="action-btns" style="justify-content:flex-end">' +
-            '<a class="btn-sm-action primary" href="../verify-certificate/index.html?id=' + encodeURIComponent(cert.id) + '" target="_blank">🔍 Verify</a>' +
-            '<button class="btn-sm-action danger" data-act="revoke-cert" data-email="' + escapeHtml(s.email) + '">Revoke</button>' +
-          '</div>';
-
-      var lockedAdmin = isRevoked ? cert.revokedByAdmin : cert.issuedByAdmin;
-      var lockedAdminHtml = lockedAdmin
-        ? '<span class="badge-track" style="font-size:.75rem;background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">🔒 ' + escapeHtml(lockedAdmin) + '</span>'
+      var authBadge = e.approvedByAdmin
+        ? '<span class="badge-track" style="font-size:.75rem;background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE">🔒 ' + escapeHtml(e.approvedByAdmin) + '</span>'
         : '<span style="color:#94A3B8;font-size:.8rem">—</span>';
 
-      var rowStyle = isRevoked ? 'background:linear-gradient(90deg,#FFF5F5 0%,#fff 100%);border-left:4px solid #EF4444;opacity:.8' : '';
-
-      html += '<tr style="' + rowStyle + '">' +
-        '<td><strong style="font-family:monospace;color:' + (isRevoked ? '#DC2626' : '#1D4ED8') + ';font-size:1.05rem">' + escapeHtml(cert.id || '—') + '</strong></td>' +
-        '<td><strong style="color:#0F172A">' + escapeHtml(s.name) + '</strong><br><small style="color:#64748B">' + escapeHtml(s.college || '') + '</small></td>' +
-        '<td>' + escapeHtml(cert.title || s.track || '—') + '</td>' +
-        '<td>' + escapeHtml(cert.issueDate || '—') + '</td>' +
-        '<td><span style="color:' + (isRevoked ? '#DC2626' : '#047857') + ';font-weight:700">' + escapeHtml(cert.grade || (isRevoked ? 'N/A' : 'Passed')) + '</span></td>' +
-        '<td>' + statusBadge + '</td>' +
-        '<td>' + lockedAdminHtml + '</td>' +
-        '<td style="text-align:right">' + actionHtml + '</td>' +
+      html += '<tr>' +
+        '<td><strong style="font-family:monospace;color:#0F172A">' + escapeHtml(e.id || 'EMP') + '</strong></td>' +
+        '<td>' +
+          '<div style="font-weight:700;color:#0F172A">' + escapeHtml(e.name) + '</div>' +
+          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(e.email) + ' • ' + escapeHtml(e.phone || '') + '</div>' +
+        '</td>' +
+        '<td>' +
+          '<div style="color:#0F172A;font-weight:600">' + escapeHtml(e.role || 'Specialist') + '</div>' +
+          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(e.domain || '') + '</div>' +
+        '</td>' +
+        '<td>' + escapeHtml(e.college || '—') + '</td>' +
+        '<td><strong style="font-family:monospace;color:#0284C7;font-size:1rem">' + escapeHtml(certNum) + '</strong></td>' +
+        '<td><div>' + escapeHtml(e.issueDate || '—') + '</div><small style="color:#059669;font-weight:600">' + escapeHtml(e.grade || '') + '</small></td>' +
+        '<td>' + authBadge + '</td>' +
+        '<td style="text-align:right">' +
+          '<div class="action-btns" style="justify-content:flex-end">' +
+            verifyLink +
+            '<button class="btn-sm-action danger" data-act="del-employee" data-id="' + escapeHtml(e.id) + '" title="Delete from master database">🗑️</button>' +
+          '</div>' +
+        '</td>' +
       '</tr>';
     });
 
@@ -395,14 +390,6 @@
       return;
     }
 
-    var students = YuvantaraDB.getStudents() || [];
-    var studentsMap = {};
-    students.forEach(function(s) {
-      studentsMap[s.email] = s;
-      if (s.id) studentsMap[s.id] = s;
-      if (s.certificate && s.certificate.id) studentsMap[s.certificate.id] = s;
-    });
-
     var html = '';
     filteredLogs.forEach(function(l) {
       var isSuper = (l.adminEmail === 'a4dr_00@supper');
@@ -412,36 +399,15 @@
 
       var badgeStyle = 'background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE';
       var actionIcon = '⚡';
-      if (l.actionType.indexOf('REVOKE') !== -1 || l.actionType.indexOf('SUSPEND') !== -1 || l.actionType.indexOf('REMOVE') !== -1) {
+      if (l.actionType.indexOf('DELETE') !== -1 || l.actionType.indexOf('REJECT') !== -1) {
         badgeStyle = 'background:#FEF2F2;color:#DC2626;border-color:#FECACA';
-        actionIcon = '🚫';
-      } else if (l.actionType.indexOf('APPROVE') !== -1) {
+        actionIcon = '🗑️';
+      } else if (l.actionType.indexOf('AUTHORIZE') !== -1 || l.actionType.indexOf('APPROVE') !== -1) {
         badgeStyle = 'background:#DCFCE7;color:#15803D;border-color:#86EFAC';
         actionIcon = '✅';
-      } else if (l.actionType.indexOf('REGISTER') !== -1 || l.actionType.indexOf('ENROLL') !== -1) {
-        badgeStyle = 'background:#DCFCE7;color:#15803D;border-color:#86EFAC';
-        actionIcon = '➕';
-      } else if (l.actionType.indexOf('CERT') !== -1) {
+      } else if (l.actionType.indexOf('EMPLOYEES') !== -1 || l.actionType.indexOf('GRADUATE') !== -1) {
         badgeStyle = 'background:#F3E8FF;color:#7E22CE;border-color:#D8B4FE';
         actionIcon = '🎓';
-      }
-
-      var targetUserHtml = '';
-      if (l.targetUser && (l.targetUser.name || l.targetUser.email)) {
-        targetUserHtml =
-          '<div style="font-weight:700;color:#0F172A">' + escapeHtml(l.targetUser.name || 'Candidate') + '</div>' +
-          '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(l.targetUser.email || l.targetId) + '</div>' +
-          (l.targetUser.track ? '<div style="font-size:.78rem;color:#2563EB;margin-top:2px">🎯 ' + escapeHtml(l.targetUser.track) + '</div>' : '');
-      } else {
-        var matched = studentsMap[l.targetId] || null;
-        if (matched) {
-          targetUserHtml =
-            '<div style="font-weight:700;color:#0F172A">' + escapeHtml(matched.name) + '</div>' +
-            '<div style="font-size:.82rem;color:#64748B">' + escapeHtml(matched.email) + '</div>' +
-            (matched.track ? '<div style="font-size:.78rem;color:#2563EB;margin-top:2px">🎯 ' + escapeHtml(matched.track) + '</div>' : '');
-        } else {
-          targetUserHtml = '<strong style="font-family:monospace;color:#1E293B">' + escapeHtml(l.targetId || '—') + '</strong>';
-        }
       }
 
       html += '<tr>' +
@@ -452,7 +418,7 @@
           '</span>' +
         '</td>' +
         '<td><span class="badge-track" style="font-size:.74rem;' + badgeStyle + '">' + actionIcon + ' ' + escapeHtml(l.actionType) + '</span></td>' +
-        '<td>' + targetUserHtml + '</td>' +
+        '<td><strong style="color:#0F172A">' + escapeHtml(l.targetUser || l.targetId || '—') + '</strong></td>' +
         '<td style="font-size:.86rem;color:#334155;line-height:1.4">' + escapeHtml(l.details) + '</td>' +
       '</tr>';
     });
@@ -468,8 +434,6 @@
     var html = '';
     admins.forEach(function(adm) {
       var isSuspended = (adm.status === 'suspended');
-
-      // Count actions performed by this admin from audit logs
       var actionCount = auditLogs.filter(function(l) { return l.adminEmail === adm.email; }).length;
 
       var statusBadge = isSuspended
@@ -503,13 +467,17 @@
     var viewer = document.getElementById('raw-json-viewer');
     if (!viewer) return;
     var state = {
-      system: 'Yuvantara Enterprise Management DB',
-      exportedAt: new Date().toISOString(),
+      system: 'Yuvantara Unified Master Database Architecture',
+      database: 'yuvantara_master_db',
+      categories: {
+        new_registrations: YuvantaraDB.getNewRegistrations().length,
+        current_interns: YuvantaraDB.getCurrentInterns().length,
+        all_employees: YuvantaraDB.getAllEmployees().length
+      },
       superAdmin: 'a4dr_00@supper',
       activeAdmins: YuvantaraDB.getAdmins().map(function(a) { return { email: a.email, name: a.name, status: a.status }; }),
-      studentsCount: YuvantaraDB.getStudents().length,
-      applicationsCount: YuvantaraDB.getApplications().length,
-      auditLogsCount: YuvantaraDB.getAuditLogs().length
+      auditLogsCount: YuvantaraDB.getAuditLogs().length,
+      lastSynced: new Date().toISOString()
     };
     viewer.textContent = JSON.stringify(state, null, 2);
   }
@@ -540,76 +508,54 @@
       });
     }
 
-    // ── Student Filters ──
+
+    // ── Intern Filters ──
     var filterStuTf = document.getElementById('filter-stu-timeframe');
-    var customDatesWrap = document.getElementById('filter-stu-custom-dates');
-    var filterStuFrom = document.getElementById('filter-stu-from');
-    var filterStuTo = document.getElementById('filter-stu-to');
     var filterStuTrack = document.getElementById('filter-stu-track');
-    var filterStuStatus = document.getElementById('filter-stu-status');
     var filterStuSearch = document.getElementById('filter-stu-search');
     var btnResetStu = document.getElementById('btn-reset-stu-filters');
 
-    function refreshStudentsView() {
-      renderStudentsTable(YuvantaraDB.getStudents());
+    function refreshInternsView() {
+      renderCurrentInternsTable(YuvantaraDB.getCurrentInterns());
     }
 
     if (filterStuTf) {
       filterStuTf.addEventListener('change', function() {
-        studentFilterState.timeframe = filterStuTf.value;
-        if (customDatesWrap) {
-          customDatesWrap.style.display = (filterStuTf.value === 'custom') ? 'flex' : 'none';
-        }
-        refreshStudentsView();
-      });
-    }
-
-    if (filterStuFrom) {
-      filterStuFrom.addEventListener('change', function() {
-        studentFilterState.from = filterStuFrom.value;
-        refreshStudentsView();
-      });
-    }
-
-    if (filterStuTo) {
-      filterStuTo.addEventListener('change', function() {
-        studentFilterState.to = filterStuTo.value;
-        refreshStudentsView();
+        internFilterState.timeframe = filterStuTf.value;
+        refreshInternsView();
       });
     }
 
     if (filterStuTrack) {
       filterStuTrack.addEventListener('change', function() {
-        studentFilterState.track = filterStuTrack.value;
-        refreshStudentsView();
-      });
-    }
-
-    if (filterStuStatus) {
-      filterStuStatus.addEventListener('change', function() {
-        studentFilterState.status = filterStuStatus.value;
-        refreshStudentsView();
+        internFilterState.track = filterStuTrack.value;
+        refreshInternsView();
       });
     }
 
     if (filterStuSearch) {
       filterStuSearch.addEventListener('input', function() {
-        studentFilterState.search = filterStuSearch.value;
-        refreshStudentsView();
+        internFilterState.search = filterStuSearch.value;
+        refreshInternsView();
       });
     }
 
     if (btnResetStu) {
       btnResetStu.addEventListener('click', function() {
-        studentFilterState = { timeframe: 'all', from: '', to: '', track: 'all', status: 'all', search: '' };
+        internFilterState = { timeframe: 'all', track: 'all', search: '' };
         if (filterStuTf) filterStuTf.value = 'all';
-        if (customDatesWrap) customDatesWrap.style.display = 'none';
-        if (filterStuFrom) filterStuFrom.value = '';
-        if (filterStuTo) filterStuTo.value = '';
         if (filterStuTrack) filterStuTrack.value = 'all';
-        if (filterStuStatus) filterStuStatus.value = 'all';
         if (filterStuSearch) filterStuSearch.value = '';
-        refreshStudentsView();
+        refreshInternsView();
+      });
+    }
+
+    // ── Employee Filters ──
+    var filterEmpSearch = document.getElementById('filter-emp-search');
+    if (filterEmpSearch) {
+      filterEmpSearch.addEventListener('input', function() {
+        employeeFilterState.search = filterEmpSearch.value;
+        renderAllEmployeesTable(YuvantaraDB.getAllEmployees());
       });
     }
 
@@ -665,39 +611,6 @@
       });
     }
 
-    // Cloud Sync
-    var cloudSyncBtn = document.getElementById('btn-cloud-sync');
-    if (cloudSyncBtn) {
-      cloudSyncBtn.addEventListener('click', function() {
-        if (!window.YuvantaraCloudDB || !window.YuvantaraCloudDB.isConfigured()) {
-          alert('☁️ Cloud Database Configuration Notice:\n\n' +
-                'To connect your live cloud database for yuvantaraventure.in:\n' +
-                '1. Open assets/config.js\n' +
-                '2. Set firebase.enabled = true\n' +
-                '3. Paste your Firebase apiKey & projectId\n\n' +
-                'All records are currently preserved in local persistent storage.');
-          return;
-        }
-
-        cloudSyncBtn.disabled = true;
-        cloudSyncBtn.textContent = '☁️ Syncing...';
-        window.YuvantaraCloudDB.syncToCloud().then(function(res) {
-          cloudSyncBtn.disabled = false;
-          cloudSyncBtn.textContent = '☁️ Sync Cloud DB';
-          if (res.synced) {
-            alert('✅ Cloud Sync Complete!\n\nSynchronized ' + res.count + ' records with Cloud Firestore.');
-            renderAdminDashboard();
-          } else {
-            alert('Cloud sync notice: ' + (res.reason || 'Check network connection.'));
-          }
-        }).catch(function(err) {
-          cloudSyncBtn.disabled = false;
-          cloudSyncBtn.textContent = '☁️ Sync Cloud DB';
-          alert('Sync error: ' + err.message);
-        });
-      });
-    }
-
     // Export Backup JSON
     var exportBtns = [
       document.getElementById('btn-export-backup'),
@@ -707,12 +620,14 @@
       if (btn) {
         btn.addEventListener('click', function() {
           var state = {
-            system: 'Yuvantara Enterprise Production Database Backup',
+            system: 'Yuvantara Unified Master Database Backup',
+            master_db: YuvantaraDB.getMasterDB(),
             exportedAt: new Date().toISOString(),
             exportedBy: currentAdmin.email,
-            users: YuvantaraDB.getUsers(),
-            applications: YuvantaraDB.getApplications(),
-            auditLogs: YuvantaraDB.getAuditLogs()
+            new_registrations: YuvantaraDB.getNewRegistrations(),
+            current_interns: YuvantaraDB.getCurrentInterns(),
+            all_employees: YuvantaraDB.getAllEmployees(),
+            audit_logs: YuvantaraDB.getAuditLogs()
           };
           var jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
           var a = document.createElement('a');
@@ -736,11 +651,15 @@
         reader.onload = function(e) {
           try {
             var data = JSON.parse(e.target.result);
-            if (data.users && data.applications) {
-              localStorage.setItem('yuvantara_users_db', JSON.stringify(data.users));
-              localStorage.setItem('yuvantara_apps_db', JSON.stringify(data.applications));
-              if (data.auditLogs) localStorage.setItem('yuvantara_audit_logs', JSON.stringify(data.auditLogs));
-              alert('System database restored successfully!');
+            if (data.new_registrations || data.current_interns || data.all_employees || data.master_db) {
+              if (data.master_db && Array.isArray(data.master_db)) {
+                YuvantaraDB.saveMasterDB(data.master_db);
+              } else {
+                var list = [].concat(data.new_registrations || [], data.current_interns || [], data.all_employees || []);
+                YuvantaraDB.saveMasterDB(list);
+              }
+              if (data.audit_logs) localStorage.setItem('yuvantara_audit_logs', JSON.stringify(data.audit_logs));
+              alert('Unified master database restored successfully!');
               renderAdminDashboard();
             } else {
               alert('Invalid backup file format.');
@@ -757,7 +676,7 @@
     var resetBtn = document.getElementById('btn-reset-demo');
     if (resetBtn) {
       resetBtn.addEventListener('click', function() {
-        if (confirm('Reset all records to factory default state?')) {
+        if (confirm('Reset all records to factory default state in master database?')) {
           YuvantaraDB.resetToDemoData();
           alert('Database reset to factory default seed successfully.');
           window.location.reload();
@@ -769,84 +688,81 @@
     document.addEventListener('click', function(e) {
       var actBtn = e.target.closest('[data-act]');
       if (!actBtn) return;
+
+      // Security check: Only verified logged-in admins may execute actions
+      if (!currentAdmin || (currentAdmin.role !== 'admin' && currentAdmin.role !== 'superadmin')) {
+        alert('Access Denied: Only authenticated administrators may perform this action.');
+        window.location.reload();
+        return;
+      }
+
       var act = actBtn.dataset.act;
 
-      // 1. Edit Progress
+      // 1. VERIFY & APPROVE NEW REGISTRATION
+      if (act === 'verify-reg') {
+        var regId = actBtn.dataset.regid;
+        var res = YuvantaraDB.verifyAndApproveRegistration(regId, currentAdmin.email);
+        if (res.success) {
+          alert('✅ Candidate Verified & Access Granted!\n\nCandidate: ' + (res.intern.name || regId) +
+                '\nAuthority granted by: ' + currentAdmin.email +
+                '\nMoved from Pending to Current Interns (In Progress: ' + res.intern.progress + '%).');
+          renderAdminDashboard();
+        } else {
+          alert(res.message || 'Error approving registration.');
+        }
+      }
+
+      // 2. REJECT NEW REGISTRATION
+      if (act === 'reject-reg') {
+        var regId = actBtn.dataset.regid;
+        if (confirm('Reject and delete registration request "' + regId + '"?\n\nThis will remove the record from the master database.')) {
+          var res = YuvantaraDB.deleteRecord('new_registrations', regId, currentAdmin.email);
+          if (res.success) {
+            alert('Registration rejected and deleted from master database.');
+            renderAdminDashboard();
+          } else {
+            alert(res.message || 'Error rejecting registration.');
+          }
+        }
+      }
+
+      // 3. EDIT INTERN PROGRESS
       if (act === 'prog') {
         var email = actBtn.dataset.email;
         openProgressModal(email);
       }
 
-      // 2. Manage / Issue Certificate
-      if (act === 'cert') {
+      // 4. OPEN GRADUATE INTERN TO ALL EMPLOYEES MODAL
+      if (act === 'open-graduate') {
         var email = actBtn.dataset.email;
         openCertModal(email);
       }
 
-      // 2.5 Activate Student Content
-      if (act === 'activate-stu') {
-        var email = actBtn.dataset.email;
-        var student = YuvantaraDB.getUserByEmail(email);
-        if (student) {
-          YuvantaraDB.updateStudent(email, {
-            accountStatus: 'active',
-            progress: student.progress || 15
-          }, currentAdmin.email);
-          alert('✅ Content activated for ' + student.name + '!\n\nStudent now has active access.');
-          renderAdminDashboard();
+      // 5. DELETE CURRENT INTERN
+      if (act === 'del-intern') {
+        var internId = actBtn.dataset.id;
+        if (confirm('Permanently delete intern record "' + internId + '"?\n\nThis will delete the record from the master database.')) {
+          var res = YuvantaraDB.deleteRecord('current_interns', internId, currentAdmin.email);
+          if (res.success) {
+            alert('Intern record deleted from master database.');
+            renderAdminDashboard();
+          } else {
+            alert(res.message || 'Error deleting intern.');
+          }
         }
       }
 
-      // 3. Delete Student
-      if (act === 'del-stu') {
-        var email = actBtn.dataset.email;
-        if (confirm('Permanently delete student record for "' + email + '"?')) {
-          var users = YuvantaraDB.getUsers();
-          users = users.filter(function(u) { return u.email.toLowerCase() !== email.toLowerCase(); });
-          localStorage.setItem('yuvantara_users_db', JSON.stringify(users));
-          YuvantaraDB.logAuditAction(currentAdmin.email, 'DELETE_STUDENT', email, 'Deleted student record ' + email);
-          renderAdminDashboard();
-        }
-      }
-
-      // 4. Approve Application (Locked to current executing admin)
-      if (act === 'approve-app') {
-        var appId = actBtn.dataset.appid;
-        var app = YuvantaraDB.getApplications().find(function(a) { return a.id === appId; });
-        if (app) {
-          var studentPass = app.password || 'student123';
-          var regRes = YuvantaraDB.registerStudent({
-            name: app.name,
-            email: app.email,
-            phone: app.phone,
-            password: studentPass,
-            track: app.track,
-            college: app.college,
-            stream: app.stream
-          }, currentAdmin.email);
-
-          YuvantaraDB.updateApplicationStatus(appId, 'approved', currentAdmin.email);
-          alert('✅ Application Approved!\n\nAction locked to: ' + currentAdmin.email + '\nStudent account activated for: ' + app.name);
-          renderAdminDashboard();
-        }
-      }
-
-      // 5. Reject Application (Locked to current executing admin)
-      if (act === 'reject-app') {
-        var appId = actBtn.dataset.appid;
-        if (confirm('Mark application ' + appId + ' as rejected?')) {
-          YuvantaraDB.updateApplicationStatus(appId, 'rejected', currentAdmin.email);
-          renderAdminDashboard();
-        }
-      }
-
-      // 6. Revoke Certificate (Locked to current executing admin)
-      if (act === 'revoke-cert') {
-        var email = actBtn.dataset.email;
-        if (confirm('Revoke official certificate for student "' + email + '"?\n\nThis action will be permanently recorded in the audit trail.')) {
-          YuvantaraDB.revokeCertificate(email, currentAdmin.email);
-          alert('Certificate revoked. Action locked to: ' + currentAdmin.email);
-          renderAdminDashboard();
+      // 6. DELETE EMPLOYEE
+      if (act === 'del-employee') {
+        var empId = actBtn.dataset.id;
+        if (confirm('Permanently delete employee record "' + empId + '"?\n\nThis will delete the record from the master database.')) {
+          var res = YuvantaraDB.deleteRecord('all_employees', empId, currentAdmin.email);
+          if (res.success) {
+            alert('Employee record deleted from master database.');
+            renderAdminDashboard();
+          } else {
+            alert(res.message || 'Error deleting employee.');
+          }
         }
       }
 
@@ -928,7 +844,7 @@
       });
     }
 
-    // Enroll New Student Modal
+    // Enroll New Candidate Modal Form
     var addStuBtn = document.getElementById('btn-add-student-modal');
     if (addStuBtn) {
       addStuBtn.addEventListener('click', function() { openModal('enroll'); });
@@ -949,19 +865,19 @@
           stream: document.getElementById('new-stu-stream').value.trim()
         };
 
-        var res = YuvantaraDB.registerStudent(data, currentAdmin.email);
+        var res = YuvantaraDB.submitNewRegistration(data);
         if (res.success) {
-          alert('Student ' + data.name + ' enrolled successfully! (Locked to: ' + currentAdmin.email + ')');
+          alert('Candidate ' + data.name + ' registered successfully!\n\nAdded to New Registrations in master database.');
           enrollForm.reset();
           closeAllModals();
           renderAdminDashboard();
         } else {
-          alert(res.message || 'Error enrolling student.');
+          alert(res.message || 'Error registering candidate.');
         }
       });
     }
 
-    // Save Progress Form (Locked to current admin)
+    // Save Progress Form (Current Interns)
     var progForm = document.getElementById('form-edit-progress');
     var progRange = document.getElementById('prog-range-input');
     var progVal = document.getElementById('prog-range-val');
@@ -985,53 +901,45 @@
           modules.push({ name: name, status: status });
         });
 
-        YuvantaraDB.updateStudent(email, {
+        var res = YuvantaraDB.updateIntern(email, {
           progress: pct,
           modules: modules
         }, currentAdmin.email);
 
-        alert('Student progress updated to ' + pct + '%! (Action locked to ' + currentAdmin.email + ')');
-        closeAllModals();
-        renderAdminDashboard();
+        if (res.success) {
+          alert('Intern progress updated to ' + pct + '% in master database! (Action attributed to ' + currentAdmin.email + ')');
+          closeAllModals();
+          renderAdminDashboard();
+        } else {
+          alert(res.message || 'Error updating progress.');
+        }
       });
     }
 
-    // Save Certificate Form (Locked to current admin)
+    // Graduate Intern to Employee & Issue Certificate Form
     var certForm = document.getElementById('form-issue-cert');
     if (certForm) {
       certForm.addEventListener('submit', function(e) {
         e.preventDefault();
         var email = document.getElementById('cert-stu-email').value;
-        var fileInput = document.getElementById('cert-custom-file');
 
         var certData = {
-          id: document.getElementById('cert-input-id').value.trim(),
+          certNumber: document.getElementById('cert-input-id').value.trim(),
+          role: document.getElementById('cert-input-role') ? document.getElementById('cert-input-role').value.trim() : 'Specialist',
           title: document.getElementById('cert-input-title').value.trim(),
           duration: document.getElementById('cert-input-duration').value.trim(),
           grade: document.getElementById('cert-input-grade').value.trim(),
           issueDate: document.getElementById('cert-input-date').value.trim(),
-          authority: document.getElementById('cert-input-authority').value.trim(),
-          status: 'Valid & Verified'
+          authority: document.getElementById('cert-input-authority').value.trim()
         };
 
-        function commitCert(fileDataUrl) {
-          if (fileDataUrl) certData.fileUrl = fileDataUrl;
-          var res = YuvantaraDB.assignCertificate(email, certData, currentAdmin.email);
-          if (res.success) {
-            alert('Certificate ' + certData.id + ' successfully issued! (Locked to: ' + currentAdmin.email + ')');
-            closeAllModals();
-            renderAdminDashboard();
-          } else {
-            alert(res.message || 'Error issuing certificate.');
-          }
-        }
-
-        if (fileInput && fileInput.files && fileInput.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function(ev) { commitCert(ev.target.result); };
-          reader.readAsDataURL(fileInput.files[0]);
+        var res = YuvantaraDB.graduateToEmployee(email, certData, currentAdmin.email);
+        if (res.success) {
+          alert('🎓 Intern successfully graduated to All Employees with Certificate ' + certData.certNumber + '!\n\nSaved to master database.');
+          closeAllModals();
+          renderAdminDashboard();
         } else {
-          commitCert('');
+          alert(res.message || 'Error graduating intern to employee.');
         }
       });
     }
@@ -1039,28 +947,33 @@
 
   // ── Modal Helpers ──
   function openProgressModal(email) {
-    var student = YuvantaraDB.getUserByEmail(email);
-    if (!student) return;
+    var interns = YuvantaraDB.getCurrentInterns();
+    var intern = interns.find(function(i) { return i.email === email; });
+    if (!intern) {
+      var student = YuvantaraDB.getUserByEmail(email);
+      if (!student) return;
+      intern = student;
+    }
 
-    setVal('prog-stu-email', student.email);
-    setVal('prog-stu-name', student.name + ' (' + student.email + ')');
-    var pct = typeof student.progress === 'number' ? student.progress : 75;
+    setVal('prog-stu-email', intern.email);
+    setVal('prog-stu-name', intern.name + ' (' + intern.email + ')');
+    var pct = typeof intern.progress === 'number' ? intern.progress : 50;
     setVal('prog-range-input', pct);
     setText('prog-range-val', pct + '%');
 
-    var modules = student.modules || [
-      { name: 'Module 1: Orientation & Core Foundations', status: 'completed' },
-      { name: 'Module 2: Lab Setup & Environment Diagnostics', status: 'completed' },
-      { name: 'Module 3: Hands-on Case Studies & Practical Labs', status: 'completed' },
-      { name: 'Module 4: Incident Response & Threat Hunting', status: 'in-progress' },
-      { name: 'Module 5: Capstone Enterprise Defense Project', status: 'pending' }
+    var modules = intern.modules || [
+      { name: 'Module 1: Orientation & Foundations', status: 'completed' },
+      { name: 'Module 2: Practical Lab Implementations', status: 'in-progress' },
+      { name: 'Module 3: Project Architecture & Execution', status: 'pending' },
+      { name: 'Module 4: Mid-Term Assessment', status: 'pending' },
+      { name: 'Module 5: Capstone Review & Final Submission', status: 'pending' }
     ];
 
     var container = document.getElementById('prog-modules-container');
     if (container) {
       var html = '';
       modules.forEach(function(m) {
-        var isDone = m.status === 'completed';
+        var isDone = (m.status === 'completed');
         html += '<label style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;font-size:.88rem;cursor:pointer">' +
           '<input type="checkbox" class="prog-mod-check" data-modname="' + escapeHtml(m.name) + '" ' + (isDone ? 'checked' : '') + ' style="width:18px;height:18px">' +
           '<span>' + escapeHtml(m.name) + '</span>' +
@@ -1073,22 +986,25 @@
   }
 
   function openCertModal(email) {
-    var student = YuvantaraDB.getUserByEmail(email);
-    if (!student) return;
+    var interns = YuvantaraDB.getCurrentInterns();
+    var intern = interns.find(function(i) { return i.email === email; });
+    if (!intern) return;
 
-    setVal('cert-stu-email', student.email);
-    setVal('cert-stu-name', student.name + ' — ' + (student.track || 'Track'));
+    setVal('cert-stu-email', intern.email);
+    setVal('cert-stu-name', intern.name + ' — ' + (intern.track || 'Track'));
 
-    var cert = student.certificate || {};
-    var defaultId = cert.id || ('YUV-2026-' + (student.track ? student.track.slice(0,2).toUpperCase() : 'IN') + Math.floor(100 + Math.random() * 900));
-    var defaultTitle = cert.title || ((student.track || 'Industrial') + ' Internship');
+    var trackCode = (intern.track ? intern.track.slice(0, 2).toUpperCase() : 'IN');
+    var defaultId = 'YUV-2026-' + trackCode + Math.floor(100 + Math.random() * 900);
+    var defaultTitle = (intern.track || 'Industrial') + ' Industrial Program';
+    var defaultRole = (intern.track ? intern.track.split(' ')[0] + ' Specialist' : 'Junior Engineer');
 
     setVal('cert-input-id', defaultId);
+    setVal('cert-input-role', defaultRole);
     setVal('cert-input-title', defaultTitle);
-    setVal('cert-input-duration', cert.duration || '6 Months (Jan 2026 – Jun 2026)');
-    setVal('cert-input-grade', cert.grade || 'Grade A+ (Distinction)');
-    setVal('cert-input-date', cert.issueDate || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
-    setVal('cert-input-authority', cert.authority || 'Yuvantara Cyber Defense Council');
+    setVal('cert-input-duration', '6 Months (Jan 2026 – Jun 2026)');
+    setVal('cert-input-grade', 'Grade A+ (Distinction)');
+    setVal('cert-input-date', new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }));
+    setVal('cert-input-authority', 'Yuvantara Academic & Skill Council');
 
     openModal('cert');
   }
@@ -1146,6 +1062,12 @@
     div.textContent = str || '';
     return div.innerHTML;
   }
+
+  window.addEventListener('yuvantara_dataset_hydrated', function() {
+    if (currentAdmin && (currentAdmin.role === 'admin' || currentAdmin.role === 'superadmin')) {
+      renderAdminDashboard();
+    }
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAdmin);

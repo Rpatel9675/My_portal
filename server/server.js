@@ -270,7 +270,65 @@ app.post('/api/auth/verify-otp', (req, res) => {
   res.json({ success: true, verified: true, email: email });
 });
 
-// ── 5. Cloud Data Endpoints (Users, Applications) ──
+// ── 5. Cloud Data Endpoints (Users, Applications, 7 Synchronized Replicas) ──
+const REPLICA_FILES = [
+  'master_super_admin.json',
+  'admin_adk_01.json',
+  'admin_alk_01.json',
+  'admin_dhb_03.json',
+  'admin_abk_04.json',
+  'admin_anp_05.json',
+  'admin_rop_06.json'
+];
+
+function updateAllReplicasOnDisk(state) {
+  const dataDirPath = path.join(__dirname, '..', 'data');
+  const now = new Date().toISOString();
+  REPLICA_FILES.forEach(fileName => {
+    const fullPath = path.join(dataDirPath, fileName);
+    let existing = {};
+    try {
+      if (fs.existsSync(fullPath)) {
+        existing = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+      }
+    } catch(e) {}
+
+    const updated = {
+      ...existing,
+      lastSynced: now,
+      new_registrations: state.new_registrations || existing.new_registrations || [],
+      current_interns: state.current_interns || existing.current_interns || [],
+      all_employees: state.all_employees || existing.all_employees || [],
+      audit_logs: state.audit_logs || existing.audit_logs || []
+    };
+    try {
+      fs.writeFileSync(fullPath, JSON.stringify(updated, null, 2), 'utf8');
+    } catch(err) {
+      console.warn('Could not write replica file:', fileName, err.message);
+    }
+  });
+}
+
+// 7-Replica Sync Endpoint
+app.get('/api/replicas', (req, res) => {
+  const dataDirPath = path.join(__dirname, '..', 'data');
+  const masterPath = path.join(dataDirPath, 'master_super_admin.json');
+  try {
+    if (fs.existsSync(masterPath)) {
+      const data = JSON.parse(fs.readFileSync(masterPath, 'utf8'));
+      return res.json({ success: true, replicasCount: 7, data });
+    }
+  } catch(e) {}
+  res.json({ success: false, message: 'Replicas not loaded' });
+});
+
+app.post('/api/replicas/sync', (req, res) => {
+  const state = req.body;
+  if (!state) return res.status(400).json({ success: false, message: 'Invalid payload' });
+  updateAllReplicasOnDisk(state);
+  res.json({ success: true, syncedReplicas: 7, timestamp: new Date().toISOString() });
+});
+
 app.get('/api/users', (req, res) => {
   res.json(cloudData.users);
 });
