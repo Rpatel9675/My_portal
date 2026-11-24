@@ -445,89 +445,8 @@
     }
   ];
 
-  // 3. Seed: Category 3 - All Employees (Certified alumni & staff records)
-  var SEED_ALL_EMPLOYEES = [
-    {
-      id: 'EMP-301',
-      name: 'Rohan Sen',
-      email: 'student@yuvantara.com',
-      phone: '+91 98765 43210',
-      dob: '2002-05-15',
-      role: 'Junior SOC Analyst',
-      domain: 'Cybersecurity & SOC Operations',
-      college: 'National Institute of Technology (NIT), Patna',
-      stream: 'B.Tech (Computer Science)',
-      certificateNumber: 'YUV-2026-CS101',
-      issueDate: 'June 20, 2026',
-      grade: 'Grade A+ (Distinction)',
-      duration: '6 Months (Jan 2026 – Jun 2026)',
-      authority: 'Yuvantara Cyber Defense Council',
-      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-CS101',
-      status: 'completed',
-      approvedByAdmin: 'adk_01@admin',
-      approvedAt: '2026-01-15'
-    },
-    {
-      id: 'EMP-302',
-      name: 'Priya Sharma',
-      email: 'priya.sharma@yuvantara.com',
-      phone: '+91 98765 33002',
-      dob: '2002-07-22',
-      role: 'Associate AI Engineer',
-      domain: 'Artificial Intelligence & Machine Learning',
-      college: 'Indian Institute of Technology (IIT), Patna',
-      stream: 'M.Tech (AI)',
-      certificateNumber: 'YUV-2026-AI204',
-      issueDate: 'July 05, 2026',
-      grade: 'Grade A+ (Outstanding)',
-      duration: '6 Months (Jan 2026 – Jun 2026)',
-      authority: 'Yuvantara AI Research Lab',
-      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-AI204',
-      status: 'completed',
-      approvedByAdmin: 'dhb_03@admin',
-      approvedAt: '2026-01-10'
-    },
-    {
-      id: 'EMP-303',
-      name: 'Amit Kumar',
-      email: 'amit.kumar@yuvantara.com',
-      phone: '+91 98765 33003',
-      dob: '2001-12-10',
-      role: 'Python Cloud Developer',
-      domain: 'Python Full-Stack & Cloud Computing',
-      college: 'Birla Institute of Technology (BIT), Patna',
-      stream: 'BCA / B.Sc CS',
-      certificateNumber: 'YUV-2026-PY305',
-      issueDate: 'May 30, 2026',
-      grade: 'Grade A (Excellent)',
-      duration: '3 Months (Feb 2026 – May 2026)',
-      authority: 'Yuvantara Software Systems Council',
-      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-PY305',
-      status: 'completed',
-      approvedByAdmin: 'abk_04@admin',
-      approvedAt: '2026-02-01'
-    },
-    {
-      id: 'EMP-304',
-      name: 'Sneha Kumari',
-      email: 'sneha.kumari@yuvantara.com',
-      phone: '+91 98765 33004',
-      dob: '2002-09-18',
-      role: 'Embedded Systems Specialist',
-      domain: 'Robotics, IoT & Embedded Systems',
-      college: 'Patna University, Patna, Bihar',
-      stream: 'Diploma in Engineering',
-      certificateNumber: 'YUV-2026-RB412',
-      issueDate: 'August 12, 2026',
-      grade: 'Grade A+ (Distinction)',
-      duration: '6 Months (Jan 2026 – Jun 2026)',
-      authority: 'Yuvantara Robotics & Automation Wing',
-      verificationUrl: 'https://yuvantaraventure.in/verify-certificate/?id=YUV-2026-RB412',
-      status: 'completed',
-      approvedByAdmin: 'anp_05@admin',
-      approvedAt: '2026-02-01'
-    }
-  ];
+  // 3. Seed: Category 3 - All Employees (Reset to NILL per user instruction)
+  var SEED_ALL_EMPLOYEES = [];
 
   function getStorage(key, defaultVal) {
     try {
@@ -732,8 +651,8 @@
       });
     }
 
-    // 5. Category 3: All Employees / Certified
-    var existingEmps = getStorage(STORAGE_KEYS.ALL_EMPLOYEES, SEED_ALL_EMPLOYEES);
+    // 5. Category 3: All Employees / Certified (Reset to NILL per user instruction)
+    var existingEmps = getStorage(STORAGE_KEYS.ALL_EMPLOYEES, []);
     if (Array.isArray(existingEmps)) {
       existingEmps.forEach(function(e) {
         if (e && e.email) {
@@ -751,8 +670,20 @@
     return masterList;
   }
 
-  // Self-Healing Initialization of Master DB
+  // Self-Healing Initialization of Master DB (Ensuring Employees DB is NILL)
   (function ensureMasterDatabase() {
+    setStorage(STORAGE_KEYS.ALL_EMPLOYEES, []);
+    var currentMaster = getStorage(STORAGE_KEYS.MASTER_DB, null);
+    if (currentMaster && Array.isArray(currentMaster)) {
+      var strippedMaster = currentMaster.filter(function(u) {
+        if (!u) return false;
+        var isEmp = !!(u.certificateNumber || u.role === 'employee' || u.accountStatus === 'completed' || u.status === 'completed');
+        return !isEmp;
+      });
+      if (strippedMaster.length !== currentMaster.length) {
+        setStorage(STORAGE_KEYS.MASTER_DB, strippedMaster);
+      }
+    }
     initMasterDB();
   })();
 
@@ -813,22 +744,14 @@
                   }
                 });
               }
-              if (data.all_employees) {
-                data.all_employees.forEach(function(e) {
-                  if (e && e.email) {
-                    var em = e.email.toLowerCase();
-                    var item = Object.assign({}, userMap[em] || {}, e);
-                    item.accountStatus = 'completed';
-                    item.certificateNumber = item.certificateNumber || e.certificateNumber;
-                    userMap[em] = item;
-                  }
-                });
-              }
-              var unifiedMaster = Object.values(userMap);
+              // Category 3: All Employees is kept strictly NILL
+              setStorage(STORAGE_KEYS.ALL_EMPLOYEES, []);
+              var unifiedMaster = Object.values(userMap).filter(function(u) {
+                return !(u.certificateNumber || u.role === 'employee' || u.accountStatus === 'completed' || u.status === 'completed');
+              });
               setStorage(STORAGE_KEYS.MASTER_DB, unifiedMaster);
               setStorage(STORAGE_KEYS.NEW_REGISTRATIONS, data.new_registrations);
               setStorage(STORAGE_KEYS.CURRENT_INTERNS, data.current_interns);
-              setStorage(STORAGE_KEYS.ALL_EMPLOYEES, data.all_employees);
               setStorage(STORAGE_KEYS.APPLICATIONS, data.new_registrations);
               if (data.audit_logs && data.audit_logs.length > 0) setStorage(STORAGE_KEYS.AUDIT_LOGS, data.audit_logs);
               if (window.YuvantaraDB && typeof window.YuvantaraDB.syncAllReplicas === 'function') {
@@ -1590,6 +1513,7 @@
         stream: data.stream || (idx !== -1 ? master[idx].stream : ''),
         college: data.college || (idx !== -1 ? master[idx].college : ''),
         role: 'student',
+        passwordHash: data.password ? hashPassword(data.password) : (data.passwordHash || (idx !== -1 && master[idx].passwordHash ? master[idx].passwordHash : hashPassword('student123'))),
         registeredAt: data.registeredAt || (idx !== -1 && master[idx].registeredAt ? master[idx].registeredAt : new Date().toISOString().split('T')[0]),
         paymentStatus: isPaid ? 'paid' : (data.paymentStatus || 'unpaid'),
         paymentAmount: isPaid ? (data.paymentAmount || 236) : 0,
@@ -1727,6 +1651,18 @@
         if (!u || u.role === 'admin' || u.role === 'superadmin') return false;
         return u.certificateNumber || u.accountStatus === 'completed' || u.status === 'completed' || (typeof u.progress === 'number' && u.progress >= 100) || u.role === 'employee';
       });
+    },
+
+    resetEmployeeDatabaseToNill: function() {
+      var master = this.getMasterDB();
+      master = master.filter(function(u) {
+        if (!u) return false;
+        var isEmp = !!(u.certificateNumber || u.role === 'employee' || u.accountStatus === 'completed' || u.status === 'completed');
+        return !isEmp;
+      });
+      setStorage(STORAGE_KEYS.ALL_EMPLOYEES, []);
+      this.saveMasterDB(master);
+      return { success: true, count: 0, message: 'Employee database successfully reset to NILL.' };
     },
 
     graduateToEmployee: function(emailOrId, certData, approvingAdminEmail) {
